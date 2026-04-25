@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Von Bastik Tattoo | Tatuajes y Piercings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.fontsource.org/fonts/space-grotesk/latin.css" rel="stylesheet">
+    <link href="https://cdn.fontsource.org/fonts/inter/latin.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #c9a96e;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+            mix-blend-mode: difference;
+        }
+        .custom-cursor.hover {
+            transform: scale(2.5);
+            background: rgba(201, 169, 110, 0.15);
+        }
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #c9a96e;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        .loader-bar {
+            width: 200px;
+            height: 2px;
+            background: #1a1a1a;
+            margin-top: 30px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .loader-bar-fill {
+            height: 100%;
+            background: #c9a96e;
+            width: 0%;
+            animation: loadBar 2s ease-in-out forwards;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        @keyframes loadBar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .nav-link {
+            position: relative;
+            padding: 8px 0;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #c9a96e;
+            transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link:hover {
+            color: #c9a96e;
+        }
+        .hero-section {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/16a3f93e1-5767-4715-bd42-db15a565596d.png') center/cover no-repeat;
+            filter: brightness(0.25);
+            transform: scale(1.1);
+            transition: transform 8s ease;
+        }
+        .hero-section:hover .hero-bg {
+            transform: scale(1.15);
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.8) 100%);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 700;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            line-height: 1;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 1s ease 2.2s forwards;
+        }
+        .hero-subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #c9a96e;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease 2.5s forwards;
+        }
+        .hero-line {
+            width: 60px;
+            height: 1px;
+            background: #c9a96e;
+            margin: 30px auto;
+            opacity: 0;
+            animation: fadeUp 1s ease 2.8s forwards;
+        }
+        .hero-cta {
+            display: inline-block;
+            padding: 16px 48px;
+            border: 1px solid #c9a96e;
+            color: #c9a96e;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.85rem;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease 3s forwards;
+            cursor: pointer;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-cta:hover {
+            background: #c9a96e;
+            color: #0a0a0a;
+        }
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: #c9a96e;
+        }
+        .section-title-center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            aspect-ratio: 1;
+            cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.6s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.08);
+            filter: brightness(0.6);
+        }
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 20px 20px;
+            background: linear-gradient(transparent, rgba(10,10,10,0.9));
+            transform: translateY(100%);
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+        .gallery-overlay h4 {
+            color: #c9a96e;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .service-card {
+            background: #111;
+            border: 1px solid #1a1a1a;
+            padding: 40px 30px;
+            border-radius: 8px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #c9a96e, transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .service-card:hover::before {
+            opacity: 1;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: #2a2a2a;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #c9a96e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: all 0.4s ease;
+        }
+        .service-card:hover .service-icon {
+            background: #c9a96e;
+        }
+        .service-card:hover .service-icon i {
+            color: #0a0a0a;
+        }
+        .service-icon i {
+            color: #c9a96e;
+            font-size: 1.3rem;
+            transition: color 0.4s ease;
+        }
+        .about-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .about-image-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: -20px;
+            bottom: -20px;
+            border: 1px solid #c9a96e;
+            border-radius: 8px;
+            z-index: -1;
+        }
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: #111;
+            border: 1px solid #222;
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            outline: none;
+        }
+        .form-input:focus {
+            border-color: #c9a96e;
+            box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+        }
+        .form-input::placeholder {
+            color: #555;
+        }
+        textarea.form-input {
+            resize: vertical;
+            min-height: 140px;
+        }
+        .btn-primary {
+            display: inline-block;
+            padding: 16px 48px;
+            background: #c9a96e;
+            color: #0a0a0a;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary:hover {
+            background: #d4b87a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(201, 169, 110, 0.3);
+        }
+        .btn-outline {
+            display: inline-block;
+            padding: 16px 48px;
+            border: 1px solid #c9a96e;
+            color: #c9a96e;
+            background: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-outline:hover {
+            background: #c9a96e;
+            color: #0a0a0a;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            opacity: 0;
+            animation: fadeUp 1s ease 3.3s forwards;
+        }
+        .scroll-indicator .mouse {
+            width: 26px;
+            height: 40px;
+            border: 2px solid #c9a96e;
+            border-radius: 13px;
+            position: relative;
+        }
+        .scroll-indicator .mouse::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 8px;
+            background: #c9a96e;
+            border-radius: 2px;
+            animation: scrollAnim 1.5s ease-in-out infinite;
+        }
+        @keyframes scrollAnim {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(12px); }
+        }
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #c9a96e;
+            line-height: 1;
+        }
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .mobile-menu.open {
+            right: 0;
+        }
+        .mobile-menu a {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            color: #e5e5e5;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            padding: 16px 0;
+            transition: color 0.3s ease;
+        }
+        .mobile-menu a:hover {
+            color: #c9a96e;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+            z-index: 1001;
+        }
+        .hamburger span {
+            width: 28px;
+            height: 2px;
+            background: #e5e5e5;
+            transition: all 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+        .testimonials-slider {
+            position: relative;
+            overflow: hidden;
+        }
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .testimonial-card {
+            min-width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+        .testimonial-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-style: italic;
+            color: #bbb;
+            max-width: 700px;
+            margin: 0 auto 24px;
+        }
+        .testimonial-author {
+            color: #c9a96e;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .slider-dot.active {
+            background: #c9a96e;
+            transform: scale(1.2);
+        }
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .process-step {
+            position: relative;
+            padding-left: 80px;
+            margin-bottom: 40px;
+        }
+        .process-step-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 50px;
+            border: 1px solid #c9a96e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #c9a96e;
+        }
+        .process-step::after {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 60px;
+            width: 1px;
+            height: calc(100% - 20px);
+            background: linear-gradient(180deg, #c9a96e, transparent);
+        }
+        .process-step:last-child::after {
+            display: none;
+        }
+        .process-step h4 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #e5e5e5;
+        }
+        .process-step p {
+            color: #888;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10,10,10,0.95);
+            z-index: 10001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox.open {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 2rem;
+            color: #e5e5e5;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: color 0.3s ease;
+        }
+        .lightbox-close:hover {
+            color: #c9a96e;
+        }
+        .parallax-text {
+            position: absolute;
+            font-size: 15vw;
+            font-weight: 700;
+            color: rgba(255,255,255,0.02);
+            text-transform: uppercase;
+            white-space: nowrap;
+            pointer-events: none;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        footer {
+            border-top: 1px solid #1a1a1a;
+        }
+        .social-link {
+            width: 44px;
+            height: 44px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .social-link:hover {
+            border-color: #c9a96e;
+            color: #c9a96e;
+            transform: translateY(-3px);
+        }
+        .nav-scrolled {
+            background: rgba(10, 10, 10, 0.95) !important;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 30px rgba(0,0,0,0.5);
+        }
+        .pricing-card {
+            background: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        .pricing-card.featured {
+            border-color: #c9a96e;
+            transform: scale(1.05);
+        }
+        .pricing-card.featured::before {
+            content: 'Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #c9a96e;
+            color: #0a0a0a;
+            padding: 4px 20px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: #2a2a2a;
+        }
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        .pricing-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #c9a96e;
+        }
+        .pricing-amount span {
+            font-size: 1rem;
+            color: #666;
+        }
+        .piercing-card {
+            background: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        .piercing-card:hover {
+            transform: translateY(-6px);
+            border-color: #2a2a2a;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        .piercing-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .piercing-card:hover .piercing-img {
+            transform: scale(1.05);
+        }
+        .piercing-img-wrapper {
+            overflow: hidden;
+            position: relative;
+        }
+        .piercing-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(10,10,10,0.85);
+            color: #c9a96e;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            backdrop-filter: blur(10px);
+        }
+        .piercing-info {
+            padding: 24px;
+        }
+        .piercing-info h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #e5e5e5;
+        }
+        .piercing-info p {
+            color: #888;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .piercing-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #1a1a1a;
+        }
+        .piercing-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: #c9a96e;
+            font-size: 1.1rem;
+        }
+        .piercing-healing {
+            color: #666;
+            font-size: 0.75rem;
+        }
+        .healing-timeline {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        .healing-timeline-icon {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #c9a96e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .healing-timeline-icon i {
+            color: #c9a96e;
+            font-size: 1.2rem;
+        }
+        .healing-timeline h5 {
+            font-size: 0.95rem;
+            color: #e5e5e5;
+            margin-bottom: 4px;
+        }
+        .healing-timeline p {
+            color: #888;
+            font-size: 0.8rem;
+        }
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .desktop-nav {
+                display: none;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-title {
+                letter-spacing: 6px;
+            }
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+            .about-image-wrapper::after {
+                display: none;
+            }
+            .custom-cursor {
+                display: none;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-cta {
+                padding: 14px 32px;
+                font-size: 0.75rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .stat-number {
+                font-size: 2.2rem;
+            }
+        }
+        .filter-btn {
+            padding: 10px 24px;
+            border: 1px solid #333;
+            background: transparent;
+            color: #888;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            border-color: #c9a96e;
+            color: #c9a96e;
+            background: rgba(201, 169, 110, 0.08);
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1a1a1a;
+            border: 1px solid #c9a96e;
+            padding: 20px 30px;
+            border-radius: 8px;
+            z-index: 10002;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .tab-btn {
+            padding: 12px 28px;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #c9a96e;
+            transition: width 0.3s ease;
+        }
+        .tab-btn.active {
+            color: #c9a96e;
+        }
+        .tab-btn.active::after {
+            width: 100%;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeUp 0.5s ease forwards;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor" id="cursor"></div>
+
+    <div class="loader" id="loader">
+        <div class="loader-logo">Von Bastik</div>
+        <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
+
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <a href="#" class="font-bold text-xl tracking-widest" style="color:#c9a96e; font-family:'Space Grotesk',sans-serif; text-decoration:none;">
+                VON BASTIK
+            </a>
+            <div class="desktop-nav flex items-center gap-10">
+                <a href="#inicio" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5; text-decoration:none;">Inicio</a>
+                <a href="#nosotros" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5; text-decoration:none;">Nosotros</a>
+                <a href="#galeria" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5; text-decoration:none;">Galería</a>
+                <a href="#piercings" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5; text-decoration:none;">Piercings</a>
+                <a href="#servicios" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5; text-decoration:none;">Servicios</a>
+                <a href="#contacto" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5; text-decoration:none;">Contacto</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#inicio" onclick="closeMenu()">Inicio</a>
+        <a href="#nosotros" onclick="closeMenu()">Nosotros</a>
+        <a href="#galeria" onclick="closeMenu()">Galería</a>
+        <a href="#piercings" onclick="closeMenu()">Piercings</a>
+        <a href="#servicios" onclick="closeMenu()">Servicios</a>
+        <a href="#contacto" onclick="closeMenu()">Contacto</a>
+    </div>
+
+    <section class="hero-section" id="inicio">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Von Bastik</h1>
+            <p class="hero-subtitle">Tatuajes & Piercings Profesionales</p>
+            <div class="hero-line"></div>
+            <a href="#galeria" class="hero-cta">Ver Trabajos</a>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <section class="py-6 border-t border-b border-[#1a1a1a]">
+        <div class="marquee">
+            <div class="marquee-content">
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Tatuajes Personalizados</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Piercings Profesionales</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Realismo</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Blackwork</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Fine Line</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Geometría</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Tatuajes Personalizados</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Piercings Profesionales</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Realismo</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Blackwork</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Fine Line</span>
+                <span class="mx-8 text-[#333]">✦</span>
+                <span class="mx-8 text-[#c9a96e] uppercase tracking-[8px] text-sm" style="font-family:'Space Grotesk',sans-serif;">Geometría</span>
+                <span class="mx-8 text-[#333]">✦</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6" id="nosotros">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <div class="about-image-wrapper">
+                        <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/16a3f93e1-5767-4715-bd42-db15a565596d.png" alt="Von Bastik Tattoo Studio" class="w-full rounded-lg" loading="lazy">
+                    </div>
+                </div>
+                <div class="reveal">
+                    <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Sobre Nosotros</p>
+                    <h2 class="section-title text-4xl font-bold mb-8">Arte en tu Piel</h2>
+                    <p class="text-[#999] leading-relaxed mb-6">
+                        En <strong style="color:#e5e5e5;">Von Bastik</strong> combinamos la pasión por el tatuaje y los piercings para ofrecerte una experiencia completa de modificación corporal. Transformamos ideas en obras de arte permanentes con años de experiencia en el sector.
+                    </p>
+                    <p class="text-[#999] leading-relaxed mb-8">
+                        Trabajamos con los más altos estándares de higiene y calidad, utilizando equipos de última generación, pigmentos premium y joyería de titanio certificada. Cada trabajo es una pieza personalizada, diseñada exclusivamente para ti.
+                    </p>
+                    <div class="grid grid-cols-3 gap-8">
+                        <div>
+                            <div class="stat-number" data-count="5000">0</div>
+                            <p class="text-[#666] text-sm mt-2 uppercase tracking-wider">Tatuajes</p>
+                        </div>
+                        <div>
+                            <div class="stat-number" data-count="12">0</div>
+                            <p class="text-[#666] text-sm mt-2 uppercase tracking-wider">Años</p>
+                        </div>
+                        <div>
+                            <div class="stat-number" data-count="100">0</div>
+                            <p class="text-[#666] text-sm mt-2 uppercase tracking-wider">% Dedicación</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="parallax-text" style="top: 50%; left: -10%;">TATTOO</div>
+    </section>
+
+    <section class="py-24 px-6 bg-[#0d0d0d]" id="galeria">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Portfolio</p>
+                <h2 class="section-title section-title-center text-4xl font-bold inline-block">Nuestra Galería</h2>
+            </div>
+            <div class="flex justify-center gap-4 mb-12 flex-wrap reveal">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="realismo">Realismo</button>
+                <button class="filter-btn" data-filter="geometrico">Geométrico</button>
+                <button class="filter-btn" data-filter="fineline">Fine Line</button>
+                <button class="filter-btn" data-filter="retrato">Retrato</button>
+            </div>
+            <div class="gallery-grid reveal" id="galleryGrid">
+                <div class="gallery-item" data-category="geometrico" onclick="openLightbox(this)">
+                    <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1b7e8b128-6f26-4100-83af-87a8a5047510.png" alt="Tatuaje geométrico mandala" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Mandala Geométrico</h4>
+                        <p class="text-[#888] text-sm mt-1">Geométrico</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="fineline" onclick="openLightbox(this)">
+                    <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1def71285-5d09-4607-9e56-9ee31c8c9072.png" alt="Tatuaje fine line botánico" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Botánica Minimalista</h4>
+                        <p class="text-[#888] text-sm mt-1">Fine Line</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="retrato" onclick="openLightbox(this)">
+                    <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1e05aea51-7360-4f11-8756-0c0376f4ad29.png" alt="Retrato tatuaje realista" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Retrato Realista</h4>
+                        <p class="text-[#888] text-sm mt-1">Retrato</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="realismo" onclick="openLightbox(this)">
+                    <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/16a3f93e1-5767-4715-bd42-db15a565596d.png" alt="Tatuaje realista águila" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>Águila Realista</h4>
+                        <p class="text-[#888] text-sm mt-1">Realismo</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-12 reveal">
+                <a href="https://instagram.com" target="_blank" class="btn-outline inline-flex items-center gap-3">
+                    <i class="fab fa-instagram"></i> Seguir en Instagram
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6" id="piercings">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-8 reveal">
+                <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Modificación Corporal</p>
+                <h2 class="section-title section-title-center text-4xl font-bold inline-block">Piercings</h2>
+            </div>
+            <p class="text-center text-[#888] max-w-2xl mx-auto mb-12 reveal leading-relaxed">
+                Ofrecemos un servicio profesional de perforación con joyería de titanio implantable de grado médico, garantizando máxima higiene y seguridad en cada procedimiento.
+            </p>
+
+            <div class="flex justify-center gap-6 mb-12 reveal">
+                <button class="tab-btn active" data-tab="piercings-gallery">Catálogo</button>
+                <button class="tab-btn" data-tab="piercings-info">Información</button>
+            </div>
+
+            <div class="tab-content active" id="tab-piercings-gallery">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 reveal">
+                    <div class="piercing-card">
+                        <div class="piercing-img-wrapper">
+                            <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1b7e8b128-6f26-4100-83af-87a8a5047510.png" alt="Piercing Lóbulo" class="piercing-img">
+                            <span class="piercing-badge">Clásico</span>
+                        </div>
+                        <div class="piercing-info">
+                            <h4>Lóbulo</h4>
+                            <p>El piercing más popular y versátil. Perforación limpia en el lóbulo de la oreja con joyería de titanio hipoalergénico.</p>
+                            <div class="piercing-meta">
+                                <span class="piercing-price">Desde 15€</span>
+                                <span class="piercing-healing"><i class="fas fa-clock mr-1"></i>6-8 semanas</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="piercing-card">
+                        <div class="piercing-img-wrapper">
+                            <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1def71285-5d09-4607-9e56-9ee31c8c9072.png" alt="Piercing Helix" class="piercing-img">
+                            <span class="piercing-badge">Cartílago</span>
+                        </div>
+                        <div class="piercing-info">
+                            <h4>Helix</h4>
+                            <p>Perforación en el cartílago superior de la oreja. Un diseño elegante que admite diferentes tipos de joyería.</p>
+                            <div class="piercing-meta">
+                                <span class="piercing-price">Desde 25€</span>
+                                <span class="piercing-healing"><i class="fas fa-clock mr-1"></i>3-6 meses</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="piercing-card">
+                        <div class="piercing-img-wrapper">
+                            <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1e05aea51-7360-4f11-8756-0c0376f4ad29.png" alt="Piercing Nariz" class="piercing-img">
+                            <span class="piercing-badge">Facial</span>
+                        </div>
+                        <div class="piercing-info">
+                            <h4>Nariz (Nostril / Septum)</h4>
+                            <p>Perforación en la fosa nasal o tabique nasal. Una opción muy demandada con gran variedad de joyas disponibles.</p>
+                            <div class="piercing-meta">
+                                <span class="piercing-price">Desde 25€</span>
+                                <span class="piercing-healing"><i class="fas fa-clock mr-1"></i>2-4 meses</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="piercing-card">
+                        <div class="piercing-img-wrapper">
+                            <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/16a3f93e1-5767-4715-bd42-db15a565596d.png" alt="Piercing Ombligo" class="piercing-img">
+                            <span class="piercing-badge">Popular</span>
+                        </div>
+                        <div class="piercing-info">
+                            <h4>Ombligo</h4>
+                            <p>Perforación en el ombligo, una de las más populares. Utilizamos agujas desechables y joyería de titanio de alta calidad.</p>
+                            <div class="piercing-meta">
+                                <span class="piercing-price">Desde 30€</span>
+                                <span class="piercing-healing"><i class="fas fa-clock mr-1"></i>6-12 meses</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="piercing-card">
+                        <div class="piercing-img-wrapper">
+                            <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1b7e8b128-6f26-4100-83af-87a8a5047510.png" alt="Piercing Labio" class="piercing-img">
+                            <span class="piercing-badge">Facial</span>
+                        </div>
+                        <div class="piercing-info">
+                            <h4>Labio (Labret / Monroe)</h4>
+                            <p>Diferentes ubicaciones alrededor de los labios. Desde el labret central hasta el estilo Monroe o Medusa.</p>
+                            <div class="piercing-meta">
+                                <span class="piercing-price">Desde 25€</span>
+                                <span class="piercing-healing"><i class="fas fa-clock mr-1"></i>2-3 meses</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="piercing-card">
+                        <div class="piercing-img-wrapper">
+                            <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1def71285-5d09-4607-9e56-9ee31c8c9072.png" alt="Piercing Ceja" class="piercing-img">
+                            <span class="piercing-badge">Especial</span>
+                        </div>
+                        <div class="piercing-info">
+                            <h4>Ceja</h4>
+                            <p>Perforación vertical en la zona de la ceja. Un piercing con mucha personalidad que requiere cuidados específicos.</p>
+                            <div class="piercing-meta">
+                                <span class="piercing-price">Desde 25€</span>
+                                <span class="piercing-healing"><i class="fas fa-clock mr-1"></i>2-3 meses</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-piercings-info">
+                <div class="max-w-3xl mx-auto reveal">
+                    <h3 class="text-2xl font-bold mb-8" style="font-family:'Space Grotesk',sans-serif;">Todo sobre Piercings</h3>
+                    <div class="healing-timeline">
+                        <div class="healing-timeline-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <h5>Joyería de Titanio Grado Implante</h5>
+                            <p>Utilizamos exclusivamente titanio ASTM F-136, el material más seguro y biocompatible para perforaciones.</p>
+                        </div>
+                    </div>
+                    <div class="healing-timeline">
+                        <div class="healing-timeline-icon">
+                            <i class="fas fa-syringe"></i>
+                        </div>
+                        <div>
+                            <h5>Agujas Desechables y Esterilizadas</h5>
+                            <p>Cada aguja se abre delante del cliente, se usa una sola vez y se desecha correctamente en contenedor especial.</p>
+                        </div>
+                    </div>
+                    <div class="healing-timeline">
+                        <div class="healing-timeline-icon">
+                            <i class="fas fa-hand-holding-medical"></i>
+                        </div>
+                        <div>
+                            <h5>Cuidados Post-Piercing</h5>
+                            <p>Proporcionamos solución salina estéril y guías detalladas de cuidados. Seguimiento personalizado durante toda la cicatrización.</p>
+                        </div>
+                    </div>
+                    <div class="healing-timeline">
+                        <div class="healing-timeline-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div>
+                            <h5>Cumplimiento Normativo</h5>
+                            <p>Seguimos estrictamente todas las normativas sanitarias vigentes. Estudio registrado y con todas las licencias en regla.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#111] border border-[#1a1a1a] rounded-lg p-8 mt-8">
+                        <h4 class="text-xl font-bold mb-6" style="font-family:'Space Grotesk',sans-serif;">¿Qué debes saber?</h4>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="font-bold text-sm uppercase tracking-wider text-[#c9a96e] mb-3">Antes del Piercing</h5>
+                                <ul class="space-y-2 text-[#888] text-sm">
+                                    <li><i class="fas fa-check text-[#c9a96e] mr-2"></i>Debes ser mayor de 18 años (o venir con tutor)</li>
+                                    <li><i class="fas fa-check text-[#c9a96e] mr-2"></i>Documento de identidad obligatorio</li>
+                                    <li><i class="fas fa-check text-[#c9a96e] mr-2"></i>Haber comido antes de la cita</li>
+                                    <li><i class="fas fa-check text-[#c9a96e] mr-2"></i>No consumir alcohol 24h antes</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-sm uppercase tracking-wider text-[#c9a96e] mb-3">Después del Piercing</h5>
+                                <ul class="space-y-2 text-[#888] text-sm">
+                                    <li><i class="fas fa-check text-[#c9a96e] mr-2"></i>Limpieza con solución salina 2 veces al día</li>
+                                    <li><i class="fas fa-check text-[#c9a96e] mr-2"></i>No tocar ni girar la joyería</li>
+                                    <li><i class="fas fa-check text-[#c9a96e] mr-2"></i>Evitar piscinas y saunas 4 semanas</li>
+                                    <li><i class="fas fa-check text-[#c9a96e] mr-2"></i>Revisiones de seguimiento incluidas</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 bg-[#0d0d0d]" id="servicios">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Lo que hacemos</p>
+                <h2 class="section-title section-title-center text-4xl font-bold inline-block">Nuestros Servicios</h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <i class="fas fa-pen-nib"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" style="font-family:'Space Grotesk',sans-serif;">Tatuajes Personalizados</h3>
+                    <p class="text-[#888] leading-relaxed text-sm">Diseñamos tu tatuaje desde cero, creando una pieza única que refleje tu personalidad y visión artística.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" style="font-family:'Space Grotesk',sans-serif;">Realismo</h3>
+                    <p class="text-[#888] leading-relaxed text-sm">Especialistas en retratos y realismo fotográfico en blanco y negro o a todo color, con un nivel de detalle impresionante.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <i class="fas fa-ring"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" style="font-family:'Space Grotesk',sans-serif;">Piercings Profesionales</h3>
+                    <p class="text-[#888] leading-relaxed text-sm">Perforaciones seguras con joyería de titanio certificada. Oído, nariz, ombligo, ceja, labio y muchas más ubicaciones.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <i class="fas fa-shapes"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" style="font-family:'Space Grotesk',sans-serif;">Geométrico & Mandala</h3>
+                    <p class="text-[#888] leading-relaxed text-sm">Patrones geométricos precisos, mandalas simétricos y diseños dotwork que requieren una técnica impecable.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <i class="fas fa-feather-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" style="font-family:'Space Grotesk',sans-serif;">Fine Line</h3>
+                    <p class="text-[#888] leading-relaxed text-sm">Líneas finas y delicadas que crean diseños elegantes y sutiles, perfectos para un estilo minimalista y refinado.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <i class="fas fa-eraser"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" style="font-family:'Space Grotesk',sans-serif;">Cover Up</h3>
+                    <p class="text-[#888] leading-relaxed text-sm">Transformamos tatuajes antiguos o no deseados en nuevas obras de arte, cubriendo y redefiniendo la pieza original.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6" id="proceso">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 items-start">
+                <div class="reveal">
+                    <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Cómo trabajamos</p>
+                    <h2 class="section-title text-4xl font-bold mb-12">El Proceso</h2>
+                    <div class="process-step">
+                        <div class="process-step-number">01</div>
+                        <h4>Consulta Inicial</h4>
+                        <p>Conversamos sobre tu idea, estilo, tamaño y ubicación. Te asesoramos sobre el diseño y resolvemos todas tus dudas.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="process-step-number">02</div>
+                        <h4>Diseño Personalizado</h4>
+                        <p>Creamos un boceto único basado en tus preferencias. Trabajamos contigo hasta que el diseño sea exactamente lo que buscas.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="process-step-number">03</div>
+                        <h4>Sesión de Tatuaje / Piercing</h4>
+                        <p>En un ambiente limpio y profesional, realizamos tu trabajo con la máxima precisión y cuidado. Tu comodidad es nuestra prioridad.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="process-step-number">04</div>
+                        <h4>Cuidado Posterior</h4>
+                        <p>Te proporcionamos instrucciones detalladas de cuidado y estamos disponibles para cualquier consulta durante la cicatrización.</p>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <div class="bg-[#111] border border-[#1a1a1a] rounded-lg p-8">
+                        <h3 class="text-2xl font-bold mb-6" style="font-family:'Space Grotesk',sans-serif;">Tarifas</h3>
+                        <div class="mb-6">
+                            <h4 class="font-bold text-sm uppercase tracking-wider text-[#c9a96e] mb-4">Tatuajes</h4>
+                            <div class="pricing-card mb-4">
+                                <h4 class="text-lg font-bold mb-2" style="font-family:'Space Grotesk',sans-serif;">Tatuaje Pequeño</h4>
+                                <p class="text-[#888] text-sm mb-4">Hasta 10 cm · Diseños simples</p>
+                                <div class="pricing-amount">60€ <span>desde</span></div>
+                            </div>
+                            <div class="pricing-card featured mb-4">
+                                <h4 class="text-lg font-bold mb-2" style="font-family:'Space Grotesk',sans-serif;">Tatuaje Mediano</h4>
+                                <p class="text-[#888] text-sm mb-4">10-20 cm · Diseños detallados</p>
+                                <div class="pricing-amount">150€ <span>desde</span></div>
+                            </div>
+                            <div class="pricing-card">
+                                <h4 class="text-lg font-bold mb-2" style="font-family:'Space Grotesk',sans-serif;">Tatuaje Grande / Pieza</h4>
+                                <p class="text-[#888] text-sm mb-4">Manga · Espalda · Personalizado completo</p>
+                                <div class="pricing-amount">300€ <span>desde</span></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm uppercase tracking-wider text-[#c9a96e] mb-4">Piercings</h4>
+                            <div class="pricing-card">
+                                <h4 class="text-lg font-bold mb-2" style="font-family:'Space Grotesk',sans-serif;">Lóbulo</h4>
+                                <p class="text-[#888] text-sm mb-4">Incluye joya de titanio</p>
+                                <div class="pricing-amount">15€</div>
+                            </div>
+                            <div class="pricing-card mt-4">
+                                <h4 class="text-lg font-bold mb-2" style="font-family:'Space Grotesk',sans-serif;">Cartílago / Nariz / Ceja / Labio</h4>
+                                <p class="text-[#888] text-sm mb-4">Incluye joya de titanio</p>
+                                <div class="pricing-amount">25€</div>
+                            </div>
+                            <div class="pricing-card mt-4">
+                                <h4 class="text-lg font-bold mb-2" style="font-family:'Space Grotesk',sans-serif;">Ombligo / Industrial</h4>
+                                <p class="text-[#888] text-sm mb-4">Incluye joya de titanio</p>
+                                <div class="pricing-amount">30€</div>
+                            </div>
+                        </div>
+                        <p class="text-[#666] text-sm mt-6 text-center">* Precios orientativos. Cada trabajo se presupuesta individualmente según diseño y complejidad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 bg-[#0d0d0d]" id="testimonios">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Opiniones</p>
+                <h2 class="section-title section-title-center text-4xl font-bold inline-block">Lo que dicen nuestros clientes</h2>
+            </div>
+            <div class="testimonials-slider reveal">
+                <div class="testimonial-track" id="testimonialTrack">
+                    <div class="testimonial-card">
+                        <div class="text-[#c9a96e] text-3xl mb-4"><i class="fas fa-quote-left"></i></div>
+                        <p class="testimonial-text">Increíble experiencia. El diseño superó todas mis expectativas y el trato fue inmejorable. Sin duda volveré para mi próximo tatuaje.</p>
+                        <p class="testimonial-author">María García</p>
+                        <div class="flex justify-center gap-1 mt-3">
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="text-[#c9a96e] text-3xl mb-4"><i class="fas fa-quote-left"></i></div>
+                        <p class="testimonial-text">Profesionalidad absoluta. Me hizo una manga completa y el resultado es espectacular. La atención al detalle es impresionante. 100% recomendable.</p>
+                        <p class="testimonial-author">Carlos Rodríguez</p>
+                        <div class="flex justify-center gap-1 mt-3">
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="text-[#c9a96e] text-3xl mb-4"><i class="fas fa-quote-left"></i></div>
+                        <p class="testimonial-text">Me hice el helix y el piercing de ombligo. Todo perfecto, el proceso fue súper profesional y la joyería de titanio de primera calidad. ¡Volveré seguro!</p>
+                        <p class="testimonial-author">Ana López</p>
+                        <div class="flex justify-center gap-1 mt-3">
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                            <i class="fas fa-star text-[#c9a96e] text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-dots" id="sliderDots">
+                    <button class="slider-dot active" data-slide="0"></button>
+                    <button class="slider-dot" data-slide="1"></button>
+                    <button class="slider-dot" data-slide="2"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6" id="contacto">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Reserva tu cita</p>
+                <h2 class="section-title section-title-center text-4xl font-bold inline-block">Contacto</h2>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-16">
+                <div class="reveal">
+                    <form id="contactForm" onsubmit="handleSubmit(event)">
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-[#888] text-sm mb-2 uppercase tracking-wider">Nombre</label>
+                                <input type="text" class="form-input" placeholder="Tu nombre" required>
+                            </div>
+                            <div>
+                                <label class="block text-[#888] text-sm mb-2 uppercase tracking-wider">Email</label>
+                                <input type="email" class="form-input" placeholder="tu@email.com" required>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-[#888] text-sm mb-2 uppercase tracking-wider">Teléfono</label>
+                                <input type="tel" class="form-input" placeholder="+34 600 000 000">
+                            </div>
+                            <div>
+                                <label class="block text-[#888] text-sm mb-2 uppercase tracking-wider">Servicio</label>
+                                <select class="form-input" style="cursor:pointer;">
+                                    <option value="">Seleccionar servicio</option>
+                                    <option value="tatuaje">Tatuaje</option>
+                                    <option value="piercing">Piercing</option>
+                                    <option value="ambos">Tatuaje + Piercing</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-[#888] text-sm mb-2 uppercase tracking-wider">Cuéntanos tu idea</label>
+                            <textarea class="form-input" placeholder="Describe lo que buscas: tipo de tatuaje o piercing, ubicación en el cuerpo, tamaño, estilo..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary w-full md:w-auto">Enviar Mensaje</button>
+                    </form>
+                </div>
+                <div class="reveal">
+                    <div class="mb-10">
+                        <h3 class="text-2xl font-bold mb-6" style="font-family:'Space Grotesk',sans-serif;">Información</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 border border-[#333] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-map-marker-alt text-[#c9a96e] text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-sm uppercase tracking-wider mb-1">Dirección</h4>
+                                    <p class="text-[#888] text-sm leading-relaxed">Calle Principal, 123<br>Madrid, España</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 border border-[#333] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-phone text-[#c9a96e] text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-sm uppercase tracking-wider mb-1">Teléfono</h4>
+                                    <p class="text-[#888] text-sm">+34 600 000 000</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 border border-[#333] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-envelope text-[#c9a96e] text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-sm uppercase tracking-wider mb-1">Email</h4>
+                                    <p class="text-[#888] text-sm">info@vonbastiktattoo.es</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 border border-[#333] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fas fa-clock text-[#c9a96e] text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-sm uppercase tracking-wider mb-1">Horario</h4>
+                                    <p class="text-[#888] text-sm leading-relaxed">Lun - Vie: 10:00 - 20:00<br>Sáb: 10:00 - 14:00<br>Dom: Cerrado</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold mb-4 uppercase tracking-wider" style="font-family:'Space Grotesk',sans-serif;">Síguenos</h3>
+                        <div class="flex gap-3">
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-pinterest-p"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <a href="#" style="color:#c9a96e; font-family:'Space Grotesk',sans-serif; font-size:1.2rem; font-weight:700; letter-spacing:4px; text-decoration:none;">VON BASTIK</a>
+                <p class="text-[#555] text-sm">© 2026 Von Bastik. Todos los derechos reservados.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="text-[#555] text-sm hover:text-[#c9a96e] transition-colors" style="text-decoration:none;">Política de Privacidad</a>
+                    <a href="#" class="text-[#555] text-sm hover:text-[#c9a96e] transition-colors" style="text-decoration:none;">Aviso Legal</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img src="" alt="Lightbox image" id="lightboxImg">
+    </div>
+
+    <div class="toast" id="toast">
+        <p style="color:#c9a96e; font-weight:600; font-size:0.9rem;">✓ Mensaje enviado correctamente</p>
+        <p style="color:#888; font-size:0.8rem; margin-top:4px;">Te contactaremos lo antes posible.</p>
+    </div>
+
+    <script>
+        const loader = document.getElementById('loader');
+        const navbar = document.getElementById('navbar');
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const cursor = document.getElementById('cursor');
+
+        setTimeout(() => {
+            loader.classList.add('hidden');
+        }, 2200);
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                navbar.classList.add('nav-scrolled');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+            document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+        });
+
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        if (window.innerWidth > 768) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX - 10 + 'px';
+                cursor.style.top = e.clientY - 10 + 'px';
+            });
+            document.querySelectorAll('a, button, .gallery-item, .service-card, .piercing-card').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        }
+
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+        revealElements.forEach(el => observer.observe(el));
+
+        const statNumbers = document.querySelectorAll('.stat-number');
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.getAttribute('data-count'));
+                    let current = 0;
+                    const increment = target / 60;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            el.textContent = target.toLocaleString() + '+';
+                            clearInterval(timer);
+                        } else {
+                            el.textContent = Math.floor(current).toLocaleString();
+                        }
+                    }, 30);
+                    statObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        statNumbers.forEach(el => statObserver.observe(el));
+
+        const galleryFilterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryFilterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                galleryFilterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                        item.style.animation = 'fadeUp 0.5s ease forwards';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        function openLightbox(item) {
+            const img = item.querySelector('img');
+            document.getElementById('lightboxImg').src = img.src;
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('lightbox')) closeLightbox();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        let currentSlide = 0;
+        const track = document.getElementById('testimonialTrack');
+        const dots = document.querySelectorAll('.slider-dot');
+        const totalSlides = dots.length;
+
+        function goToSlide(index) {
+            currentSlide = index;
+            track.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => goToSlide(parseInt(dot.getAttribute('data-slide'))));
+        });
+        setInterval(() => {
+            goToSlide((currentSlide + 1) % totalSlides);
+        }, 5000);
+
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById('tab-' + tabId).classList.add('active');
+            });
+        });
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+            e.target.reset();
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
