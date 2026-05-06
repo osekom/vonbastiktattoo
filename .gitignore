@@ -1,0 +1,40 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IA
+.kilo/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build/Output
+dist/
+build/
+*.min.css
+*.min.js
+
+# Dependencies
+node_modules/
+vendor/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Misc
+.cache/
+.temp/
+coverage/
