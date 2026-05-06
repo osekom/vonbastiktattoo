@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Von Bastik Tattoo | Tatuajes y Piercings</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdn.fontsource.org/fonts/space-grotesk/latin.css" rel="stylesheet">
-    <link href="https://cdn.fontsource.org/fonts/inter/latin.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.2.10/index.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
@@ -925,6 +924,15 @@
         .tab-content.active {
             display: block;
         }
+        /* inter-latin-wght-normal */
+        @font-face {
+            font-family: 'Inter Variable';
+            font-style: normal;
+            font-display: swap;
+            font-weight: 100 900;
+            src: url(https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
+            unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+        }
     </style>
 </head>
 <body>
@@ -1015,7 +1023,7 @@
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="reveal">
                     <div class="about-image-wrapper">
-                        <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/16a3f93e1-5767-4715-bd42-db15a565596d.png" alt="Von Bastik Tattoo Studio" class="w-full rounded-lg" loading="lazy">
+                        <img src="public/images/banner.jpg" alt="Von Bastik Tattoo Studio" class="w-full rounded-lg" loading="lazy">
                     </div>
                 </div>
                 <div class="reveal">
@@ -1062,28 +1070,28 @@
             </div>
             <div class="gallery-grid reveal" id="galleryGrid">
                 <div class="gallery-item" data-category="geometrico" onclick="openLightbox(this)">
-                    <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1b7e8b128-6f26-4100-83af-87a8a5047510.png" alt="Tatuaje geométrico mandala" loading="lazy">
+                    <img src="public/images/image-1.jpg" alt="Tatuaje geométrico mandala" loading="lazy">
                     <div class="gallery-overlay">
                         <h4>Mandala Geométrico</h4>
                         <p class="text-[#888] text-sm mt-1">Geométrico</p>
                     </div>
                 </div>
                 <div class="gallery-item" data-category="fineline" onclick="openLightbox(this)">
-                    <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1def71285-5d09-4607-9e56-9ee31c8c9072.png" alt="Tatuaje fine line botánico" loading="lazy">
+                    <img src="public/images/image-2.jpg" alt="Tatuaje fine line botánico" loading="lazy">
                     <div class="gallery-overlay">
                         <h4>Botánica Minimalista</h4>
                         <p class="text-[#888] text-sm mt-1">Fine Line</p>
                     </div>
                 </div>
                 <div class="gallery-item" data-category="retrato" onclick="openLightbox(this)">
-                    <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/1e05aea51-7360-4f11-8756-0c0376f4ad29.png" alt="Retrato tatuaje realista" loading="lazy">
+                    <img src="public/images/image-3.jpg" alt="Retrato tatuaje realista" loading="lazy">
                     <div class="gallery-overlay">
                         <h4>Retrato Realista</h4>
                         <p class="text-[#888] text-sm mt-1">Retrato</p>
                     </div>
                 </div>
                 <div class="gallery-item" data-category="realismo" onclick="openLightbox(this)">
-                    <img src="https://image.qwenlm.ai/public_source/77b31aa7-c526-4e69-a7d4-a88ffcb29c15/16a3f93e1-5767-4715-bd42-db15a565596d.png" alt="Tatuaje realista águila" loading="lazy">
+                    <img src="public/images/image-4.jpg" alt="Tatuaje realista águila" loading="lazy">
                     <div class="gallery-overlay">
                         <h4>Águila Realista</h4>
                         <p class="text-[#888] text-sm mt-1">Realismo</p>
