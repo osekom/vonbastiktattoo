@@ -35,22 +35,21 @@ img {
     display: block;
 }
 
-/* --- Custom Cursor --- */
-.custom-cursor {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #c9a96e;
-    border-radius: 50%;
+/* --- Scroll Progress --- */
+.scroll-progress {
     position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.15s ease, opacity 0.15s ease;
-    mix-blend-mode: difference;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #c9a96e, #d4b87a);
+    z-index: 10001;
+    width: 0%;
+    transition: width 0.1s ease-out;
 }
 
-.custom-cursor.hover {
-    transform: scale(2.5);
-    background: rgba(201, 169, 110, 0.15);
+/* --- Custom Cursor (Disabled) --- */
+.custom-cursor {
+    display: none !important;
 }
 
 /* --- Loader --- */
@@ -214,7 +213,16 @@ img {
     overflow: hidden;
 }
 
-.hero-bg {
+.hero-slides {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.hero-slide {
     position: absolute;
     top: 0;
     left: 0;
@@ -225,11 +233,49 @@ img {
     background-repeat: no-repeat;
     filter: brightness(0.25);
     transform: scale(1.1);
-    transition: transform 8s ease;
+    opacity: 0;
+    transition: opacity 1.5s ease, transform 8s ease;
 }
 
-.hero-section:hover .hero-bg {
+.hero-slide.active {
+    opacity: 1;
     transform: scale(1.15);
+}
+
+.hero-section:hover .hero-slide.active {
+    transform: scale(1.18);
+}
+
+.hero-dots {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 1s ease 3.4s forwards;
+}
+
+.hero-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #c9a96e;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.hero-dot.active {
+    background: #c9a96e;
+    transform: scale(1.3);
+}
+
+.hero-dot:hover {
+    background: rgba(201, 169, 110, 0.5);
 }
 
 .hero-overlay {
@@ -333,6 +379,21 @@ img {
     }
 }
 
+/* --- Typewriter Cursor --- */
+.typewriter-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: #c9a96e;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
 /* --- Scroll Indicator --- */
 .scroll-indicator {
     position: absolute;
@@ -433,6 +494,26 @@ img {
     white-space: nowrap;
     pointer-events: none;
     font-family: 'Space Grotesk', sans-serif;
+    will-change: transform;
+}
+
+/* --- Parallax Image Wrapper --- */
+[data-parallax-img] {
+    will-change: transform;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+[data-parallax-img]::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: -20px;
+    bottom: -20px;
+    border: 1px solid #c9a96e;
+    border-radius: 8px;
+    z-index: -1;
 }
 
 /* --- About Section --- */
@@ -1648,6 +1729,91 @@ footer {
     font-size: 0.8rem;
 }
 
+/* --- Zoom Level Fixes (150% on 1920x1080 = ~1280x720 viewport) --- */
+@media (max-width: 1400px) {
+    .hero-title {
+        letter-spacing: 6px;
+        font-size: clamp(2rem, 6vw, 5rem);
+    }
+
+    .hero-subtitle {
+        letter-spacing: 3px;
+        font-size: clamp(0.8rem, 1.5vw, 1rem);
+    }
+
+    .hero-cta {
+        letter-spacing: 2px;
+        padding: 14px 36px;
+        font-size: 0.8rem;
+    }
+
+    .hero-cta-secondary {
+        letter-spacing: 2px;
+        padding: 12px 32px;
+        font-size: 0.75rem;
+    }
+
+    .desktop-nav {
+        gap: 20px;
+    }
+
+    .nav-link {
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+    }
+
+    .max-w-7xl {
+        max-width: 1200px;
+    }
+
+    section.py-24.px-6 {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .parallax-text {
+        overflow: hidden;
+        max-width: 100vw;
+    }
+
+    section#nosotros {
+        overflow: hidden;
+    }
+
+    .artist-hero-content h1 {
+        letter-spacing: 4px;
+        font-size: clamp(2rem, 5vw, 4rem);
+    }
+
+    .artist-hero-specialty {
+        letter-spacing: 2px;
+        font-size: clamp(0.8rem, 1.5vw, 1rem);
+    }
+
+    .artist-hero-subtitle {
+        font-size: 0.95rem;
+        max-width: 500px;
+    }
+
+    .artist-hero-section {
+        overflow: hidden;
+    }
+
+    .artist-image {
+        height: 300px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .desktop-nav {
+        display: none;
+    }
+}
+
 /* --- Responsive --- */
 @media (max-width: 1024px) {
     .artist-image {
@@ -1689,6 +1855,14 @@ footer {
     }
 
     .custom-cursor {
+        display: none;
+    }
+
+    .hero-dots {
+        display: none;
+    }
+
+    .scroll-progress {
         display: none;
     }
 

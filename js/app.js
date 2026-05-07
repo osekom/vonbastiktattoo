@@ -18,6 +18,10 @@
         initTabs();
         initContactForm();
         initSmoothScroll();
+        initHeroSlideshow();
+        initTypewriter();
+        initParallax();
+        initScrollProgress();
     });
 
     // --- Navbar Scroll State ---
@@ -70,27 +74,9 @@
         window.closeMenu = closeMenu;
     }
 
-    // --- Custom Cursor (Desktop Only) ---
+    // --- Custom Cursor (Disabled) ---
     function initCustomCursor() {
-        if (window.innerWidth <= 768) return;
-
-        const cursor = document.getElementById('cursor');
-        if (!cursor) return;
-
-        document.addEventListener('mousemove', function (e) {
-            cursor.style.left = e.clientX - 10 + 'px';
-            cursor.style.top = e.clientY - 10 + 'px';
-        });
-
-        var hoverElements = document.querySelectorAll('a, button, .gallery-item, .service-card, .piercing-card, .artist-card, .event-item, .work-item, .download-link');
-        hoverElements.forEach(function (el) {
-            el.addEventListener('mouseenter', function () {
-                cursor.classList.add('hover');
-            });
-            el.addEventListener('mouseleave', function () {
-                cursor.classList.remove('hover');
-            });
-        });
+        // Disabled per user request
     }
 
     // --- Scroll Reveal ---
@@ -419,6 +405,144 @@
                     window.scrollTo({ top: top, behavior: 'smooth' });
                 }
             });
+        });
+    }
+
+    // --- Hero Slideshow ---
+    function initHeroSlideshow() {
+        var slides = document.querySelectorAll('.hero-slide');
+        var dots = document.querySelectorAll('.hero-dot');
+        var hero = document.querySelector('.hero-section');
+        if (slides.length === 0 || !hero) return;
+
+        var current = 0;
+        var interval;
+
+        function showSlide(index) {
+            slides.forEach(function (s, i) {
+                s.classList.toggle('active', i === index);
+            });
+            dots.forEach(function (d, i) {
+                d.classList.toggle('active', i === index);
+            });
+            current = index;
+        }
+
+        function next() {
+            showSlide((current + 1) % slides.length);
+        }
+
+        function start() {
+            interval = setInterval(next, 5000);
+        }
+
+        function stop() {
+            clearInterval(interval);
+        }
+
+        dots.forEach(function (dot, i) {
+            dot.addEventListener('click', function () {
+                stop();
+                showSlide(i);
+                start();
+            });
+        });
+
+        hero.addEventListener('mouseenter', stop);
+        hero.addEventListener('mouseleave', start);
+
+        start();
+    }
+
+    // --- Typewriter Effect ---
+    function initTypewriter() {
+        var textEl = document.getElementById('typewriterText');
+        if (!textEl) return;
+
+        var phrases = [
+            'Tres artistas, un estudio.',
+            'Realismo, Blackwork, Fine Line.',
+            'Arte que permanece en tu piel.',
+            'Tu historia, nuestra tinta.'
+        ];
+
+        var phraseIndex = 0;
+        var charIndex = 0;
+        var isDeleting = false;
+        var typingSpeed = 60;
+        var deletingSpeed = 30;
+        var pauseDuration = 2000;
+
+        function type() {
+            var currentPhrase = phrases[phraseIndex];
+
+            if (isDeleting) {
+                charIndex--;
+                textEl.textContent = currentPhrase.substring(0, charIndex);
+            } else {
+                charIndex++;
+                textEl.textContent = currentPhrase.substring(0, charIndex);
+            }
+
+            var speed = isDeleting ? deletingSpeed : typingSpeed;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                speed = pauseDuration;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                speed = 300;
+            }
+
+            setTimeout(type, speed);
+        }
+
+        setTimeout(type, 2500);
+    }
+
+    // --- Parallax on Scroll ---
+    function initParallax() {
+        if ('ontouchstart' in window || window.innerWidth <= 1024) return;
+
+        var parallaxElements = document.querySelectorAll('[data-parallax]');
+        var parallaxImages = document.querySelectorAll('[data-parallax-img]');
+
+        if (parallaxElements.length === 0 && parallaxImages.length === 0) return;
+
+        function update() {
+            var scrollY = window.pageYOffset;
+
+            parallaxElements.forEach(function (el) {
+                var speed = parseFloat(el.getAttribute('data-parallax')) || 0.5;
+                var rect = el.getBoundingClientRect();
+                var yPos = rect.top * speed;
+                el.style.transform = 'translateY(' + yPos + 'px)';
+            });
+
+            parallaxImages.forEach(function (el) {
+                var speed = parseFloat(el.getAttribute('data-parallax-img')) || 0.5;
+                var rect = el.getBoundingClientRect();
+                var yPos = (rect.top + scrollY - scrollY) * speed * 0.3;
+                el.style.transform = 'translateY(' + yPos + 'px)';
+            });
+
+            requestAnimationFrame(update);
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    // --- Scroll Progress Indicator ---
+    function initScrollProgress() {
+        var progressBar = document.getElementById('scrollProgress');
+        if (!progressBar) return;
+
+        window.addEventListener('scroll', function () {
+            var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = scrollPercent + '%';
         });
     }
 })();

@@ -141,12 +141,12 @@
     }
     </script>
 </head>
-<inkbody>
+<body>
     <!-- Skip Navigation -->
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-    <!-- Custom Cursor -->
-    <div class="custom-cursor" id="cursor" aria-hidden="true"></div>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
     <!-- Navigation -->
     <header>
@@ -185,16 +185,27 @@
     <main id="main-content">
         <!-- Hero Section -->
         <section class="hero-section" id="inicio" aria-label="Bienvenida">
-            <div class="hero-bg" style="background-image: url('public/images/banner.jpg');"></div>
+            <div class="hero-slides">
+                <div class="hero-slide active" style="background-image: url('public/images/banner.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('public/artist/Selene/selene-hero.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('public/artist/Inkbo/inkbo-hero.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('public/artist/BigTorres/bigtorres-hero.jpg');"></div>
+            </div>
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <h1 class="hero-title">Arte que Permanece en tu Piel</h1>
-                <p class="hero-subtitle">Tres artistas, un estudio. Tatuajes personalizados con la excelencia que mereces.</p>
+                <p class="hero-subtitle"><span id="typewriterText"></span><span class="typewriter-cursor"></span></p>
                 <div class="hero-line"></div>
                 <div>
                     <a href="#contacto" class="hero-cta">Reservar Cita</a>
                     <a href="#artistas" class="hero-cta-secondary">Conoce a los Artistas</a>
                 </div>
+            </div>
+            <div class="hero-dots" aria-label="Control de slideshow">
+                <button class="hero-dot active" data-slide="0" aria-label="Slide 1"></button>
+                <button class="hero-dot" data-slide="1" aria-label="Slide 2"></button>
+                <button class="hero-dot" data-slide="2" aria-label="Slide 3"></button>
+                <button class="hero-dot" data-slide="3" aria-label="Slide 4"></button>
             </div>
             <div class="scroll-indicator" aria-hidden="true">
                 <div class="mouse"></div>
@@ -238,7 +249,7 @@
             <div class="max-w-7xl mx-auto">
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div class="reveal">
-                        <div class="ainkbout-image-wrapper">
+                        <div class="ainkbout-image-wrapper" data-parallax-img="0.5">
                             <img src="public/images/banner.jpg" alt="Estudio Von Bastik - espacio de trabajo profesional" class="w-full rounded-lg" loading="lazy" decoding="async">
                         </div>
                     </div>
@@ -268,7 +279,7 @@
                     </div>
                 </div>
             </div>
-            <div class="parallax-text" style="top: 50%; left: -10%;" aria-hidden="true">TATTOO</div>
+            <div class="parallax-text" data-parallax="0.3" style="top: 50%; left: -10%;" aria-hidden="true">TATTOO</div>
         </section>
 
         <!-- Servicios -->
