@@ -1,0 +1,62 @@
+/**
+ * Von Bastik Blog - Admin Styles
+ *
+ * @package Von_Bastik_Blog
+ */
+
+/* === Admin Menu Styling === */
+.toplevel_page_von-bastik-blog {
+    background-color: #1a1a1a !important;
+}
+
+/* === Blog Settings Page === */
+.von-bastik-blog-settings {
+    max-width: 800px;
+}
+
+.von-bastik-blog-settings .notice {
+    margin: 20px 0;
+}
+
+/* === Blog Card Preview === */
+.blog-card-preview {
+    background: #0a0a0a;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.blog-card-preview-image {
+    height: 200px;
+    background: #1e1e1e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.blog-card-preview-content {
+    padding: 20px;
+}
+
+.blog-card-preview-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.3rem;
+    color: #f5f5f5;
+    margin-bottom: 10px;
+}
+
+.blog-card-preview-excerpt {
+    color: #999;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* === Customizer Preview === */
+.customize-control-von-bastik-blog {
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

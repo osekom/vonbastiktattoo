@@ -1,0 +1,9 @@
+.git
+.github
+.vscode
+*.md
+plans/
+scripts/
+*.log
+.DS_Store
+Thumbs.db

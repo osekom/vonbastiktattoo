@@ -1,0 +1,78 @@
+services:
+  wordpress:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: von-bastik-wordpress
+    restart: unless-stopped
+    ports:
+      - "8888:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_TABLE_PREFIX: wp_
+    volumes:
+      - wp-content:/var/www/html/wp-content
+      - ./wp-content/themes/von-bastik-blog:/var/www/html/wp-content/themes/von-bastik-blog:cached
+    depends_on:
+      - mysql
+    networks:
+      - wordpress-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: von-bastik-mysql
+    restart: unless-stopped
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - wordpress-network
+    command: '--default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci'
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: von-bastik-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8889:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 100M
+    depends_on:
+      - mysql
+    networks:
+      - wordpress-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: von-bastik-nginx
+    restart: unless-stopped
+    ports:
+      - "8086:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./wp-content/themes/von-bastik-blog:/var/www/html/wp-content/themes/von-bastik-blog:cached
+    depends_on:
+      - wordpress
+    networks:
+      - wordpress-network
+
+volumes:
+  wp-content:
+    driver: local
+  mysql-data:
+    driver: local
+
+networks:
+  wordpress-network:
+    driver: bridge
