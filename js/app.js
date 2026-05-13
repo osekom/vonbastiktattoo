@@ -16,6 +16,7 @@
         initGalleryLazyLoad();
         initLightbox();
         initTabs();
+        initGalleryTabs();
         initContactForm();
         initSmoothScroll();
         initHeroSlideshow();
@@ -275,7 +276,7 @@
         });
     }
 
-    // --- Tabs ---
+    // --- Content Tabs ---
     function initTabs() {
         var tabBtns = document.querySelectorAll('.tab-btn');
         if (tabBtns.length === 0) return;
@@ -303,8 +304,10 @@
                 }
             });
         });
+    }
 
-        // Gallery tabs
+    // --- Gallery Tabs ---
+    function initGalleryTabs() {
         var galleryTabs = document.querySelectorAll('.gallery-tab');
         if (galleryTabs.length === 0) return;
 
@@ -545,4 +548,134 @@
             progressBar.style.width = scrollPercent + '%';
         });
     }
+
+    // --- Re-initialize for dynamically added content ---
+    // This is called after artist profile content is loaded dynamically
+    window.initDynamicContent = function () {
+        // Re-run scroll reveal for newly added elements
+        var revealElements = document.querySelectorAll('.reveal');
+        if (revealElements.length > 0) {
+            var isTouchDevice = ('ontouchstart' in window) || window.innerWidth <= 1024;
+            var observerOptions = isTouchDevice
+                ? { threshold: 0.05, rootMargin: '0px 0px 0px 0px' }
+                : { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
+
+            var observer = new IntersectionObserver(
+                function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                },
+                observerOptions
+            );
+
+            revealElements.forEach(function (el) {
+                // Only observe elements that haven't been observed yet
+                if (!el.classList.contains('active') && !el.classList.contains('revealed-dynamic')) {
+                    el.classList.add('revealed-dynamic');
+                    observer.observe(el);
+                }
+            });
+        }
+
+        // Re-run stat counter animation for newly added elements
+        var statNumbers = document.querySelectorAll('.stat-number');
+        if (statNumbers.length > 0) {
+            var observer = new IntersectionObserver(
+                function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            animateCounter(entry.target);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                },
+                { threshold: 0.5 }
+            );
+
+            statNumbers.forEach(function (el) {
+                if (!el.classList.contains('countered')) {
+                    el.classList.add('countered');
+                    observer.observe(el);
+                }
+            });
+        }
+
+        // Re-init lightbox for newly added gallery items
+        var lightbox = document.getElementById('lightbox');
+        if (lightbox) {
+            // The lightbox is already initialized on DOMContentLoaded,
+            // but we need to ensure openLightbox works for dynamic items
+            // (it already does since openLightbox is called inline via onclick)
+        }
+
+        // Re-init gallery lazy load for newly added galleries
+        var galleryGrids = document.querySelectorAll('.gallery-grid');
+        if (galleryGrids.length > 0) {
+            var INITIAL_COUNT = 10;
+            var LOAD_MORE_COUNT = 10;
+
+            galleryGrids.forEach(function (grid) {
+                // Skip if already processed
+                if (grid.hasAttribute('data-lazy-initialized')) return;
+                grid.setAttribute('data-lazy-initialized', 'true');
+
+                var items = grid.querySelectorAll('.gallery-item');
+                if (items.length <= INITIAL_COUNT) return;
+
+                var wrapper = grid.nextElementSibling;
+                if (!wrapper || !wrapper.classList.contains('load-more-wrapper')) {
+                    wrapper = document.createElement('div');
+                    wrapper.className = 'load-more-wrapper';
+                }
+
+                function updateButton() {
+                    var hiddenCount = grid.querySelectorAll('.gallery-item[data-lazy="true"]').length;
+                    
+                    if (hiddenCount <= 0) {
+                        if (wrapper.previousElementSibling === grid) {
+                            wrapper.remove();
+                        }
+                        return;
+                    }
+
+                    var loadCount = Math.min(LOAD_MORE_COUNT, hiddenCount);
+                    
+                    var btn = wrapper.querySelector('.btn-load-more');
+                    if (!btn) {
+                        btn = document.createElement('button');
+                        btn.className = 'btn-load-more';
+                        wrapper.appendChild(btn);
+                        
+                        btn.addEventListener('click', function () {
+                            var hiddenItems = grid.querySelectorAll('.gallery-item[data-lazy="true"]');
+                            for (var j = 0; j < Math.min(LOAD_MORE_COUNT, hiddenItems.length); j++) {
+                                hiddenItems[j].classList.remove('gallery-hidden');
+                                hiddenItems[j].removeAttribute('data-lazy');
+                                hiddenItems[j].style.animation = 'fadeUp 0.5s ease forwards';
+                            }
+                            updateButton();
+                        });
+                    }
+                    
+                    btn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver ' + loadCount + ' foto' + (loadCount === 1 ? '' : 's') + ' más';
+                }
+
+                // Show items beyond initial count and mark for lazy loading
+                for (var i = INITIAL_COUNT; i < items.length; i++) {
+                    items[i].classList.add('gallery-hidden');
+                    items[i].setAttribute('data-lazy', 'true');
+                }
+
+                if (grid.parentElement) {
+                    grid.parentElement.appendChild(wrapper);
+                }
+
+                updateButton();
+            });
+        }
+    };
 })();
