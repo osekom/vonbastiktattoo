@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Tatuaje | Von Bastik Studio</title>
+    <meta name="description" content="Diseña tu tatuaje perfecto y obtén una estimación de precio interactiva.">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.2.10/index.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/calculadora-tattoo.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="public/images/logo.png">
+</head>
+<body>
+    <!-- Back to Home -->
+    <a href="index.html" class="back-home">
+        <i class="fas fa-arrow-left"></i>
+        <span>Volver al inicio</span>
+    </a>
+
+    <!-- Hero Section -->
+    <section class="calc-hero">
+        <div class="hero-particles" id="particles"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Diseña tu 
+                <span class="gradient-text">Tatuaje Perfecto</span>
+            </h1>
+            <p class="hero-subtitle">
+                Responde 6 preguntas rápidas y descubre tu estimación de precio
+            </p>
+            <button class="start-btn" onclick="startCalculator()">
+                <span class="btn-text">Comenzar Aventura</span>
+                <span class="btn-icon"><i class="fas fa-rocket"></i></span>
+                <div class="btn-shine"></div>
+            </button>
+        </div>
+    </section>
+
+    <!-- Calculator Section (Hidden initially) -->
+    <section class="calculator-section" id="calculator">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="step-label" id="stepLabel">Paso 1 de 6</span>
+                <div class="xp-bar">
+                    <div class="xp-bar-bg">
+                        <div class="xp-bar-fill" id="xpBarFill"></div>
+                    </div>
+                    <span class="xp-text" id="xpText">0 XP</span>
+                </div>
+            </div>
+            <div class="steps-dots" id="stepsDots">
+                <div class="dot active" data-step="0"></div>
+                <div class="dot" data-step="1"></div>
+                <div class="dot" data-step="2"></div>
+                <div class="dot" data-step="3"></div>
+                <div class="dot" data-step="4"></div>
+                <div class="dot" data-step="5"></div>
+            </div>
+        </div>
+
+        <!-- Steps Container -->
+        <div class="steps-wrapper">
+            <!-- Step 1: Tattoo Size -->
+            <div class="step active" data-step="0">
+                <div class="step-header">
+                    <div class="step-icon-wrap">
+                        <i class="fas fa-ruler-combined"></i>
+                    </div>
+                    <h2>¿Qué tamaño buscas?</h2>
+                    <p>Tu tatuaje será pequeño, mediano o grande</p>
+                </div>
+                <div class="options-grid size-options">
+                    <div class="option-card" data-value="small" data-price="80">
+                        <div class="option-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="option-content">
+                            <h3>Pequeño</h3>
+                            <p>Hasta 10 cm</p>
+                        </div>
+                        <div class="option-price">Desde 80€</div>
+                        <div class="option-check">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="option-card" data-value="medium" data-price="150">
+                        <div class="option-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="option-content">
+                            <h3>Mediano</h3>
+                            <p>10 - 20 cm</p>
+                        </div>
+                        <div class="option-price">Desde 150€</div>
+                        <div class="option-check">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="option-card" data-value="large" data-price="300">
+                        <div class="option-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="option-content">
+                            <h3>Grande</h3>
+                            <p>20 - 30 cm</p>
+                        </div>
+                        <div class="option-price">Desde 300€</div>
+                        <div class="option-check">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="option-card" data-value="xlarge" data-price="500">
+                        <div class="option-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="option-content">
+                            <h3>Extra Grande</h3>
+                            <p>Más de 30 cm</p>
+                        </div>
+                        <div class="option-price">Desde 500€</div>
+                        <div class="option-check">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Body Part -->
+            <div class="step" data-step="1">
+                <div class="step-header">
+                    <div class="step-icon-wrap">
+                        <i class="fas fa-person"></i>
+                    </div>
+                    <h2>¿Dónde lo quieres?</h2>
+                    <p>Selecciona la zona del cuerpo</p>
+                </div>
+                <div class="zone-options-body">
+                    <div class="zone-options-list">
+                        <div class="zone-option" data-zone="head">
+                            <span class="zone-emoji">💇</span>
+                            <span class="zone-name">Cabeza / Pantalla</span>
+                        </div>
+                        <div class="zone-option" data-zone="neck">
+                            <span class="zone-emoji">🔗</span>
+                            <span class="zone-name">Cuello</span>
+                        </div>
+                        <div class="zone-option" data-zone="shoulder-left,shoulder-right">
+                            <span class="zone-emoji">💪</span>
+                            <span class="zone-name">Hombro</span>
+                        </div>
+                        <div class="zone-option" data-zone="chest">
+                            <span class="zone-emoji">❤️</span>
+                            <span class="zone-name">Pecho</span>
+                        </div>
+                        <div class="zone-option" data-zone="arm-left,arm-right">
+                            <span class="zone-emoji">💪</span>
+                            <span class="zone-name">Brazo</span>
+                        </div>
+                        <div class="zone-option" data-zone="forearm-left,forearm-right">
+                            <span class="zone-emoji">✏️</span>
+                            <span class="zone-name">Antebrazo</span>
+                        </div>
+                        <div class="zone-option" data-zone="hand-left,hand-right">
+                            <span class="zone-emoji">🤞</span>
+                            <span class="zone-name">Mano</span>
+                        </div>
+                        <div class="zone-option" data-zone="stomach">
+                            <span class="zone-emoji">⭕</span>
+                            <span class="zone-name">Estómago</span>
+                        </div>
+                        <div class="zone-option" data-zone="leg-left,leg-right">
+                            <span class="zone-emoji">🦵</span>
+                            <span class="zone-name">Muslo</span>
+                        </div>
+                        <div class="zone-option" data-zone="shin-left,shin-right">
+                            <span class="zone-emoji">🦿</span>
+                            <span class="zone-name">Pierna</span>
+                        </div>
+                        <div class="zone-option" data-zone="foot-left,foot-right">
+                            <span class="zone-emoji">👟</span>
+                            <span class="zone-name">Pie</span>
+                        </div>
+                        <div class="zone-option" data-zone="back">
+                            <span class="zone-emoji">⭐</span>
+                            <span class="zone-name">Espalda</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Style -->
+            <div class="step" data-step="2">
+                <div class="step-header">
+                    <div class="step-icon-wrap">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h2>¿Qué estilo prefieres?</h2>
+                    <p>Elige el arte que más te represente</p>
+                </div>
+                <div class="style-cards">
+                    <div class="style-card" data-value="realism" data-price="1.5">
+                        <div class="style-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <i class="fas fa-portrait"></i>
+                        </div>
+                        <h3>Realismo</h3>
+                        <p>Retratos y escenas hiperrealistas</p>
+                        <div class="style-tag">Premium</div>
+                    </div>
+                    <div class="style-card" data-value="blackwork" data-price="1.3">
+                        <div class="style-preview" style="background: linear-gradient(135deg, #0c0c0c 0%, #2d2d2d 100%); border: 2px solid #c9a96e;">
+                            <i class="fas fa-circle-notch"></i>
+                        </div>
+                        <h3>Blackwork</h3>
+                        <p>Geometría y patrones bold</p>
+                        <div class="style-tag">Popular</div>
+                    </div>
+                    <div class="style-card" data-value="fineline" data-price="1.4">
+                        <div class="style-preview" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+                            <i class="fas fa-feather-alt"></i>
+                        </div>
+                        <h3>Fine Line</h3>
+                        <p>Delineado fino y delicado</p>
+                        <div class="style-tag">Elegante</div>
+                    </div>
+                    <div class="style-card" data-value="watercolor" data-price="1.4">
+                        <div class="style-preview" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <h3>Acuarela</h3>
+                        <p>Color y fluidez artística</p>
+                        <div class="style-tag">Artístico</div>
+                    </div>
+                    <div class="style-card" data-value="japanese" data-price="1.3">
+                        <div class="style-preview" style="background: linear-gradient(135deg, #fc5c7d 0%, #6a82fb 100%);">
+                            <i class="fas fa-fan"></i>
+                        </div>
+                        <h3>Japonés</h3>
+                        <p>Tradición y simbolismo</p>
+                    </div>
+                    <div class="style-card" data-value="minimalist" data-price="1.0">
+                        <div class="style-preview" style="background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);">
+                            <i class="fas fa-minus"></i>
+                        </div>
+                        <h3>Minimalista</h3>
+                        <p>Menos es más</p>
+                        <div class="style-tag">Básico</div>
+                    </div>
+                    <div class="style-card" data-value="color" data-price="1.3">
+                        <div class="style-preview" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h3>Color</h3>
+                        <p>Vibrante y expresivo</p>
+                    </div>
+                    <div class="style-card" data-value="traditional" data-price="1.1">
+                        <div class="style-preview" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                            <i class="fas fa-anchor"></i>
+                        </div>
+                        <h3>Traditional</h3>
+                        <p>Old & New School</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Complexity -->
+            <div class="step" data-step="3">
+                <div class="step-header">
+                    <div class="step-icon-wrap">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h2>¿Qué nivel de detalle?</h2>
+                    <p>El nivel de complejidad afecta el tiempo</p>
+                </div>
+                <div class="complexity-options">
+                    <div class="complexity-card" data-value="simple" data-multiplier="1.0">
+                        <div class="complexity-visual simple">
+                            <div class="shape simple-shape"></div>
+                        </div>
+                        <h3>Sencillo</h3>
+                        <p>Líneas limpias, poco sombreado</p>
+                        <div class="complexity-features">
+                            <span><i class="fas fa-check"></i> Contornos</span>
+                            <span><i class="fas fa-check"></i> Relleno básico</span>
+                        </div>
+                    </div>
+                    <div class="complexity-card selected" data-value="moderate" data-multiplier="1.3">
+                        <div class="complexity-visual moderate">
+                            <div class="shape moderate-shape"></div>
+                            <div class="shape moderate-shape2"></div>
+                        </div>
+                        <h3>Moderado</h3>
+                        <p>Sombras y detalles intermedios</p>
+                        <div class="complexity-features">
+                            <span><i class="fas fa-check"></i> Contornos</span>
+                            <span><i class="fas fa-check"></i> Sombreado</span>
+                            <span><i class="fas fa-check"></i> Detalles</span>
+                        </div>
+                    </div>
+                    <div class="complexity-card" data-value="detailed" data-multiplier="1.6">
+                        <div class="complexity-visual detailed">
+                            <div class="shape detailed-shape"></div>
+                            <div class="shape detailed-shape2"></div>
+                            <div class="shape detailed-shape3"></div>
+                        </div>
+                        <h3>Detectado</h3>
+                        <p>Alto nivel de detalle y textura</p>
+                        <div class="complexity-features">
+                            <span><i class="fas fa-check"></i> Todo lo anterior</span>
+                            <span><i class="fas fa-check"></i> Texturas</span>
+                            <span><i class="fas fa-check"></i> Gradeos</span>
+                            <span><i class="fas fa-check"></i> Alto detalle</span>
+                        </div>
+                    </div>
+                    <div class="complexity-card" data-value="intricate" data-multiplier="2.0">
+                        <div class="complexity-visual intricate">
+                            <div class="shape intricate-shape"></div>
+                            <div class="shape intricate-shape2"></div>
+                            <div class="shape intricate-shape3"></div>
+                            <div class="shape intricate-shape4"></div>
+                        </div>
+                        <h3>Intricado</h3>
+                        <p>Obra de arte con cada pixel</p>
+                        <div class="complexity-features">
+                            <span><i class="fas fa-check"></i> Todo lo anterior</span>
+                            <span><i class="fas fa-check"></i> Ultra detalle</span>
+                            <span><i class="fas fa-check"></i> Personalizado</span>
+                            <span><i class="fas fa-check"></i> Premium</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Color -->
+            <div class="step" data-step="4">
+                <div class="step-header">
+                    <div class="step-icon-wrap">
+                        <i class="fas fa-swatchbook"></i>
+                    </div>
+                    <h2>¿Color o blanco y negro?</h2>
+                    <p>El color añade un toque especial</p>
+                </div>
+                <div class="color-options">
+                    <div class="color-choice" data-value="bw" data-multiplier="1.0">
+                        <div class="color-swatch bw-swatch">
+                            <div class="bw-circle"></div>
+                        </div>
+                        <h3>Blanco y Negro</h3>
+                        <p>Clásico y atemporal</p>
+                        <div class="color-visual">
+                            <div class="bw-tattoo"></div>
+                        </div>
+                    </div>
+                    <div class="color-choice" data-value="color" data-multiplier="1.25">
+                        <div class="color-swatch color-swatch-full">
+                            <div class="color-spectrum"></div>
+                        </div>
+                        <h3>Color</h3>
+                        <p>Vibrante y único</p>
+                        <div class="color-visual">
+                            <div class="color-tattoo"></div>
+                        </div>
+                    </div>
+                    <div class="color-choice" data-value="mixed" data-multiplier="1.15">
+                        <div class="color-swatch mixed-swatch">
+                            <div class="mixed-circle"></div>
+                        </div>
+                        <h3>Mixto</h3>
+                        <p>BN con toques de color</p>
+                        <div class="color-visual">
+                            <div class="mixed-tattoo"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6: Artist -->
+            <div class="step" data-step="5">
+                <div class="step-header">
+                    <div class="step-icon-wrap">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <h2>¿Qué artista te inspira?</h2>
+                    <p>Cada uno tiene su estilo único</p>
+                </div>
+                <div class="artist-cards">
+                    <div class="artist-card" data-artist="selene">
+                        <div class="artist-avatar">
+                            <img src="public/artist/Selene/selene-hero.jpg" alt="Selene" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a1a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23c9a96e%22 font-size=%2240%22>S</text></svg>'">
+                        </div>
+                        <h3>Selene</h3>
+                        <p>Especialista en realismo y fine line</p>
+                        <div class="artist-style-tags">
+                            <span class="tag">Realismo</span>
+                            <span class="tag">Fine Line</span>
+                        </div>
+                    </div>
+                    <div class="artist-card" data-artist="inkbo">
+                        <div class="artist-avatar">
+                            <img src="public/artist/Inkbo/inkbo-hero.jpg" alt="Inkbo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a1a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23c9a96e%22 font-size=%2240%22>I</text></svg>'">
+                        </div>
+                        <h3>Inkbo</h3>
+                        <p>Master en blackwork y geométrico</p>
+                        <div class="artist-style-tags">
+                            <span class="tag">Blackwork</span>
+                            <span class="tag">Geométrico</span>
+                        </div>
+                    </div>
+                    <div class="artist-card" data-artist="bigtorres">
+                        <div class="artist-avatar">
+                            <img src="public/artist/BigTorres/bigtorres-hero.jpg" alt="Big Torres" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a1a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23c9a96e%22 font-size=%2240%22>B</text></svg>'">
+                        </div>
+                        <h3>Big Torres</h3>
+                        <p>Especialista en tradicional y color</p>
+                        <div class="artist-style-tags">
+                            <span class="tag">Traditional</span>
+                            <span class="tag">Color</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="step-navigation">
+            <button class="nav-btn prev-btn" onclick="prevStep()" style="display: none;">
+                <i class="fas fa-arrow-left"></i>
+                <span>Anterior</span>
+            </button>
+            <div class="spacer"></div>
+            <button class="nav-btn next-btn" onclick="nextStep()">
+                <span>Siguiente</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Results Section (Hidden initially) -->
+    <section class="results-section" id="results">
+        <div class="confetti-container" id="confetti"></div>
+        <div class="results-content">
+            <div class="results-badge animate-bounce">
+                <i class="fas fa-trophy"></i>
+                <span>¡COMPLETADO!</span>
+            </div>
+            
+            <h2>Tu tatuaje estimado es...</h2>
+            
+            <div class="price-display">
+                <div class="price-range">
+                    <span class="price-min" id="priceMin">120€</span>
+                    <span class="price-separator">-</span>
+                    <span class="price-max" id="priceMax">180€</span>
+                </div>
+                <p class="price-note">Precio orientativo. El precio final puede variar según el diseño.</p>
+            </div>
+
+            <div class="summary-card">
+                <h3><i class="fas fa-clipboard-list"></i> Tu Resumen</h3>
+                <div class="summary-items" id="summaryItems"></div>
+            </div>
+
+            <div class="results-actions">
+                <button onclick="openWhatsApp()" class="action-btn primary-btn" id="whatsappBtn">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>Contactar por WhatsApp</span>
+                </button>
+                <button class="action-btn secondary-btn" onclick="resetCalculator()">
+                    <i class="fas fa-redo"></i>
+                    <span>Empezar de Nuevo</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="calc-footer">
+        <p>© 2025 Von Bastik Tattoo Studio. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="index.html">Inicio</a>
+            <a href="artist.html">Artistas</a>
+            <a href="aviso-legal.html">Aviso Legal</a>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="calc-toast" id="calcToast"></div>
+
+    <script src="js/calculadora-tattoo.js"></script>
+    </body>
+</html>
