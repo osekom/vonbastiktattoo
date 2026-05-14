@@ -23,6 +23,7 @@
         initTypewriter();
         initParallax();
         initScrollProgress();
+        loadArtistsFromAPI();
     });
 
     // --- Navbar Scroll State ---
@@ -337,7 +338,7 @@
         });
     }
 
-    // --- Contact Form ---
+    // --- Contact Form → WordPress API ---
     function initContactForm() {
         var forms = document.querySelectorAll('form[id*="contact"], form[id*="booking"]');
         if (forms.length === 0) return;
@@ -374,23 +375,117 @@
                 }
 
                 if (isValid) {
-                    showToast();
-                    form.reset();
+                    sendToWordPress(form);
                 }
             });
         });
 
-        function showToast() {
+        function sendToWordPress(form) {
+            var submitBtn = form.querySelector('button[type="submit"]');
+            var originalText = submitBtn ? submitBtn.textContent : '';
+            
+            if (submitBtn) {
+                submitBtn.textContent = 'Enviando...';
+                submitBtn.disabled = true;
+            }
+
+            // Collect form data
+            var nameInput = form.querySelector('#contact-name, input[name="nombre"], input[type="text"]');
+            var emailInput = form.querySelector('#contact-email, input[name="email"], input[type="email"]');
+            var phoneInput = form.querySelector('#contact-phone, input[name="telefono"], input[type="tel"]');
+            var styleInput = form.querySelector('#contact-style, select[name="estilo"], select[name="tipo_tatuaje"]');
+            var messageInput = form.querySelector('#contact-message, textarea[name="mensaje"], textarea');
+
+            var formData = {
+                nombre: nameInput ? nameInput.value : '',
+                email: emailInput ? emailInput.value : '',
+                telefono: phoneInput ? phoneInput.value : '',
+                estilo: styleInput ? styleInput.value : '',
+                mensaje: messageInput ? messageInput.value : '',
+                website: '' // Honeypot anti-spam
+            };
+
+            // Honeypot field check
+            var honeypot = form.querySelector('#website, input[name="website"]');
+            if (honeypot) {
+                honeypot.value = '';
+            }
+
+            const wordpressUrl = 'https://vonbastiktattoo.es';
+            
+            fetch(`${wordpressUrl}/wp-json/vbt/v1/contacto`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    showSuccessToast(form);
+                    form.reset();
+                } else {
+                    showErrorToast(data.error || 'Error al enviar');
+                    if (submitBtn) {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }
+            })
+            .catch(function(error) {
+                showErrorToast('No se pudo conectar. Inténtalo de nuevo.');
+                if (submitBtn) {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        function showSuccessToast(form) {
+            var toast = document.getElementById('toast');
+            if (toast) {
+                toast.innerHTML = '<i class="fas fa-check-circle" style="color:#0a0a0a;margin-right:8px;"></i> Solicitud enviada correctamente. Te contactaremos pronto.';
+                toast.classList.add('show', 'success');
+                setTimeout(function () {
+                    toast.classList.remove('show', 'success');
+                }, 5000);
+            }
+            
+            // Also show the success message div if it exists
+            var successMsg = document.querySelector('.form-success-message');
+            if (successMsg) {
+                successMsg.classList.add('show');
+                setTimeout(function() {
+                    successMsg.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        function showErrorToast(message) {
+            var toast = document.getElementById('toast');
+            if (toast) {
+                toast.innerHTML = '<i class="fas fa-exclamation-circle" style="color:#ff4444;margin-right:8px;"></i> ' + message;
+                toast.classList.add('show', 'error');
+                setTimeout(function () {
+                    toast.classList.remove('show', 'error');
+                }, 5000);
+            }
+        }
+
+        window.showToast = function(message, type) {
             var toast = document.getElementById('toast');
             if (!toast) return;
-
+            
+            if (type === 'success') {
+                toast.innerHTML = '<i class="fas fa-check-circle"></i> ' + (message || 'Mensaje enviado');
+            } else {
+                toast.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (message || 'Error');
+            }
+            
             toast.classList.add('show');
             setTimeout(function () {
                 toast.classList.remove('show');
             }, 4000);
-        }
-
-        window.showToast = showToast;
+        };
     }
 
     // --- Smooth Scroll for Anchor Links ---
@@ -678,4 +773,120 @@
             });
         }
     };
+
+    // --- Load Artists from TAM API ---
+    // Disabled on index.html - uses consolidated API script instead
+    var loadArtistsFromAPI = function () {
+        // Skip loading - index.html handles artists/gallery loading via consolidated script
+        if (document.getElementById('galleryGridTatuajes')) {
+            return;
+        }
+        
+        var artistsGrid = document.getElementById('artistsGrid');
+        var artistsLoading = document.getElementById('artistsLoading');
+
+        if (!artistsGrid) return;
+
+        var API_URL = 'https://vonbastiktattoo.es/wp-json/tam/v1/artists';
+
+        // Show loading state
+        if (artistsLoading) {
+            artistsLoading.style.display = 'block';
+        }
+
+        fetch(API_URL)
+            .then(function (response) {
+                console.log('[Artists] Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch artists: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(function (artists) {
+                console.log('[Artists] Received artists:', Object.keys(artists));
+                if (artistsLoading) {
+                    artistsLoading.style.display = 'none';
+                }
+
+                if (!artists || Object.keys(artists).length === 0) {
+                    artistsGrid.innerHTML = '<p style="color:#888;text-align:center;width:100%;">No hay artistas disponibles.</p>';
+                    return;
+                }
+
+                var html = '';
+
+                // Iterate over each artist in the response object
+                for (var slug in artists) {
+                    if (!artists.hasOwnProperty(slug)) continue;
+
+                    var artist = artists[slug];
+                    var artistName = artist.name || 'Unknown Artist';
+                    var artistSlug = artist.slug || slug;
+                    var specialty = artist.hero && artist.hero.specialty ? artist.hero.specialty : (artist.genres ? artist.genres.join(', ') : '');
+                    var cover = 'public/images/logo.png';
+                    if (artist.hero && artist.hero.cover) {
+                        // WordPress returns paths like "wp-content/uploads/..." - prepend domain for static site
+                        if (artist.hero.cover.indexOf('wp-content') === 0) {
+                            cover = 'https://vonbastiktattoo.es/' + artist.hero.cover;
+                        } else {
+                            cover = artist.hero.cover;
+                        }
+                    }
+                    var bio = '';
+                    if (artist.bio) {
+                        if (Array.isArray(artist.bio) && artist.bio.length > 0) {
+                            bio = artist.bio[0];
+                        } else if (typeof artist.bio === 'string') {
+                            bio = artist.bio;
+                        }
+                    }
+                    // Truncate bio to ~120 characters for card preview
+                    if (bio.length > 120) {
+                        bio = bio.substring(0, 120) + '...';
+                    }
+
+                    // Build artist card
+                    html += '<article class="artist-card reveal">';
+                    html += '    <div class="artist-image-wrapper overflow-hidden">';
+                    html += '        <img src="' + cover + '" alt="' + artistName + '" class="artist-image" loading="lazy">';
+                    html += '    </div>';
+                    html += '    <div class="artist-info">';
+                    html += '        <h3>' + artistName + '</h3>';
+                    if (specialty) {
+                        html += '        <p class="artist-specialty">' + specialty + '</p>';
+                    }
+                    if (bio) {
+                        html += '        <p class="artist-description">' + bio + '</p>';
+                    }
+                    html += '        <div class="artist-links">';
+                    html += '            <a href="artist.html?id=' + artistSlug + '" class="artist-link-primary" aria-label="Ver perfil de ' + artistName + '">Ver portfolio</a>';
+                    // Add Instagram link if available
+                    if (artist.social && Array.isArray(artist.social)) {
+                        for (var i = 0; i < artist.social.length; i++) {
+                            if (artist.social[i].indexOf('instagram.com') !== -1) {
+                                html += '            <a href="' + artist.social[i] + '" class="artist-link-secondary" target="_blank" rel="noopener noreferrer" aria-label="Instagram de ' + artistName + '"><i class="fab fa-instagram"></i></a>';
+                                break;
+                            }
+                        }
+                    }
+                    html += '        </div>';
+                    html += '    </div>';
+                    html += '</article>';
+                }
+
+                artistsGrid.innerHTML = html;
+
+                // Re-init scroll reveal for newly added cards
+                initScrollReveal();
+            })
+            .catch(function (error) {
+                console.error('[Artists] Error loading artists:', error);
+                if (artistsLoading) {
+                    artistsLoading.style.display = 'none';
+                }
+                artistsGrid.innerHTML = '<p style="color:#888;text-align:center;width:100%;">Error al cargar los artistas. Por favor, inténtalo más tarde.</p>';
+            });
+    };
+
+    window.loadArtistsFromAPI = loadArtistsFromAPI;
 })();

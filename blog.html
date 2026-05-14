@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Von Bastik Tattoo Studio</title>
+    <meta name="description" content="Blog de Von Bastik Tattoo. Artículos sobre tatuajes, cuidados, artistas y tendencias en el mundo del tattoo.">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="public/images/logo.png">
+    <link rel="apple-touch-icon" href="public/images/logo.png">
+
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.2.10/index.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/blog.css">
+
+    <!-- JSON-LD Blog Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Von Bastik Tattoo Blog",
+        "description": "Artículos sobre tatuajes, cuidados, artistas y tendencias",
+        "url": "https://vonbastiktattoo.es/blog.html",
+        "publisher": {
+            "@type": "TattooParlor",
+            "name": "Von Bastik Tattoo & Piercing"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <header>
+        <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="navbar" aria-label="Navegación principal">
+            <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+                <a href="index.html" class="inline-block">
+                    <img src="public/images/logo.png" alt="Von Bastik Tattoo" class="h-10 w-auto">
+                </a>
+                <div class="desktop-nav flex items-center gap-10">
+                    <a href="index.html" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;">Inicio</a>
+                    <a href="index.html#nosotros" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;">Nosotros</a>
+                    <a href="index.html#servicios" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;">Servicios</a>
+                    <a href="index.html#artistas" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;">Artistas</a>
+                    <a href="index.html#galeria" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;">Galería</a>
+                    <a href="index.html#contacto" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;">Contacto</a>
+                    <a href="blog.html" class="nav-link text-sm uppercase tracking-wider active-blog" style="color:#c9a96e;font-weight:600;"><i class="fas fa-newspaper"></i> Blog</a>
+                    <a href="calculadora-tattoo.html" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;"><i class="fas fa-calculator"></i> Calculadora</a>
+                </div>
+                <a href="index.html#contacto" class="btn-primary inline-flex items-center gap-2" style="font-size:0.8rem;padding:8px 18px;">
+                    <i class="far fa-calendar-alt"></i> Reservar Cita
+                </a>
+                <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Menú de navegación móvil">
+        <a href="index.html">Inicio</a>
+        <a href="index.html#nosotros">Nosotros</a>
+        <a href="index.html#servicios">Servicios</a>
+        <a href="index.html#artistas">Artistas</a>
+        <a href="index.html#galeria">Galería</a>
+        <a href="index.html#contacto">Contacto</a>
+        <a href="blog.html" style="color:#c9a96e;font-weight:600;"><i class="fas fa-newspaper"></i> Blog</a>
+        <a href="calculadora-tattoo.html" style="color:#e5e5e5;"><i class="fas fa-calculator"></i> Calculadora</a>
+        <a href="index.html#contacto" class="mobile-reserve-btn" style="color:#0a0a0a;background:#c9a96e;padding:10px 20px;border-radius:4px;font-weight:600;">Reservar Cita</a>
+    </div>
+
+    <main id="main-content">
+        <!-- Blog Hero -->
+        <section class="blog-hero">
+            <div class="blog-hero-overlay"></div>
+            <div class="blog-hero-content">
+                <div class="reveal">
+                    <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Nuestro Blog</p>
+                    <h1 class="blog-hero-title">Historias, Consejos & Arte</h1>
+                    <p class="blog-hero-subtitle">Descubre artículos sobre tatuajes, cuidados posteriores, perfiles de artistas y las últimas tendencias del mundo del tattoo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Filters -->
+        <section class="blog-filters-section py-8 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="blog-filters" id="blogFilters">
+                    <button class="filter-btn active" data-category="all">
+                        <i class="fas fa-th"></i> Todos
+                    </button>
+                    <button class="filter-btn" data-category="tips">
+                        <i class="fas fa-lightbulb"></i> Consejos
+                    </button>
+                    <button class="filter-btn" data-category="artists">
+                        <i class="fas fa-user"></i> Artistas
+                    </button>
+                    <button class="filter-btn" data-category="trends">
+                        <i class="fas fa-fire"></i> Tendencias
+                    </button>
+                    <button class="filter-btn" data-category="care">
+                        <i class="fas fa-heart"></i> Cuidados
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Posts Grid -->
+        <section class="py-12 px-6" id="blog-posts-section">
+            <div class="max-w-7xl mx-auto">
+                <!-- Loading State -->
+                <div class="blog-loading" id="blogLoading">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                    <p class="text-[#888] mt-4">Cargando artículos...</p>
+                </div>
+
+                <!-- Error State -->
+                <div class="blog-error hidden" id="blogError">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>No se pudieron cargar los artículos</h3>
+                    <p>Por favor, verifica la conexión a internet o la configuración de la API.</p>
+                    <button class="btn-primary" onclick="loadBlogPosts()">
+                        <i class="fas fa-redo"></i> Reintentar
+                    </button>
+                </div>
+
+                <!-- Posts Grid -->
+                <div class="blog-grid" id="blogGrid">
+                    <!-- Posts will be injected here by JavaScript -->
+                </div>
+
+                <!-- Load More -->
+                <div class="blog-load-more hidden" id="loadMoreContainer">
+                    <button class="load-more-btn" id="loadMoreBtn">
+                        <i class="fas fa-plus"></i> Cargar más artículos
+                    </button>
+                </div>
+
+                <!-- No Posts State -->
+                <div class="blog-no-posts hidden" id="blogNoPosts">
+                    <div class="no-posts-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3>No hay artículos disponibles</h3>
+                    <p>Próximamente publicaremos nuevo contenido. ¡Vuelve pronto!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="py-20 px-6 bg-[#0d0d0d]">
+            <div class="max-w-3xl mx-auto text-center reveal">
+                <i class="fas fa-envelope text-[#c9a96e] text-3xl mb-6"></i>
+                <h2 class="section-title text-3xl font-bold mb-4">No te pierdas nada</h2>
+                <p class="text-[#888] mb-8">Suscríbete para recibir los últimos artículos, consejos y novedades del estudio.</p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <div class="newsletter-input-wrap">
+                        <input type="email" placeholder="tu@email.com" required aria-label="Email para newsletter">
+                        <button type="submit" class="newsletter-btn">
+                            <i class="fas fa-paper-plane"></i> Suscribirse
+                        </button>
+                    </div>
+                    <p class="text-[#555] text-sm mt-3">Sin spam. Cancela cuando quieras.</p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-16 px-6" role="contentinfo">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-12 mb-12">
+                <!-- Brand -->
+                <div>
+                    <a href="index.html" class="inline-block">
+                        <img src="public/images/logo.png" alt="Von Bastik Tattoo" class="h-8 w-auto">
+                    </a>
+                    <p class="text-[#888] text-sm mt-4 leading-relaxed">Tres artistas, un estudio. Tatuajes personalizados con la excelencia que mereces.</p>
+                </div>
+                <!-- Links -->
+                <div>
+                    <h4 class="font-bold text-sm uppercase tracking-wider text-[#c9a96e] mb-4">Enlaces</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Inicio</a></li>
+                        <li><a href="index.html#servicios" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Servicios</a></li>
+                        <li><a href="index.html#artistas" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Artistas</a></li>
+                        <li><a href="index.html#galeria" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Galería</a></li>
+                        <li><a href="index.html#contacto" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Contacto</a></li>
+                        <li><a href="blog.html" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+                <!-- Legal -->
+                <div>
+                    <h4 class="font-bold text-sm uppercase tracking-wider text-[#c9a96e] mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="aviso-legal.html" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Aviso Legal</a></li>
+                        <li><a href="politica-privacidad.html" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Política de Privacidad</a></li>
+                        <li><a href="cookies.html" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="inkborder-t inkborder-[#1a1a1a] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-[#555] text-sm">© 2026 Von Bastik. Todos los derechos reservados.</p>
+                <div class="flex gap-3">
+                    <a href="https://www.instagram.com/vonbastiktattoo/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://tiktok.com/@vonbastik" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://youtube.com/@vonbastik" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/34653053913?text=Hola%20Von%20Bastik%2C%20me%20gustar%C3%ADa%20pedir%20informaci%C3%B3n%20sobre%20vuestros%20servicios." target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="Escríbenos por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Blog Post Modal -->
+    <div class="blog-modal" id="blogModal">
+        <div class="blog-modal-overlay" id="blogModalOverlay"></div>
+        <div class="blog-modal-content">
+            <button class="blog-modal-close" id="blogModalClose" aria-label="Cerrar artículo">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="blog-modal-body" id="blogModalBody">
+                <!-- Article content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast" role="alert" aria-live="polite">
+        <p style="color:#c9a96e; font-weight:600; font-size:0.9rem;">✓ Suscripción exitosa</p>
+        <p style="color:#888; font-size:0.8rem; margin-top:4px;">Recibirás nuestros últimos artículos.</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/app.js" defer></script>
+    <script src="js/blog.js" defer></script>
+</body>
+</html>

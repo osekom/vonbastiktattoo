@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genera tu Tatuaje con IA | Von Bastik</title>
+    <meta name="description" content="Un pequeño juego de broma: escribe un prompt, genera un tatuaje con IA y descubre el mensaje final del estudio.">
+    <meta name="robots" content="index, follow">
+
+    <link rel="icon" type="image/png" href="public/images/logo.png">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.2.10/index.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/genera-tu-tatuaje-ia.css">
+</head>
+<body class="ai-joke-page">
+    <a href="index.html" class="back-home">
+        <i class="fas fa-arrow-left"></i>
+        <span>Volver al inicio</span>
+    </a>
+
+    <main class="ai-game-shell">
+
+        <section class="ai-chat-shell" aria-label="Conversación con la IA">
+            <div class="ai-chat-header ai-panel">
+                <div>
+                    <span class="ai-panel__eyebrow">Chat en vivo</span>
+                    <h2>Asistente de tatuajes IA</h2>
+                </div>
+                <div class="ai-chat-status">
+                    <span class="ai-chat-status__dot"></span>
+                    <span id="statusText">Escribiendo contigo.</span>
+                </div>
+            </div>
+
+            <article class="ai-panel ai-chat-thread-wrap">
+                <div class="ai-chat-thread" id="chatThread" aria-live="polite" aria-label="Historial de la conversación"></div>
+            </article>
+
+            <form id="promptForm" class="ai-chat-dock ai-panel">
+                <div class="ai-chat-dock__top">
+                    <label for="promptInput" class="ai-label">Escribe tu idea</label>
+                    <span class="ai-chat-count"><span id="versionText">0</span> respuestas</span>
+                </div>
+
+                <textarea
+                    id="promptInput"
+                    class="ai-textarea"
+                    rows="4"
+                    maxlength="220"
+                    placeholder="Ejemplo: un dragón samurái en blackwork con flores de cerezo y humo cósmico"
+                ></textarea>
+
+                <div class="ai-chip-row" aria-label="Ejemplos de prompts">
+                    <button type="button" class="ai-chip" data-prompt="calavera minimalista con rosas y líneas finas">Calavera + rosas</button>
+                    <button type="button" class="ai-chip" data-prompt="dragón japonés rodeado de humo y estrellas">Dragón japonés</button>
+                    <button type="button" class="ai-chip" data-prompt="ojos místicos, geometría sagrada y tinta negra">Geometría sagrada</button>
+                </div>
+
+                <div class="ai-chat-actions">
+                    <button type="submit" class="ai-submit">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                        <span>Enviar</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script src="js/genera-tu-tatuaje-ia.js"></script>
+</body>
+</html>

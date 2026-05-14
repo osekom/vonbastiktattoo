@@ -1,39 +1,123 @@
 /* ========================================
    Von Bastik Tattoo - Artist Profile Template
-   Dynamic rendering from data/artists.json
+   Dynamic rendering from WordPress REST API
+   Fallback: data/artists.json
    Usage: artist.html?id=<slug>
    ======================================== */
 
 (function () {
     'use strict';
 
-    var ARTIST_DATA_URL = 'data/artists.json';
+    // WordPress REST API endpoint for single artist
+    // Falls back to local JSON for static site development
+    var WORDPRESS_API_URL = 'https://vonbastiktattoo.es/wp-json/tam/v1/artists';
+    var LOCAL_FALLBACK_URL = 'data/artists.json';
+    var ALL_ARTISTS_URL = 'https://vonbastiktattoo.es/wp-json/tam/v1/artists';
+    
     var currentArtist = null;
+
+    /**
+     * Normalize image path: prepend domain for WordPress paths
+     */
+    function normalizeImagePath(path) {
+        if (!path) return '';
+        if (path.indexOf('wp-content') === 0) {
+            return 'https://vonbastiktattoo.es/' + path;
+        }
+        return path;
+    }
 
     function getArtistId() {
         var params = new URLSearchParams(window.location.search);
         return params.get('id') || 'selene';
     }
 
+    /**
+     * Fetch artist data from WordPress API or local fallback
+     */
+    function fetchArtistData(artistId) {
+        // Try WordPress API first
+        return fetch(WORDPRESS_API_URL + '/' + encodeURIComponent(artistId))
+            .then(function (res) {
+                if (res.ok) {
+                    return res.json();
+                }
+                // If 404, try all-artists endpoint
+                if (res.status === 404) {
+                    return fetchAllArtistsThenFind(artistId);
+                }
+                throw new Error('API error: ' + res.status);
+            })
+            .then(function (data) {
+                // API returns {"slug": {...}}, extract the artist object
+                if (data && typeof data === 'object' && !Array.isArray(data)) {
+                    // If the response has the artistId as a key, use that
+                    if (data[artistId]) {
+                        return data[artistId];
+                    }
+                    // If there's only one key, use its value
+                    var keys = Object.keys(data);
+                    if (keys.length === 1 && data[keys[0]]) {
+                        return data[keys[0]];
+                    }
+                }
+                return data;
+            })
+            .catch(function (err) {
+                console.warn('[artist-template] WordPress API failed, trying fallback:', err);
+                // Fallback to local JSON
+                return fetchLocalFallback(artistId);
+            });
+    }
+
+    /**
+     * Fetch all artists and find by slug
+     */
+    function fetchAllArtistsThenFind(artistId) {
+        return fetch(WORDPRESS_API_URL)
+            .then(function (res) {
+                if (!res.ok) throw new Error('API error: ' + res.status);
+                return res.json();
+            })
+            .then(function (data) {
+                if (!data[artistId]) {
+                    throw new Error('Artist not found: ' + artistId);
+                }
+                return data[artistId];
+            });
+    }
+
+    /**
+     * Load from local JSON fallback
+     */
+    function fetchLocalFallback(artistId) {
+        return fetch(LOCAL_FALLBACK_URL)
+            .then(function (res) {
+                if (!res.ok) throw new Error('Local fallback failed: ' + res.status);
+                return res.json();
+            })
+            .then(function (data) {
+                if (!data[artistId]) {
+                    throw new Error('Artist not found in local data: ' + artistId);
+                }
+                return data[artistId];
+            });
+    }
+
     function init() {
         var artistId = getArtistId();
         var loader = document.getElementById('pageLoader');
 
-        fetch(ARTIST_DATA_URL)
-            .then(function (res) { return res.json(); })
-            .then(function (data) {
-                if (!data[artistId]) {
-                    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#e5e5e5;background:#0a0a0a;font-family:Space Grotesk,sans-serif;"><div style="text-align:center;"><h1 style="font-size:2rem;margin-bottom:1rem;">Artista no encontrado</h1><a href="index.html" style="color:#c9a96e;">&larr; Volver al inicio</a></div></div>';
-                    return;
-                }
-                currentArtist = data[artistId];
+        fetchArtistData(artistId)
+            .then(function (artistData) {
+                currentArtist = artistData;
                 renderPage(currentArtist);
                 if (loader) loader.classList.add('hidden');
             })
             .catch(function (err) {
                 console.error('Error loading artist data:', err);
                 if (loader) loader.classList.add('hidden');
-                document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#e5e5e5;background:#0a0a0a;font-family:Space Grotesk,sans-serif;"><div style="text-align:center;"><h1 style="font-size:2rem;margin-bottom:1rem;">Error al cargar</h1><a href="index.html" style="color:#c9a96e;">&larr; Volver al inicio</a></div></div>';
+                document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#e5e5e5;background:#0a0a0a;font-family:Space Grotesk,sans-serif;"><div style="text-align:center;"><h1 style="font-size:2rem;margin-bottom:1rem;">Artista no encontrado</h1><a href="index.html" style="color:#c9a96e;">&larr; Volver al inicio</a></div></div>';
             });
     }
 
@@ -97,9 +181,6 @@
         renderBio(main, artist);
         renderGallery(main, artist);
         renderContact(main, artist);
-
-        // Init Chart.js
-        setTimeout(function () { initSkillsChart(artist); }, 300);
 
         // Initialize dynamic content features (scroll reveal, gallery lazy load, etc.)
         if (typeof window.initDynamicContent === 'function') {
@@ -173,7 +254,7 @@
             '</a>' : '';
 
         section.innerHTML =
-            '<div class="artist-hero-bg" style="background-image: url(\'' + a.hero.cover + '\');"></div>' +
+            '<div class="artist-hero-bg" style="background-image: url(\'' + normalizeImagePath(a.hero.cover) + '\');"></div>' +
             '<div class="artist-hero-overlay"></div>' +
             '<div class="max-w-7xl mx-auto w-full">' +
                 '<div class="artist-hero-content px-6">' +
@@ -191,7 +272,7 @@
     }
 
     // Nota: Los géneros no se muestran en el hero (original no los tiene)
-    // Solo se usan para Schema.org JSON-LD y el gráfico de habilidades
+    // Solo se usan para Schema.org JSON-LD
 
     function renderBio(container, a) {
         var section = document.createElement('section');
@@ -203,7 +284,19 @@
             return '<p class="mb-6">' + p + '</p>';
         }).join('');
 
-        var canvasId = 'skillsChart' + capitalize(a.name);
+        var skillsHtml = '';
+        if (a.skills_labels && a.skills_labels.length > 0) {
+            var skillsHtmlBuilder = '';
+            for (var i = 0; i < a.skills_labels.length; i++) {
+                skillsHtmlBuilder += '<span class="skill-pill">' + a.skills_labels[i] + '</span>';
+            }
+            skillsHtml = '\
+                <div class="skills-section mt-12 reveal">' +
+                    '<h3 class="text-2xl font-bold mb-6" style="font-family:\'Space Grotesk\',sans-serif;">Estilos y Especialidades</h3>' +
+                    '<div class="skills-grid">' + skillsHtmlBuilder + '\
+                    </div>' +
+                '</div>';
+        }
 
         section.innerHTML =
             '<div class="max-w-4xl mx-auto">' +
@@ -213,12 +306,7 @@
                     '<div class="bio-text">' + bioParagraphs + '\
                     </div>' +
                 '</div>' +
-                '<div class="skills-section mt-12 reveal">' +
-                    '<h3 class="text-2xl font-bold mb-8" style="font-family:\'Space Grotesk\',sans-serif;">Estilos y Habilidades</h3>' +
-                    '<div class="max-w-md mx-auto">' +
-                        '<canvas id="' + canvasId + '"></canvas>' +
-                    '</div>' +
-                '</div>' +
+                skillsHtml +
             '</div>';
 
         container.appendChild(section);
@@ -237,7 +325,7 @@
                 overlay = '<h4>' + item.title + '</h4>';
                 if (item.category) overlay += '<p class="text-[#888] text-sm mt-1">' + item.category + '</p>';
             }
-            return '<div class="gallery-item" data-category="' + (item.category || '') + '" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje">\n                        <img src="' + item.src + '" alt="' + (item.alt || '') + '" loading="lazy" decoding="async">\n                        <div class="gallery-overlay">\n' + overlay + '\
+            return '<div class="gallery-item" data-category="' + (item.category || '') + '" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje">\n                        <img src="' + normalizeImagePath(item.src) + '" alt="' + (item.alt || '') + '" loading="lazy" decoding="async">\n                        <div class="gallery-overlay">\n' + overlay + '\
                         </div>\n                    </div>';
         }).join('');
 
@@ -364,68 +452,6 @@
 
     function capitalize(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    function initSkillsChart(artist) {
-        var canvasId = 'skillsChart' + capitalize(artist.name);
-        var ctx = document.getElementById(canvasId);
-        if (!ctx || typeof Chart === 'undefined') return;
-
-        new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: artist.skills_labels,
-                datasets: [{
-                    label: 'Nivel',
-                    data: artist.skills_data,
-                    backgroundColor: 'rgba(201, 169, 110, 0.2)',
-                    borderColor: '#c9a96e',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#c9a96e',
-                    pointBorderColor: '#0a0a0a',
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            stepSize: 20,
-                            color: '#666',
-                            backdropColor: 'transparent',
-                            font: { size: 10 }
-                        },
-                        grid: {
-                            color: 'rgba(255,255,255,0.08)'
-                        },
-                        angleLines: {
-                            color: 'rgba(255,255,255,0.08)'
-                        },
-                        pointLabels: {
-                            color: '#ccc',
-                            font: { size: 12, family: "'Space Grotesk', sans-serif" }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#1a1a1a',
-                        titleColor: '#c9a96e',
-                        bodyColor: '#e5e5e5',
-                        borderColor: '#c9a96e',
-                        borderWidth: 1,
-                        cornerRadius: 4,
-                        padding: 10
-                    }
-                }
-            }
-        });
     }
 
     document.addEventListener('DOMContentLoaded', function () {

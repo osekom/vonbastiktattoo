@@ -43,6 +43,7 @@
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.2.10/index.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/calculadora-tattoo.css">
 
     <!-- JSON-LD Schema.org -->
     <script type="application/ld+json">
@@ -162,7 +163,7 @@
                     <a href="#artistas" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;">Artistas</a>
                     <a href="#galeria" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;">Galería</a>
                     <a href="#contacto" class="nav-link text-sm uppercase tracking-wider" style="color:#e5e5e5;">Contacto</a>
-                    <a href="calculadora-tattoo.html" class="nav-link text-sm uppercase tracking-wider" style="color:#c9a96e;font-weight:600;"><i class="fas fa-calculator"></i> Calculadora</a>
+                    <a href="blog.html" class="nav-link text-sm uppercase tracking-wider" style="color:#c9a96e;font-weight:600;"><i class="fas fa-newspaper"></i> Blog</a>
                 </div>
                 <a href="#contacto" class="btn-primary inline-flex items-center gap-2" style="font-size:0.8rem;padding:8px 18px;">
                     <i class="far fa-calendar-alt"></i> Reservar Cita
@@ -184,7 +185,8 @@
         <a href="#artistas">Artistas</a>
         <a href="#galeria">Galería</a>
         <a href="#contacto">Contacto</a>
-        <a href="calculadora-tattoo.html" style="color:#c9a96e;font-weight:600;"><i class="fas fa-calculator"></i> Calculadora de Tatuaje</a>
+        <a href="blog.html" style="color:#c9a96e;font-weight:600;"><i class="fas fa-newspaper"></i> Blog</a>
+        <a href="#calculadora-tattoo" style="color:#e5e5e5;"><i class="fas fa-calculator"></i> Calculadora</a>
         <a href="#contacto" class="mobile-reserve-btn" style="color:#0a0a0a;background:#c9a96e;padding:10px 20px;border-radius:4px;font-weight:600;">Reservar Cita</a>
     </div>
 
@@ -380,70 +382,11 @@
                     <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Nuestro Equipo</p>
                     <h2 class="section-title section-title-center text-4xl font-bold inline-block" id="artists-title">Artistas Destacados</h2>
                 </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Selene -->
-                    <article class="artist-card reveal">
-                        <div class="artist-image-wrapper">
-                            <img src="public/artist/Selene/selene-hero.jpg" alt="Selene tatuando en el estudio Von Bastik" class="artist-image" loading="lazy" decoding="async">
-                        </div>
-                        <div class="artist-info">
-                            <h3>Selene</h3>
-                            <p class="artist-specialty">Realismo y Retratos</p>
-                            <p class="artist-description">Especialista en retratos hiperrealistas y composiciones de gran formato. Su dominio de la luz y la sombra transforma cada piel en un lienzo tridimensional.</p>
-                            <div class="artist-links">
-                                <a href="artist.html?id=selene" class="artist-link-primary">Ver Portfolio</a>
-                                <a href="#contacto" class="artist-link-secondary">Reservar Cita</a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Inkbo -->
-                    <article class="artist-card reveal">
-                        <div class="artist-image-wrapper">
-                            <img src="public/artist/Inkbo/inkbo-hero.jpg" alt="Inkbo tatuando en el estudio Von Bastik" class="artist-image" loading="lazy" decoding="async">
-                        </div>
-                        <div class="artist-info">
-                            <h3>Inkbo</h3>
-                            <p class="artist-specialty">Blackwork y Geometría Sagrada</p>
-                            <p class="artist-description">Creador de piezas monumentales en negro sólido y patrones geométricos de precisión milimétrica. Su trabajo fusiona tradición ancestral con diseño contemporáneo.</p>
-                            <div class="artist-links">
-                                <a href="artist.html?id=inkbo" class="artist-link-primary">Ver Portfolio</a>
-                                <a href="#contacto" class="artist-link-secondary">Reservar Cita</a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Big Torres -->
-                    <article class="artist-card reveal">
-                        <div class="artist-image-wrapper">
-                            <img src="public/artist/BigTorres/bigtorres-hero.jpg" alt="Big Torres tatuando en el estudio Von Bastik" class="artist-image" loading="lazy" decoding="async">
-                        </div>
-                        <div class="artist-info">
-                            <h3>Big Torres</h3>
-                            <p class="artist-specialty">Fine Line y Acuarela</p>
-                            <p class="artist-description">Maestro de la línea fina y las composiciones que parecen pintadas con acuarela. Delicadeza y color en cada trazo, piezas que respiran ligereza.</p>
-                            <div class="artist-links">
-                                <a href="artist.html?id=bigtorres" class="artist-link-primary">Ver Portfolio</a>
-                                <a href="#contacto" class="artist-link-secondary">Reservar Cita</a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Ciervo -->
-                    <article class="artist-card reveal">
-                        <div class="artist-image-wrapper">
-                            <img src="public/artist/Ciervo/ciervo-hero.jpg" alt="Ciervo tatuando en el estudio Von Bastik" class="artist-image" loading="lazy" decoding="async">
-                        </div>
-                        <div class="artist-info">
-                            <h3>Ciervo</h3>
-                            <p class="artist-specialty">Piercing y Joyería Profesional</p>
-                            <p class="artist-description">Especialista en piercing profesional y asesoría en joyería de alta gama. Su experiencia de 14 años garantiza perforaciones seguras, precisas y con los mejores materiales del mercado.</p>
-                            <div class="artist-links">
-                                <a href="artist.html?id=ciervo" class="artist-link-primary">Ver Portfolio</a>
-                                <a href="#contacto" class="artist-link-secondary">Reservar Cita</a>
-                            </div>
-                        </div>
-                    </article>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="artistsGrid">
+                    <!-- Artists will be loaded dynamically from the TAM API -->
+                </div>
+                <div id="artistsLoading" class="text-center py-12">
+                    <p style="color:#888;">Cargando artistas...</p>
                 </div>
             </div>
         </section>
@@ -466,58 +409,10 @@
                 <!-- Galería Tatuajes -->
                 <div class="gallery-panel active" id="panel-tatuajes">
                     <div class="gallery-grid reveal" id="galleryGridTatuajes">
-                        <!-- Selene (3) -->
-                        <div class="gallery-item" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje realizado por Selene">
-                            <img src="public/artist/Selene/gallery/selene-work-01.jpg" alt="Tatuaje de retrato realizado por Selene" loading="lazy" decoding="async">
-                            <div class="gallery-overlay">
-                                <p class="text-[#888] text-sm mt-1">Selene</p>
-                            </div>
-                        </div>
-                        <div class="gallery-item" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje realizado por Selene">
-                            <img src="public/artist/Selene/gallery/selene-work-02.jpg" alt="Tatuaje realista de animal realizado por Selene" loading="lazy" decoding="async">
-                            <div class="gallery-overlay">
-                                <p class="text-[#888] text-sm mt-1">Selene</p>
-                            </div>
-                        </div>
-                        <div class="gallery-item" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje realizado por Selene">
-                            <img src="public/artist/Selene/gallery/selene-work-03.jpg" alt="Tatuaje de gran formato realizado por Selene" loading="lazy" decoding="async">
-                            <div class="gallery-overlay">
-                                <p class="text-[#888] text-sm mt-1">Selene</p>
-                            </div>
-                        </div>
-
-                        <!-- BigTorres (3) -->
-                        <div class="gallery-item" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje realizado por Big Torres">
-                            <img src="public/artist/BigTorres/gallery/bigtorres-work-01.jpg" alt="Tatuaje fine line realizado por Big Torres" loading="lazy" decoding="async">
-                            <div class="gallery-overlay">
-                                <p class="text-[#888] text-sm mt-1">Big Torres</p>
-                            </div>
-                        </div>
-                        <div class="gallery-item" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje realizado por Big Torres">
-                            <img src="public/artist/BigTorres/gallery/bigtorres-work-02.jpg" alt="Tatuaje acuarela realizado por Big Torres" loading="lazy" decoding="async">
-                            <div class="gallery-overlay">
-                                <p class="text-[#888] text-sm mt-1">Big Torres</p>
-                            </div>
-                        </div>
-                        <!-- Inkbo (3) -->
-                        <div class="gallery-item" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje realizado por Inkbo">
-                            <img src="public/artist/Inkbo/gallery/inkbo-work-01.jpg" alt="Tatuaje blackwork realizado por Inkbo" loading="lazy" decoding="async">
-                            <div class="gallery-overlay">
-                                <p class="text-[#888] text-sm mt-1">Inkbo</p>
-                            </div>
-                        </div>
-                        <div class="gallery-item" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje realizado por Inkbo">
-                            <img src="public/artist/Inkbo/gallery/inkbo-work-03.jpg" alt="Tatuaje dotwork realizado por Inkbo" loading="lazy" decoding="async">
-                            <div class="gallery-overlay">
-                                <p class="text-[#888] text-sm mt-1">Inkbo</p>
-                            </div>
-                        </div>
-                        <div class="gallery-item" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="Ver tatuaje realizado por Inkbo">
-                            <img src="public/artist/Inkbo/gallery/inkbo-work-05.jpg" alt="Tatuaje blackwork de gran formato realizado por Inkbo" loading="lazy" decoding="async">
-                            <div class="gallery-overlay">
-                                <p class="text-[#888] text-sm mt-1">Inkbo</p>
-                            </div>
-                        </div>
+                        <!-- Gallery items will be loaded dynamically from WordPress API -->
+                    </div>
+                    <div id="galleryLoading" class="text-center py-12">
+                        <p style="color:#888;">Cargando galería...</p>
                     </div>
                 </div>
 
@@ -662,6 +557,323 @@
             </div>
         </section>
 
+        <!-- Calculadora de Tatuaje -->
+        <section class="py-24 px-6" id="calculadora-tattoo" aria-labelledby="calculator-title">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Diseña tu tatuaje</p>
+                    <h2 class="section-title section-title-center text-4xl font-bold inline-block" id="calculator-title">Calculadora de Tatuaje</h2>
+                    <p class="text-[#888] max-w-2xl mx-auto mt-6 leading-relaxed">Responde 6 preguntas rápidas y descubre tu estimación de precio personalizada.</p>
+                </div>
+
+                <!-- Calculator Hero -->
+                <div class="calc-hero-section reveal">
+                    <div class="calc-hero-content">
+                        <div class="calc-badge">
+                            <i class="fas fa-calculator"></i>
+                            <span>Interactivo</span>
+                        </div>
+                        <h3 class="calc-hero-title">Diseña tu <span class="gradient-text">Tatuaje Perfecto</span></h3>
+                        <p class="calc-hero-subtitle">Obtén una estimación personalizada en minutos</p>
+                        <button class="calc-start-btn" id="startCalcBtn" onclick="startCalculator()">
+                            <span class="calc-btn-text">Comenzar Aventura</span>
+                            <span class="calc-btn-icon"><i class="fas fa-rocket"></i></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Calculator Interface (Hidden initially) -->
+                <div class="calc-interface" id="calcInterface" style="display:none;">
+                    <!-- Progress Bar -->
+                    <div class="calc-progress">
+                        <div class="calc-progress-header">
+                            <span class="calc-step-label" id="calcStepLabel">Paso 1 de 6</span>
+                            <div class="calc-xp-bar">
+                                <div class="calc-xp-bar-bg">
+                                    <div class="calc-xp-bar-fill" id="calcXpBarFill"></div>
+                                </div>
+                                <span class="calc-xp-text" id="calcXpText">0 XP</span>
+                            </div>
+                        </div>
+                        <div class="calc-steps-dots" id="calcStepsDots">
+                            <div class="calc-dot active" data-step="0"></div>
+                            <div class="calc-dot" data-step="1"></div>
+                            <div class="calc-dot" data-step="2"></div>
+                            <div class="calc-dot" data-step="3"></div>
+                            <div class="calc-dot" data-step="4"></div>
+                            <div class="calc-dot" data-step="5"></div>
+                        </div>
+                    </div>
+
+                    <!-- Steps Container -->
+                    <div class="calc-steps-wrapper" id="calcStepsWrapper">
+                        <!-- Step 1: Size -->
+                        <div class="calc-step active" data-step="0">
+                            <div class="calc-step-header">
+                                <div class="calc-step-icon-wrap">
+                                    <i class="fas fa-ruler-combined"></i>
+                                </div>
+                                <h3>¿Qué tamaño buscas?</h3>
+                                <p>Tu tatuaje será pequeño, mediano o grande</p>
+                            </div>
+                            <div class="calc-options-grid size-options">
+                                <div class="calc-option-card" data-value="small" data-price="80" onclick="selectOption(this)">
+                                    <div class="calc-option-icon"><i class="fas fa-star"></i></div>
+                                    <div class="calc-option-content">
+                                        <h4>Pequeño</h4>
+                                        <p>Hasta 10 cm</p>
+                                    </div>
+                                    <div class="calc-option-price">Desde 80€</div>
+                                </div>
+                                <div class="calc-option-card" data-value="medium" data-price="150" onclick="selectOption(this)">
+                                    <div class="calc-option-icon"><i class="fas fa-certificate"></i></div>
+                                    <div class="calc-option-content">
+                                        <h4>Mediano</h4>
+                                        <p>10 - 20 cm</p>
+                                    </div>
+                                    <div class="calc-option-price">Desde 150€</div>
+                                </div>
+                                <div class="calc-option-card" data-value="large" data-price="300" onclick="selectOption(this)">
+                                    <div class="calc-option-icon"><i class="fas fa-gem"></i></div>
+                                    <div class="calc-option-content">
+                                        <h4>Grande</h4>
+                                        <p>20 - 30 cm</p>
+                                    </div>
+                                    <div class="calc-option-price">Desde 300€</div>
+                                </div>
+                                <div class="calc-option-card" data-value="xlarge" data-price="500" onclick="selectOption(this)">
+                                    <div class="calc-option-icon"><i class="fas fa-crown"></i></div>
+                                    <div class="calc-option-content">
+                                        <h4>Extra Grande</h4>
+                                        <p>Más de 30 cm</p>
+                                    </div>
+                                    <div class="calc-option-price">Desde 500€</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Zone -->
+                        <div class="calc-step" data-step="1">
+                            <div class="calc-step-header">
+                                <div class="calc-step-icon-wrap">
+                                    <i class="fas fa-person"></i>
+                                </div>
+                                <h3>¿Dónde lo quieres?</h3>
+                                <p>Selecciona la zona del cuerpo</p>
+                            </div>
+                            <div class="calc-zone-options">
+                                <div class="calc-zone-option" data-zone="head" onclick="selectZone(this)"><span class="calc-zone-emoji">💇</span><span class="calc-zone-name">Cabeza / Pantalla</span></div>
+                                <div class="calc-zone-option" data-zone="neck" onclick="selectZone(this)"><span class="calc-zone-emoji">🔗</span><span class="calc-zone-name">Cuello</span></div>
+                                <div class="calc-zone-option" data-zone="shoulder-left,shoulder-right" onclick="selectZone(this)"><span class="calc-zone-emoji">💪</span><span class="calc-zone-name">Hombro</span></div>
+                                <div class="calc-zone-option" data-zone="chest" onclick="selectZone(this)"><span class="calc-zone-emoji">❤️</span><span class="calc-zone-name">Pecho</span></div>
+                                <div class="calc-zone-option" data-zone="arm-left,arm-right" onclick="selectZone(this)"><span class="calc-zone-emoji">💪</span><span class="calc-zone-name">Brazo</span></div>
+                                <div class="calc-zone-option" data-zone="forearm-left,forearm-right" onclick="selectZone(this)"><span class="calc-zone-emoji">✏️</span><span class="calc-zone-name">Antebrazo</span></div>
+                                <div class="calc-zone-option" data-zone="hand-left,hand-right" onclick="selectZone(this)"><span class="calc-zone-emoji">🤞</span><span class="calc-zone-name">Mano</span></div>
+                                <div class="calc-zone-option" data-zone="stomach" onclick="selectZone(this)"><span class="calc-zone-emoji">⭕</span><span class="calc-zone-name">Estómago</span></div>
+                                <div class="calc-zone-option" data-zone="leg-left,leg-right" onclick="selectZone(this)"><span class="calc-zone-emoji">🦵</span><span class="calc-zone-name">Muslo</span></div>
+                                <div class="calc-zone-option" data-zone="shin-left,shin-right" onclick="selectZone(this)"><span class="calc-zone-emoji">🦿</span><span class="calc-zone-name">Pierna</span></div>
+                                <div class="calc-zone-option" data-zone="foot-left,foot-right" onclick="selectZone(this)"><span class="calc-zone-emoji">👟</span><span class="calc-zone-name">Pie</span></div>
+                                <div class="calc-zone-option" data-zone="back" onclick="selectZone(this)"><span class="calc-zone-emoji">⭐</span><span class="calc-zone-name">Espalda</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Style -->
+                        <div class="calc-step" data-step="2">
+                            <div class="calc-step-header">
+                                <div class="calc-step-icon-wrap">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <h3>¿Qué estilo prefieres?</h3>
+                                <p>Elige el arte que más te represente</p>
+                            </div>
+                            <div class="calc-style-cards">
+                                <div class="calc-style-card" data-value="realism" data-price="1.5" onclick="selectStyle(this)" style="--style-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <i class="fas fa-portrait"></i><h4>Realismo</h4><p>Retratos hiperrealistas</p><span class="calc-style-tag">Premium</span>
+                                </div>
+                                <div class="calc-style-card" data-value="blackwork" data-price="1.3" onclick="selectStyle(this)" style="--style-gradient: linear-gradient(135deg, #0c0c0c 0%, #2d2d2d 100%);">
+                                    <i class="fas fa-circle-notch"></i><h4>Blackwork</h4><p>Geometría y patrones</p><span class="calc-style-tag">Popular</span>
+                                </div>
+                                <div class="calc-style-card" data-value="fineline" data-price="1.4" onclick="selectStyle(this)" style="--style-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+                                    <i class="fas fa-feather-alt"></i><h4>Fine Line</h4><p>Delineado fino</p><span class="calc-style-tag">Elegante</span>
+                                </div>
+                                <div class="calc-style-card" data-value="watercolor" data-price="1.4" onclick="selectStyle(this)" style="--style-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                    <i class="fas fa-tint"></i><h4>Acuarela</h4><p>Color y fluidez</p><span class="calc-style-tag">Artístico</span>
+                                </div>
+                                <div class="calc-style-card" data-value="japanese" data-price="1.3" onclick="selectStyle(this)" style="--style-gradient: linear-gradient(135deg, #fc5c7d 0%, #6a82fb 100%);">
+                                    <i class="fas fa-fan"></i><h4>Japonés</h4><p>Tradición y simbolismo</p>
+                                </div>
+                                <div class="calc-style-card" data-value="minimalist" data-price="1.0" onclick="selectStyle(this)" style="--style-gradient: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);">
+                                    <i class="fas fa-minus"></i><h4>Minimalista</h4><p>Menos es más</p><span class="calc-style-tag">Básico</span>
+                                </div>
+                                <div class="calc-style-card" data-value="color" data-price="1.3" onclick="selectStyle(this)" style="--style-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);">
+                                    <i class="fas fa-paint-brush"></i><h4>Color</h4><p>Vibrante y expresivo</p>
+                                </div>
+                                <div class="calc-style-card" data-value="traditional" data-price="1.1" onclick="selectStyle(this)" style="--style-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                                    <i class="fas fa-anchor"></i><h4>Traditional</h4><p>Old & New School</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Complexity -->
+                        <div class="calc-step" data-step="3">
+                            <div class="calc-step-header">
+                                <div class="calc-step-icon-wrap">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <h3>¿Qué nivel de detalle?</h3>
+                                <p>El nivel de complejidad afecta el tiempo</p>
+                            </div>
+                            <div class="calc-complexity-options">
+                                <div class="calc-complexity-card" data-value="simple" data-multiplier="1.0" onclick="selectComplexity(this)">
+                                    <h4>Sencillo</h4><p>Líneas limpias, poco sombreado</p>
+                                    <div class="calc-complexity-features"><span><i class="fas fa-check"></i> Contornos</span><span><i class="fas fa-check"></i> Relleno básico</span></div>
+                                </div>
+                                <div class="calc-complexity-card selected" data-value="moderate" data-multiplier="1.3" onclick="selectComplexity(this)">
+                                    <h4>Moderado</h4><p>Detalles y sombreado</p>
+                                    <div class="calc-complexity-features"><span><i class="fas fa-check"></i> Sombreado</span><span><i class="fas fa-check"></i> Detalles medios</span></div>
+                                </div>
+                                <div class="calc-complexity-card" data-value="detailed" data-multiplier="1.6" onclick="selectComplexity(this)">
+                                    <h4>Muy Detallado</h4><p>Alto nivel de detalle</p>
+                                    <div class="calc-complexity-features"><span><i class="fas fa-check"></i> Alto detalle</span><span><i class="fas fa-check"></i> Texturas</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Colors -->
+                        <div class="calc-step" data-step="4">
+                            <div class="calc-step-header">
+                                <div class="calc-step-icon-wrap">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <h3>¿Colores o blanco y negro?</h3>
+                                <p>La elección de color afecta el proceso</p>
+                            </div>
+                            <div class="calc-color-options">
+                                <div class="calc-color-option" data-value="bw" data-multiplier="1.0" onclick="selectColor(this)">
+                                    <div class="calc-color-swatch" style="background: linear-gradient(135deg, #333 0%, #999 100%);"></div>
+                                    <h4>Blanco y Negro</h4><p>Clásico y atemporal</p>
+                                </div>
+                                <div class="calc-color-option" data-value="color" data-multiplier="1.2" onclick="selectColor(this)">
+                                    <div class="calc-color-swatch" style="background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcf7f, #4d96ff);"></div>
+                                    <h4>Color</h4><p>Vibrante y expresivo</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: Artist -->
+                        <div class="calc-step" data-step="5">
+                            <div class="calc-step-header">
+                                <div class="calc-step-icon-wrap">
+                                    <i class="fas fa-user-edit"></i>
+                                </div>
+                                <h3>¿Qué artista prefieres?</h3>
+                                <p>Elige tu artista favorito</p>
+                            </div>
+                            <div class="calc-artist-options">
+                                <div class="calc-artist-option" data-artist="selene" onclick="selectArtist(this)">
+                                    <img src="public/artist/Selene/selene-hero.jpg" alt="Selene" class="calc-artist-img">
+                                    <h4>Selene</h4><p>Realismo y Retratos</p>
+                                </div>
+                                <div class="calc-artist-option" data-artist="inkbo" onclick="selectArtist(this)">
+                                    <img src="public/artist/Inkbo/inkbo-hero.jpg" alt="Inkbo" class="calc-artist-img">
+                                    <h4>Inkbo</h4><p>Blackwork y Geometría</p>
+                                </div>
+                                <div class="calc-artist-option" data-artist="bigtorres" onclick="selectArtist(this)">
+                                    <img src="public/artist/BigTorres/bigtorres-hero.jpg" alt="Big Torres" class="calc-artist-img">
+                                    <h4>Big Torres</h4><p>Fine Line y Acuarela</p>
+                                </div>
+                                <div class="calc-artist-option" data-artist="ciervo" onclick="selectArtist(this)">
+                                    <img src="public/artist/Ciervo/ciervo-hero.jpg" alt="Ciervo" class="calc-artist-img">
+                                    <h4>Ciervo</h4><p>Piercing y Joyería</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="calc-nav-buttons">
+                        <button class="calc-nav-btn calc-prev-btn" onclick="prevStep()" style="display:none;">
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <div class="calc-nav-spacer"></div>
+                        <button class="calc-nav-btn calc-next-btn" onclick="nextStep()">
+                            Siguiente <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="calc-results" id="calcResults" style="display:none;">
+                    <div class="calc-results-card">
+                        <div class="calc-results-header">
+                            <div class="calc-results-icon"><i class="fas fa-check-circle"></i></div>
+                            <h3>¡Tu Tatuaje Perfecto!</h3>
+                            <p>Basado en tus selecciones</p>
+                        </div>
+                        <div class="calc-results-summary" id="calcResultsSummary"></div>
+                        <div class="calc-price-display">
+                            <span class="calc-price-label">Estimación</span>
+                            <span class="calc-price-value" id="calcPriceValue">0€</span>
+                            <span class="calc-price-note">*Precio orientativo. Contacta para un presupuesto exacto.</span>
+                        </div>
+                        <div class="calc-results-actions">
+                            <a href="#contacto" class="calc-cta-btn">
+                                <i class="fas fa-calendar-alt"></i> Reservar Cita
+                            </a>
+                            <a href="https://wa.me/34653053913?text=Hola%20Von%20Bastik%2C%20he%20usado%20la%20calculadora%20de%20tatuaje%20y%20me%20gustar%C3%ADa%20pedir%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="calc-whatsapp-btn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                        <button class="calc-restart-btn" onclick="restartCalculator()">
+                            <i class="fas fa-redo"></i> Empezar de Nuevo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Últimas Entradas del Blog -->
+        <section class="py-24 px-6" id="blog-latest" aria-labelledby="latest-blog-title">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <p class="uppercase tracking-[4px] text-[#c9a96e] text-sm mb-4">Nuestro Blog</p>
+                    <h2 class="section-title section-title-center text-4xl font-bold inline-block" id="latest-blog-title">Últimas Entradas</h2>
+                    <p class="text-[#888] max-w-2xl mx-auto mt-6 leading-relaxed">Explora consejos, tendencias y historias del mundo del tatuaje.</p>
+                </div>
+
+                <!-- Blog Posts Grid -->
+                <div class="blog-latest-container">
+                    <!-- Loading State -->
+                    <div class="blog-latest-loading" id="blogLatestLoading">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                        </div>
+                        <p class="text-[#888] mt-4">Cargando artículos...</p>
+                    </div>
+
+                    <!-- Error State -->
+                    <div class="blog-latest-error hidden" id="blogLatestError">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>No se pudieron cargar los artículos</h3>
+                        <p>Por favor, verifica la conexión a internet o intenta más tarde.</p>
+                    </div>
+
+                    <!-- Blog Grid -->
+                    <div class="blog-latest-grid" id="blogLatestGrid">
+                        <!-- Posts will be injected here by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="text-center mt-12 reveal">
+                    <a href="blog.html" class="btn-outline inline-flex items-center gap-2">
+                        <i class="fas fa-newspaper"></i> Ver todos los artículos
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- Contacto -->
         <section class="py-24 px-6 bg-[#0d0d0d]" id="contacto" aria-labelledby="contact-title">
             <div class="max-w-7xl mx-auto">
@@ -800,6 +1012,7 @@
                         <li><a href="#artistas" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Artistas</a></li>
                         <li><a href="#galeria" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Galería</a></li>
                         <li><a href="#contacto" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Contacto</a></li>
+                        <li><a href="blog.html" class="text-[#888] text-sm hover:text-[#c9a96e] transition-colors">Blog</a></li>
                     </ul>
                 </div>
                 <!-- Legal -->
@@ -843,5 +1056,437 @@
 
     <!-- JavaScript -->
     <script src="js/app.js" defer></script>
-</body>
-</html>
+    <script src="js/index-blog.js" defer></script>
+    <script defer>
+    // ========================================
+    // Single API Request - Load Artists & Gallery from WordPress TAM API
+    // ========================================
+    (function() {
+        var WORDPRESS_API_URL = 'https://vonbastiktattoo.es/wp-json/tam/v1/artists';
+        var LOCAL_ARTISTS_URL = 'data/artists.json';
+        var SITE_URL = 'https://vonbastiktattoo.es';
+        var artistsGrid = document.getElementById('artistsGrid');
+        var artistsLoading = document.getElementById('artistsLoading');
+        var galleryGrid = document.getElementById('galleryGridTatuajes');
+        var piercingGrid = document.getElementById('galleryGridPiercing');
+        var galleryLoading = document.getElementById('galleryLoading');
+        
+        console.log('[Index] artistsGrid:', !!artistsGrid, 'galleryGrid:', !!galleryGrid);
+        
+        function resolveImagePath(src) {
+            if (src.startsWith('http://') || src.startsWith('https://')) return src;
+            if (src.startsWith('/')) return SITE_URL + src;
+            return SITE_URL + '/' + src;
+        }
+
+        function normalizeArtistsData(data) {
+            if (!data) return {};
+            if (Array.isArray(data)) {
+                var result = {};
+                data.forEach(function(artist, index) {
+                    if (!artist) return;
+                    var artistSlug = artist.slug || ('artist-' + index);
+                    result[artistSlug] = artist;
+                });
+                return result;
+            }
+            if (typeof data === 'object' && data.data && typeof data.data === 'object') {
+                return data.data;
+            }
+            if (typeof data === 'object') {
+                return data;
+            }
+            return {};
+        }
+
+        function pickRandomItems(items, maxItems) {
+            if (!Array.isArray(items) || items.length === 0) return [];
+            var shuffled = items.slice();
+            for (var i = shuffled.length - 1; i > 0; i--) {
+                var randomIndex = Math.floor(Math.random() * (i + 1));
+                var temp = shuffled[i];
+                shuffled[i] = shuffled[randomIndex];
+                shuffled[randomIndex] = temp;
+            }
+            return shuffled.slice(0, Math.min(maxItems, shuffled.length));
+        }
+
+        function isHeroImage(item) {
+            if (!item) return false;
+            var src = item.src ? String(item.src).toLowerCase() : '';
+            var alt = item.alt ? String(item.alt).toLowerCase() : '';
+            return src.indexOf('hero') !== -1 || alt.indexOf('hero') !== -1;
+        }
+        
+        function renderArtists(artists) {
+            console.log('[Index] renderArtists called with artists keys:', Object.keys(artists));
+            // If grid already has content (app.js loaded it), just hide loading and return
+            console.log('[Index] artistsGrid.children.length:', artistsGrid.children.length);
+            if (artistsGrid.children.length > 0) {
+                if (artistsLoading) artistsLoading.style.display = 'none';
+                return;
+            }
+            artistsGrid.innerHTML = '';
+            if (artistsLoading) artistsLoading.style.display = 'none';
+            
+            var entries = Object.entries(artists);
+            if (entries.length === 0) {
+                artistsGrid.innerHTML = '<p style="color:#888; text-align:center; grid-column:1/-1;">No hay artistas disponibles.</p>';
+                return;
+            }
+            
+            entries.forEach(function(entry) {
+                var slug = entry[0];
+                var artist = entry[1];
+                var specialty = artist.hero && artist.hero.specialty ? artist.hero.specialty : (artist.skills_labels && artist.skills_labels.length > 0 ? artist.skills_labels.join(', ') : '');
+                var description = 'Artista especializado en tatuajes personalizados.';
+                if (artist.bio) {
+                    if (Array.isArray(artist.bio) && artist.bio.length > 0) {
+                        description = String(artist.bio[0]).replace(/<[^>]*>/g, '').substring(0, 150) + '...';
+                    } else if (typeof artist.bio === 'string') {
+                        description = artist.bio.replace(/<[^>]*>/g, '').substring(0, 150) + '...';
+                    }
+                }
+                var coverUrl = resolveImagePath(artist.hero && artist.hero.cover ? artist.hero.cover : '');
+                var altText = artist.name ? artist.name + ' tatuando en el estudio Von Bastik' : 'Artista Von Bastik';
+                
+                var card = document.createElement('article');
+                card.className = 'artist-card reveal active';
+                
+                card.innerHTML =
+                    '<div class="artist-image-wrapper">' +
+                        '<img src="' + coverUrl + '" alt="' + altText + '" class="artist-image" loading="lazy" decoding="async">' +
+                    '</div>' +
+                    '<div class="artist-info">' +
+                        '<h3>' + (artist.name || 'Sin nombre') + '</h3>' +
+                        '<p class="artist-specialty">' + specialty + '</p>' +
+                        '<p class="artist-description">' + description + '</p>' +
+                        '<div class="artist-links">' +
+                            '<a href="artist.html?id=' + (artist.slug || slug).toLowerCase() + '" class="artist-link-primary">Ver portfolio</a>' +
+                            '<a href="#contacto" class="artist-link-secondary">Reservar Cita</a>' +
+                        '</div>' +
+                    '</div>';
+                
+                artistsGrid.appendChild(card);
+            });
+        }
+        
+        function renderGallery(artists) {
+            if (galleryLoading) galleryLoading.style.display = 'none';
+            if (!galleryGrid) return;
+            
+            console.log('[Index] renderGallery - artists keys:', Object.keys(artists));
+            galleryGrid.innerHTML = '';
+            if (piercingGrid) piercingGrid.innerHTML = '';
+            
+            var allTattooItems = [];
+            var ciervoItems = [];
+
+            Object.keys(artists).forEach(function(artistSlug) {
+                var artistData = artists[artistSlug];
+                if (!artistData || !Array.isArray(artistData.gallery) || artistData.gallery.length === 0) return;
+
+                var artistName = artistData.name || artistSlug;
+                artistData.gallery.forEach(function(item) {
+                    if (!item || !item.src) return;
+                    if (isHeroImage(item)) return;
+                    allTattooItems.push({
+                        src: item.src,
+                        alt: item.alt,
+                        artistName: artistName
+                    });
+                });
+
+                if (artistSlug.toLowerCase() === 'ciervo' || (artistData.slug && artistData.slug.toLowerCase() === 'ciervo')) {
+                    artistData.gallery.forEach(function(item) {
+                        if (!item || !item.src) return;
+                        if (isHeroImage(item)) return;
+                        ciervoItems.push({
+                            src: item.src,
+                            alt: item.alt,
+                            artistName: artistName
+                        });
+                    });
+                }
+            });
+
+            var randomTattooItems = pickRandomItems(allTattooItems, 12);
+            randomTattooItems.forEach(function(item) {
+                var galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.setAttribute('onclick', 'openLightbox(this)');
+                galleryItem.setAttribute('role', 'button');
+                galleryItem.setAttribute('tabindex', '0');
+                galleryItem.setAttribute('aria-label', 'Ver tatuaje realizado por ' + item.artistName);
+
+                var resolvedSrc = resolveImagePath(item.src);
+                var altText = item.alt || ('Tatuaje de ' + item.artistName);
+
+                galleryItem.innerHTML =
+                    '<img src="' + resolvedSrc + '" alt="' + altText + '" loading="lazy" decoding="async">' +
+                    '<div class="gallery-overlay">' +
+                        '<p class="text-[#888] text-sm mt-1">' + item.artistName + '</p>' +
+                    '</div>';
+
+                galleryGrid.appendChild(galleryItem);
+            });
+
+            if (randomTattooItems.length === 0) {
+                galleryGrid.innerHTML = '<p style="color:#888; text-align:center; grid-column:1/-1;">No hay imágenes de tatuajes disponibles.</p>';
+            }
+
+            if (piercingGrid) {
+                var randomCiervoItems = pickRandomItems(ciervoItems, 8);
+                randomCiervoItems.forEach(function(item) {
+                    var galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item';
+                    galleryItem.setAttribute('onclick', 'openLightbox(this)');
+                    galleryItem.setAttribute('role', 'button');
+                    galleryItem.setAttribute('tabindex', '0');
+                    galleryItem.setAttribute('aria-label', 'Ver piercing realizado por Ciervo');
+
+                    var resolvedSrc = resolveImagePath(item.src);
+                    var altText = item.alt || 'Piercing realizado por Ciervo';
+
+                    galleryItem.innerHTML =
+                        '<img src="' + resolvedSrc + '" alt="' + altText + '" loading="lazy" decoding="async">' +
+                        '<div class="gallery-overlay">' +
+                            '<p class="text-[#888] text-sm mt-1">Ciervo</p>' +
+                        '</div>';
+
+                    piercingGrid.appendChild(galleryItem);
+                });
+
+                if (randomCiervoItems.length === 0) {
+                    piercingGrid.innerHTML = '<p style="color:#888; text-align:center; grid-column:1/-1;">No hay imágenes de piercing de Ciervo disponibles.</p>';
+                }
+            }
+        }
+        
+        function handleError(err) {
+            console.error('Error cargando datos desde WordPress API:', err);
+            if (artistsLoading) {
+                artistsLoading.innerHTML = '<p style="color:#888;">No se pudieron cargar los artistas. Inténtalo más tarde.</p>';
+            }
+            if (galleryLoading) {
+                galleryLoading.innerHTML = '<p style="color:#888;">No se pudo cargar la galería. Inténtalo más tarde.</p>';
+            }
+        }
+        
+        function fetchAndRender(url, sourceLabel) {
+            console.log('[Index] Fetching artists from ' + sourceLabel + ':', url);
+            return fetch(url)
+                .then(function(res) {
+                    console.log('[Index] ' + sourceLabel + ' response status:', res.status);
+                    if (!res.ok) throw new Error(sourceLabel + ' error: ' + res.status);
+                    return res.json();
+                })
+                .then(function(data) {
+                    var artists = normalizeArtistsData(data);
+                    console.log('[Index] ' + sourceLabel + ' artists keys:', Object.keys(artists));
+                    renderArtists(artists);
+                    renderGallery(artists);
+                });
+        }
+
+        // Load artists from API, fallback to local JSON when API is unavailable
+        fetchAndRender(WORDPRESS_API_URL, 'WordPress API')
+            .catch(function(err) {
+                console.warn('[Index] WordPress API failed, trying local fallback:', err);
+                return fetchAndRender(LOCAL_ARTISTS_URL, 'Local JSON');
+            })
+            .catch(function(err) {
+                console.error('[Index] Fallback also failed:', err);
+                handleError(err);
+            });
+    })();
+
+    // ========================================
+    // Tattoo Calculator Functions
+    // ========================================
+    const calcState = {
+        currentStep: 0,
+        totalSteps: 6,
+        selections: {
+            size: null,
+            sizePrice: 0,
+            zone: null,
+            zoneMultiplier: 1,
+            style: null,
+            styleMultiplier: 1,
+            complexity: null,
+            complexityMultiplier: 1,
+            color: null,
+            colorMultiplier: 1,
+            artist: null
+        },
+        xp: 0,
+        totalXP: 600
+    };
+
+    const zoneMultipliers = {
+        'head': 1.15, 'neck': 1.2, 'chest': 1.1, 'hand-left,hand-right': 1.25,
+        'foot-left,foot-right': 1.2, 'back': 1.15, 'stomach': 1.05,
+        'leg-left,leg-right': 1.05, 'shin-left,shin-right': 1.05,
+        'shoulder-left,shoulder-right': 1.0, 'arm-left,arm-right': 1.0,
+        'forearm-left,forearm-right': 1.0
+    };
+
+    function startCalculator() {
+        document.querySelector('.calc-hero-section').style.display = 'none';
+        document.getElementById('calcInterface').style.display = 'block';
+        document.getElementById('calcResults').style.display = 'none';
+        updateProgress();
+    }
+
+    function selectOption(card) {
+        const step = card.closest('.calc-step');
+        step.querySelectorAll('.calc-option-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        calcState.selections.size = card.dataset.value;
+        calcState.selections.sizePrice = parseInt(card.dataset.price);
+        addXP(100);
+        setTimeout(() => nextStep(), 400);
+    }
+
+    function selectZone(option) {
+        document.querySelectorAll('.calc-zone-option').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        calcState.selections.zone = option.dataset.zone;
+        calcState.selections.zoneMultiplier = zoneMultipliers[option.dataset.zone] || 1;
+        addXP(100);
+        setTimeout(() => nextStep(), 400);
+    }
+
+    function selectStyle(card) {
+        document.querySelectorAll('.calc-style-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        calcState.selections.style = card.dataset.value;
+        calcState.selections.styleMultiplier = parseFloat(card.dataset.price);
+        addXP(100);
+        setTimeout(() => nextStep(), 400);
+    }
+
+    function selectComplexity(card) {
+        document.querySelectorAll('.calc-complexity-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        calcState.selections.complexity = card.dataset.value;
+        calcState.selections.complexityMultiplier = parseFloat(card.dataset.multiplier);
+        addXP(100);
+        setTimeout(() => nextStep(), 400);
+    }
+
+    function selectColor(option) {
+        document.querySelectorAll('.calc-color-option').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        calcState.selections.color = option.dataset.value;
+        calcState.selections.colorMultiplier = parseFloat(option.dataset.multiplier);
+        addXP(100);
+        setTimeout(() => nextStep(), 400);
+    }
+
+    function selectArtist(option) {
+        document.querySelectorAll('.calc-artist-option').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        calcState.selections.artist = option.dataset.artist;
+        addXP(100);
+        setTimeout(() => showResults(), 400);
+    }
+
+    function nextStep() {
+        if (calcState.currentStep < calcState.totalSteps - 1) {
+            const currentEl = document.querySelector('.calc-step.active');
+            if (currentEl) currentEl.classList.remove('active');
+            calcState.currentStep++;
+            const nextEl = document.querySelector(`.calc-step[data-step="${calcState.currentStep}"]`);
+            if (nextEl) nextEl.classList.add('active');
+            updateProgress();
+        }
+    }
+
+    function prevStep() {
+        if (calcState.currentStep > 0) {
+            const currentEl = document.querySelector('.calc-step.active');
+            if (currentEl) currentEl.classList.remove('active');
+            calcState.currentStep--;
+            const prevEl = document.querySelector(`.calc-step[data-step="${calcState.currentStep}"]`);
+            if (prevEl) prevEl.classList.add('active');
+            updateProgress();
+        }
+    }
+
+    function updateProgress() {
+        const stepLabel = document.getElementById('calcStepLabel');
+        if (stepLabel) stepLabel.textContent = `Paso ${calcState.currentStep + 1} de ${calcState.totalSteps}`;
+        
+        const xpBarFill = document.getElementById('calcXpBarFill');
+        const xpText = document.getElementById('calcXpText');
+        if (xpBarFill) xpBarFill.style.width = `${(calcState.xp / calcState.totalXP) * 100}%`;
+        if (xpText) xpText.textContent = `${calcState.xp} XP`;
+
+        const dots = document.querySelectorAll('.calc-dot');
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index <= calcState.currentStep);
+            dot.classList.toggle('completed', index < calcState.currentStep);
+        });
+
+        const prevBtn = document.querySelector('.calc-prev-btn');
+        const nextBtn = document.querySelector('.calc-next-btn');
+        if (prevBtn) prevBtn.style.display = calcState.currentStep === 0 ? 'none' : 'flex';
+        if (nextBtn) {
+            if (calcState.currentStep === calcState.totalSteps - 1) {
+                nextBtn.innerHTML = '<i class="fas fa-check"></i> Ver Resultado';
+            } else {
+                nextBtn.innerHTML = 'Siguiente <i class="fas fa-arrow-right"></i>';
+            }
+        }
+    }
+
+    function addXP(amount) {
+        calcState.xp = Math.min(calcState.xp + amount, calcState.totalXP);
+    }
+
+    function showResults() {
+        document.getElementById('calcInterface').style.display = 'none';
+        document.getElementById('calcResults').style.display = 'block';
+
+        const s = calcState.selections;
+        const price = Math.round(s.sizePrice * s.zoneMultiplier * s.styleMultiplier * s.complexityMultiplier * s.colorMultiplier);
+        
+        const sizeLabels = { small: 'Pequeño', medium: 'Mediano', large: 'Grande', xlarge: 'Extra Grande' };
+        const styleLabels = { realism: 'Realismo', blackwork: 'Blackwork', fineline: 'Fine Line', watercolor: 'Acuarela', japanese: 'Japonés', minimalist: 'Minimalista', color: 'Color', traditional: 'Traditional' };
+        const complexityLabels = { simple: 'Sencillo', moderate: 'Moderado', detailed: 'Muy Detallado' };
+        const colorLabels = { bw: 'Blanco y Negro', color: 'Color' };
+        const artistLabels = { selene: 'Selene', inkbo: 'Inkbo', bigtorres: 'Big Torres', ciervo: 'Ciervo' };
+
+        const summary = document.getElementById('calcResultsSummary');
+        summary.innerHTML = `
+            <div class="summary-item"><span>Tamaño:</span><strong>${sizeLabels[s.size] || s.size}</strong></div>
+            <div class="summary-item"><span>Zona:</span><strong>${s.zone ? s.zone.replace(/-/g, ' ').replace(/,/g, ' / ') : '-'}</strong></div>
+            <div class="summary-item"><span>Estilo:</span><strong>${styleLabels[s.style] || s.style}</strong></div>
+            <div class="summary-item"><span>Complejidad:</span><strong>${complexityLabels[s.complexity] || s.complexity}</strong></div>
+            <div class="summary-item"><span>Color:</span><strong>${colorLabels[s.color] || s.color}</strong></div>
+            <div class="summary-item"><span>Artista:</span><strong>${artistLabels[s.artist] || s.artist}</strong></div>
+        `;
+
+        const priceValue = document.getElementById('calcPriceValue');
+        priceValue.textContent = `${price}€`;
+    }
+
+    function restartCalculator() {
+        calcState.currentStep = 0;
+        calcState.selections = { size: null, sizePrice: 0, zone: null, zoneMultiplier: 1, style: null, styleMultiplier: 1, complexity: null, complexityMultiplier: 1, color: null, colorMultiplier: 1, artist: null };
+        calcState.xp = 0;
+        
+        document.querySelectorAll('.calc-option-card, .calc-zone-option, .calc-style-card, .calc-complexity-card, .calc-color-option, .calc-artist-option').forEach(el => el.classList.remove('selected'));
+        
+        document.getElementById('calcResults').style.display = 'none';
+        document.querySelector('.calc-hero-section').style.display = 'block';
+        
+        const firstStep = document.querySelector('.calc-step[data-step="0"]');
+        if (firstStep) firstStep.classList.add('active');
+        updateProgress();
+    }
+    </script>
+    </body>
+    </html>
