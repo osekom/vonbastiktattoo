@@ -801,7 +801,7 @@
 
         if (!artistsGrid) return;
 
-        var API_URL = 'https://vonbastiktattoo.es/wp-json/tam/v1/artists';
+        var API_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://vonbastiktattoo.es/wp-json/tam/v1/artists');
 
         // Show loading state
         if (artistsLoading) {

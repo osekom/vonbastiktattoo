@@ -1055,7 +1055,7 @@
     // Single API Request - Load Artists & Gallery from WordPress TAM API
     // ========================================
     (function() {
-        var WORDPRESS_API_URL = 'https://vonbastiktattoo.es/wp-json/tam/v1/artists';
+        var WORDPRESS_API_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://vonbastiktattoo.es/wp-json/tam/v1/artists');
         var LOCAL_ARTISTS_URL = 'data/artists.json';
         var SITE_URL = 'https://vonbastiktattoo.es';
         var artistsGrid = document.getElementById('artistsGrid');
