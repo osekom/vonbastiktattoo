@@ -913,28 +913,17 @@ function tam_register_rest_routes() {
 add_action('rest_api_init', 'tam_register_rest_routes');
 
 /**
- * Add CORS headers to the TAM REST API responses.
- *
- * @param WP_REST_Response $response The response object.
- * @param WP_REST_Request $request The request object.
- * @param string $route The route being dispatched.
- * @return WP_REST_Response Modified response with CORS headers.
+ * Send CORS headers for all TAM API responses.
  */
-function tam_add_cors_headers($response, $request, $route) {
-    // Check if this is our TAM API route
-    if (strpos($route, 'tam/v1/') === 0) {
-        // Allow requests from any origin
+function tam_send_cors_headers() {
+    if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/wp-json/tam/v1/') !== false) {
         header('Access-Control-Allow-Origin: *');
-        // Allow these HTTP methods
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
-        // Allow these headers
         header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin');
-        // Cache preflight results for 1 hour
         header('Access-Control-Max-Age: 3600');
     }
-    return $response;
 }
-add_filter('rest_post_dispatch', 'tam_add_cors_headers', 10, 3);
+add_action('rest_send_nocache_headers', 'tam_send_cors_headers');
 
 /**
  * Handle CORS preflight OPTIONS requests.
@@ -952,7 +941,9 @@ function tam_handle_cors_preflight() {
         }
     }
 }
-add_action('rest_api_init', 'tam_handle_cors_preflight');
+// Execute preflight handler very early
+add_action('init', 'tam_handle_cors_preflight', 0);
+add_action('rest_api_init', 'tam_handle_cors_preflight', 0);
 
 /**
  * Get all artists.
