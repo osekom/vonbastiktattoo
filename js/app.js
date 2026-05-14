@@ -511,7 +511,21 @@
         var slides = document.querySelectorAll('.hero-slide');
         var dots = document.querySelectorAll('.hero-dot');
         var hero = document.querySelector('.hero-section');
-        if (slides.length === 0 || !hero) return;
+        if (!hero) return;
+
+        // If no slides exist, add a default banner
+        if (slides.length === 0) {
+            var heroSlides = document.querySelector('.hero-slides');
+            var heroDots = document.querySelector('.hero-dots');
+            if (heroSlides && heroDots) {
+                heroSlides.innerHTML = '<div class="hero-slide active" style="background-image: url(\'public/images/banner.jpg\'); background-color: #1a1a1a;"></div>';
+                heroDots.innerHTML = '<button class="hero-dot active" data-slide="0" aria-label="Slide 1"></button>';
+                slides = document.querySelectorAll('.hero-slide');
+                dots = document.querySelectorAll('.hero-dot');
+            }
+        }
+
+        if (slides.length === 0) return;
 
         var current = 0;
         var interval;
@@ -813,6 +827,12 @@
                     return;
                 }
 
+                // --- Update Hero Slideshow with Artist Images ---
+                updateHeroSlideshow(artists);
+
+                // --- Update Calculator Artist Images ---
+                updateCalculatorArtistImages(artists);
+
                 var html = '';
 
                 // Iterate over each artist in the response object
@@ -887,6 +907,106 @@
                 artistsGrid.innerHTML = '<p style="color:#888;text-align:center;width:100%;">Error al cargar los artistas. Por favor, inténtalo más tarde.</p>';
             });
     };
+
+    // --- Update Hero Slideshow with Artist Images from API ---
+    function updateHeroSlideshow(artists) {
+        var heroSlides = document.querySelector('.hero-slides');
+        var heroDots = document.querySelector('.hero-dots');
+        
+        if (!heroSlides || !heroDots) return;
+
+        // Start with banner as first slide
+        var newSlidesHTML = '<div class="hero-slide active" style="background-image: url(\'public/images/banner.jpg\'); background-color: #1a1a1a;"></div>';
+        var newDotsHTML = '<button class="hero-dot active" data-slide="0" aria-label="Slide 1"></button>';
+
+        var slideIndex = 1;
+        var artistCount = 0;
+
+        // Add artist hero images as slides
+        if (artists && typeof artists === 'object') {
+            for (var slug in artists) {
+                if (!artists.hasOwnProperty(slug)) continue;
+
+                var artist = artists[slug];
+                if (artist && artist.hero && artist.hero.cover) {
+                    var coverUrl = artist.hero.cover;
+                    
+                    // Handle WordPress paths
+                    if (coverUrl.indexOf('wp-content') === 0) {
+                        coverUrl = 'https://vonbastiktattoo.es/' + coverUrl;
+                    } else if (coverUrl.indexOf('http') !== 0) {
+                        // If not a full URL, prepend WordPress domain
+                        coverUrl = 'https://vonbastiktattoo.es/' + coverUrl;
+                    }
+
+                    newSlidesHTML += '<div class="hero-slide" style="background-image: url(\'' + coverUrl + '\'); background-color: #1a1a1a;"></div>';
+                    newDotsHTML += '<button class="hero-dot" data-slide="' + slideIndex + '" aria-label="Slide ' + (slideIndex + 1) + '"></button>';
+                    slideIndex++;
+                    artistCount++;
+                }
+            }
+        }
+
+        // Update the DOM
+        heroSlides.innerHTML = newSlidesHTML;
+        heroDots.innerHTML = newDotsHTML;
+
+        console.log('[Hero] Updated with ' + artistCount + ' artist images');
+
+        // Re-initialize hero slideshow with new slides and dots
+        initHeroSlideshow();
+    }
+
+    // --- Update Calculator Artist Images from API ---
+    function updateCalculatorArtistImages(artists) {
+        var calcArtistOptions = document.getElementById('calcArtistOptions');
+        if (!calcArtistOptions) return;
+
+        // Mapping of artist slugs to their display data
+        var artistMap = {};
+        if (artists && typeof artists === 'object') {
+            for (var slug in artists) {
+                if (!artists.hasOwnProperty(slug)) continue;
+                
+                var artist = artists[slug];
+                if (artist && artist.hero && artist.hero.cover) {
+                    var coverUrl = artist.hero.cover;
+                    
+                    // Handle WordPress paths
+                    if (coverUrl.indexOf('wp-content') === 0) {
+                        coverUrl = 'https://vonbastiktattoo.es/' + coverUrl;
+                    } else if (coverUrl.indexOf('http') !== 0) {
+                        coverUrl = 'https://vonbastiktattoo.es/' + coverUrl;
+                    }
+                    
+                    // Store by artist slug
+                    artistMap[slug] = coverUrl;
+                }
+            }
+        }
+
+        // Update each calculator artist option with image from API
+        var artistOptions = calcArtistOptions.querySelectorAll('.calc-artist-option');
+        artistOptions.forEach(function (option) {
+            var artistSlug = option.getAttribute('data-artist');
+            if (artistSlug && artistMap[artistSlug]) {
+                var placeholder = option.querySelector('.calc-artist-img-placeholder');
+                if (placeholder) {
+                    // Create image element
+                    var img = document.createElement('img');
+                    img.className = 'calc-artist-img';
+                    img.src = artistMap[artistSlug];
+                    img.alt = option.querySelector('h4').textContent;
+                    img.loading = 'lazy';
+                    
+                    // Replace placeholder with image
+                    placeholder.replaceWith(img);
+                }
+            }
+        });
+
+        console.log('[Calculator] Updated artist images from API');
+    }
 
     window.loadArtistsFromAPI = loadArtistsFromAPI;
 })();

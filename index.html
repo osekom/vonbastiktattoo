@@ -194,11 +194,7 @@
         <!-- Hero Section -->
         <section class="hero-section" id="inicio" aria-label="Bienvenida">
             <div class="hero-slides">
-                <div class="hero-slide active" style="background-image: url('public/images/banner.jpg');"></div>
-                <div class="hero-slide" style="background-image: url('public/artist/Selene/selene-hero.jpg');"></div>
-                <div class="hero-slide" style="background-image: url('public/artist/Inkbo/inkbo-hero.jpg');"></div>
-                <div class="hero-slide" style="background-image: url('public/artist/BigTorres/bigtorres-hero.jpg');"></div>
-                <div class="hero-slide" style="background-image: url('public/artist/Ciervo/ciervo-hero.jpg');"></div>
+                <!-- Hero slides will be loaded dynamically from API -->
             </div>
             <div class="hero-overlay"></div>
             <div class="hero-content">
@@ -211,10 +207,7 @@
                 </div>
             </div>
             <div class="hero-dots" aria-label="Control de slideshow">
-                <button class="hero-dot active" data-slide="0" aria-label="Slide 1"></button>
-                <button class="hero-dot" data-slide="1" aria-label="Slide 2"></button>
-                <button class="hero-dot" data-slide="2" aria-label="Slide 3"></button>
-                <button class="hero-dot" data-slide="3" aria-label="Slide 4"></button>
+                <!-- Hero dots will be loaded dynamically from API -->
             </div>
             <div class="scroll-indicator" aria-hidden="true">
                 <div class="mouse"></div>
@@ -769,21 +762,21 @@
                                 <h3>¿Qué artista prefieres?</h3>
                                 <p>Elige tu artista favorito</p>
                             </div>
-                            <div class="calc-artist-options">
+                            <div class="calc-artist-options" id="calcArtistOptions">
                                 <div class="calc-artist-option" data-artist="selene" onclick="selectArtist(this)">
-                                    <img src="public/artist/Selene/selene-hero.jpg" alt="Selene" class="calc-artist-img">
+                                    <div class="calc-artist-img-placeholder"><i class="fas fa-user"></i></div>
                                     <h4>Selene</h4><p>Realismo y Retratos</p>
                                 </div>
                                 <div class="calc-artist-option" data-artist="inkbo" onclick="selectArtist(this)">
-                                    <img src="public/artist/Inkbo/inkbo-hero.jpg" alt="Inkbo" class="calc-artist-img">
+                                    <div class="calc-artist-img-placeholder"><i class="fas fa-user"></i></div>
                                     <h4>Inkbo</h4><p>Blackwork y Geometría</p>
                                 </div>
                                 <div class="calc-artist-option" data-artist="bigtorres" onclick="selectArtist(this)">
-                                    <img src="public/artist/BigTorres/bigtorres-hero.jpg" alt="Big Torres" class="calc-artist-img">
+                                    <div class="calc-artist-img-placeholder"><i class="fas fa-user"></i></div>
                                     <h4>Big Torres</h4><p>Fine Line y Acuarela</p>
                                 </div>
                                 <div class="calc-artist-option" data-artist="ciervo" onclick="selectArtist(this)">
-                                    <img src="public/artist/Ciervo/ciervo-hero.jpg" alt="Ciervo" class="calc-artist-img">
+                                    <div class="calc-artist-img-placeholder"><i class="fas fa-user"></i></div>
                                     <h4>Ciervo</h4><p>Piercing y Joyería</p>
                                 </div>
                             </div>
