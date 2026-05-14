@@ -6,10 +6,17 @@
 const calculatorState = {
     currentStep: 0,
     totalSteps: 6,
+    serviceType: null, // 'tattoo' | 'laser' | 'piercing'
+    laserSize: null,
+    laserPrice: 0,
     selections: {
         size: null,
-        sizePrice: 0,
+        sizeMin: 0,
+        sizeMax: 0,
         zone: null,
+        xlargeArea: null,
+        xlargeSessionsMin: 0,
+        xlargeSessionsMax: 0,
         zoneMultiplier: 1,
         style: null,
         styleMultiplier: 1,
@@ -23,27 +30,39 @@ const calculatorState = {
     totalXP: 600
 };
 
-// Zone multipliers (difficult areas take more time)
+// Piercing state
+const piercingState = {
+    step: 0,
+    material: null,
+    type: null,
+    quantity: null
+};
+
+// Zone multipliers
 const zoneMultipliers = {
-    'head': 1.15,
-    'neck': 1.2,
-    'shoulder-left': 1.0,
-    'shoulder-right': 1.0,
+    'head': 1.15, 'neck': 1.2,
+    'shoulder-left': 1.0, 'shoulder-right': 1.0,
     'chest': 1.1,
-    'arm-left': 1.0,
-    'arm-right': 1.0,
-    'forearm-left': 1.0,
-    'forearm-right': 1.0,
-    'hand-left': 1.25,
-    'hand-right': 1.25,
+    'arm-left': 1.0, 'arm-right': 1.0,
+    'forearm-left': 1.0, 'forearm-right': 1.0,
+    'hand-left': 1.25, 'hand-right': 1.25,
     'stomach': 1.05,
-    'leg-left': 1.05,
-    'leg-right': 1.05,
-    'shin-left': 1.05,
-    'shin-right': 1.05,
-    'foot-left': 1.2,
-    'foot-right': 1.2,
+    'leg-left': 1.05, 'leg-right': 1.05,
+    'shin-left': 1.05, 'shin-right': 1.05,
+    'foot-left': 1.2, 'foot-right': 1.2,
     'back': 1.15
+};
+
+const BASE_XLARGE_SESSION_PRICE = 500;
+const XLARGE_DISCOUNT = 0.2;
+const xlargeConfigurations = {
+    full_arm: { label: 'Brazo completo', sessionsMin: 5, sessionsMax: 8 },
+    full_leg: { label: 'Pierna completa', sessionsMin: 10, sessionsMax: 15 },
+    full_back: { label: 'Espalda completa', sessionsMin: 6, sessionsMax: 10 },
+    chest_piece: { label: 'Pecho', sessionsMin: 3, sessionsMax: 3 },
+    full_torso: { label: 'Torso completo', sessionsMin: 6, sessionsMax: 8 },
+    outer_arm: { label: 'Brazo exterior', sessionsMin: 3, sessionsMax: 3 },
+    outer_leg: { label: 'Pierna exterior', sessionsMin: 4, sessionsMax: 4 }
 };
 
 // ========================================
@@ -52,7 +71,6 @@ const zoneMultipliers = {
 function createParticles() {
     const container = document.getElementById('particles');
     if (!container) return;
-    
     for (let i = 0; i < 30; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
@@ -71,9 +89,7 @@ function createParticles() {
 function createConfetti() {
     const container = document.getElementById('confetti');
     if (!container) return;
-    
     const colors = ['#c9a96e', '#f0d89d', '#d4b87a', '#fff', '#ff6b6b', '#feca57', '#48dbfb'];
-    
     for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
@@ -82,26 +98,13 @@ function createConfetti() {
         confetti.style.width = (5 + Math.random() * 10) + 'px';
         confetti.style.height = (5 + Math.random() * 10) + 'px';
         confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-        confetti.style.animation = `confettiFall ${2 + Math.random() * 3}s ease-out ${Math.random() * 2}s forwards`;
+        confetti.style.animation = 'confettiFall ' + (2 + Math.random() * 3) + 's ease-out ' + (Math.random() * 2) + 's forwards';
         container.appendChild(confetti);
     }
-    
-    // Add confetti animation dynamically
     if (!document.getElementById('confetti-style')) {
         const style = document.createElement('style');
         style.id = 'confetti-style';
-        style.textContent = `
-            @keyframes confettiFall {
-                0% {
-                    opacity: 1;
-                    transform: translateY(0) rotate(0deg);
-                }
-                100% {
-                    opacity: 0;
-                    transform: translateY(100vh) rotate(720deg);
-                }
-            }
-        `;
+        style.textContent = '@keyframes confettiFall { 0% { opacity:1; transform:translateY(0) rotate(0deg); } 100% { opacity:0; transform:translateY(100vh) rotate(720deg); } }';
         document.head.appendChild(style);
     }
 }
@@ -111,37 +114,100 @@ function createConfetti() {
 // ========================================
 function startCalculator() {
     const hero = document.querySelector('.calc-hero');
-    const calculator = document.getElementById('calculator');
-    
     hero.style.opacity = '0';
     hero.style.transform = 'translateY(-30px)';
-    
-    setTimeout(() => {
+    setTimeout(function() {
         hero.style.display = 'none';
-        calculator.classList.add('active');
-        updateStepDisplay();
+        showServiceSelector();
     }, 500);
 }
 
-function nextStep() {
-    // Validate that a selection has been made before advancing
-    if (!validateCurrentStep()) {
-        return;
-    }
+function showServiceSelector() {
+    document.getElementById('serviceSelector').classList.add('active');
+}
 
+function isXlargeSelection() {
+    return calculatorState.selections.size === 'xlarge';
+}
+
+function getXlargeConfiguration() {
+    return xlargeConfigurations[calculatorState.selections.xlargeArea] || null;
+}
+
+function formatSessionsRange(min, max) {
+    return min === max ? min + ' sesiones' : min + ' a ' + max + ' sesiones';
+}
+
+function formatPriceRange(min, max) {
+    return min === max ? min + '€' : min + '€ - ' + max + '€';
+}
+
+function updateTattooPlacementStep() {
+    const title = document.getElementById('placementStepTitle');
+    const subtitle = document.getElementById('placementStepSubtitle');
+    const regularZones = document.getElementById('regularZoneOptions');
+    const xlargeOptions = document.getElementById('xlargeOptions');
+    const xlargeNote = document.getElementById('xlargeStepNote');
+    if (!title || !subtitle || !regularZones || !xlargeOptions || !xlargeNote) return;
+
+    if (isXlargeSelection()) {
+        title.textContent = '¿Qué cobertura extra grande quieres?';
+        subtitle.textContent = 'Selecciona la pieza completa para calcular sesiones y total estimado';
+        regularZones.style.display = 'none';
+        xlargeOptions.style.display = 'grid';
+        xlargeNote.style.display = 'flex';
+    } else {
+        title.textContent = '¿En qué zona irá?';
+        subtitle.textContent = 'Selecciona la parte del cuerpo para continuar con la estimación';
+        regularZones.style.display = '';
+        xlargeOptions.style.display = 'none';
+        xlargeNote.style.display = 'none';
+    }
+}
+
+function selectService(service) {
+    calculatorState.serviceType = service;
+    document.getElementById('serviceSelector').classList.remove('active');
+    if (service === 'tattoo') {
+        document.getElementById('calculator').classList.add('active');
+        updateStepDisplay();
+    } else if (service === 'laser') {
+        calculatorState.laserSize = null;
+        calculatorState.laserPrice = 0;
+        document.querySelectorAll('#laserCalculator .option-card').forEach(function(c) { c.classList.remove('selected'); });
+        document.getElementById('laserCalculator').classList.add('active');
+    } else if (service === 'piercing') {
+        piercingState.step = 0;
+        piercingState.material = null;
+        piercingState.type = null;
+        piercingState.quantity = null;
+        document.querySelectorAll('#piercingCalculator .option-card').forEach(function(c) { c.classList.remove('selected'); });
+        document.querySelectorAll('#piercingCalculator .step').forEach(function(s) { s.classList.remove('active'); });
+        document.querySelector('#piercingCalculator .step[data-step-p="0"]').classList.add('active');
+        document.getElementById('piercingCalculator').classList.add('active');
+        updatePiercingStepDisplay();
+    }
+}
+
+function backToServiceSelector() {
+    document.getElementById('calculator').classList.remove('active');
+    document.getElementById('laserCalculator').classList.remove('active');
+    document.getElementById('piercingCalculator').classList.remove('active');
+    showServiceSelector();
+}
+
+function nextStep() {
+    if (!validateCurrentStep()) return;
     if (calculatorState.currentStep < calculatorState.totalSteps - 1) {
-        const currentStepEl = document.querySelector(`.step[data-step="${calculatorState.currentStep}"]`);
+        const currentStepEl = document.querySelector('.step[data-step="' + calculatorState.currentStep + '"]');
         currentStepEl.style.animation = 'slideOutLeft 0.3s ease-in forwards';
-        
-        setTimeout(() => {
+        setTimeout(function() {
             currentStepEl.classList.remove('active');
             currentStepEl.style.animation = '';
             calculatorState.currentStep++;
             calculatorState.xp += 100;
             updateStepDisplay();
-            
-            // Slide in new step
-            const newStepEl = document.querySelector(`.step[data-step="${calculatorState.currentStep}"]`);
+            const newStepEl = document.querySelector('.step[data-step="' + calculatorState.currentStep + '"]');
             newStepEl.classList.add('active');
         }, 300);
     } else {
@@ -151,124 +217,73 @@ function nextStep() {
 
 function validateCurrentStep() {
     const step = calculatorState.currentStep;
-    const selections = calculatorState.selections;
-    
-    // Step 0: Size selection required
-    if (step === 0 && !selections.size) {
-        shakeStep();
-        showToast('⚠️ Por favor, selecciona un tamaño');
-        return false;
-    }
-    
-    // Step 1: Zone selection required
-    if (step === 1 && !selections.zone) {
-        shakeStep();
-        showToast('⚠️ Por favor, selecciona una zona');
-        return false;
-    }
-    
-    // Step 2: Style selection required
-    if (step === 2 && !selections.style) {
-        shakeStep();
-        showToast('⚠️ Por favor, selecciona un estilo');
-        return false;
-    }
-    
-    // Step 3: Complexity selection required
-    if (step === 3 && !selections.complexity) {
-        shakeStep();
-        showToast('⚠️ Por favor, selecciona un nivel de complejidad');
-        return false;
-    }
-    
-    // Step 4: Color selection required
-    if (step === 4 && !selections.color) {
-        shakeStep();
-        showToast('⚠️ Por favor, selecciona color');
-        return false;
-    }
-    
-    // Step 5: Artist selection required
-    if (step === 5 && !selections.artist) {
-        shakeStep();
-        showToast('⚠️ Por favor, selecciona un artista');
-        return false;
-    }
-    
+    const s = calculatorState.selections;
+    if (step === 0 && !s.size)       { shakeStep(); showToast('Por favor, selecciona un tamano'); return false; }
+    if (step === 1 && isXlargeSelection() && !s.xlargeArea) { shakeStep(); showToast('Por favor, selecciona una cobertura extra grande'); return false; }
+    if (step === 1 && !isXlargeSelection() && !s.zone)      { shakeStep(); showToast('Por favor, selecciona una zona'); return false; }
+    if (step === 2 && !s.style)      { shakeStep(); showToast('Por favor, selecciona un estilo'); return false; }
+    if (step === 3 && !s.complexity) { shakeStep(); showToast('Por favor, selecciona complejidad'); return false; }
+    if (step === 4 && !s.color)      { shakeStep(); showToast('Por favor, selecciona color'); return false; }
+    if (step === 5 && !s.artist)     { shakeStep(); showToast('Por favor, selecciona un artista'); return false; }
     return true;
 }
 
 function shakeStep() {
-    const currentStepEl = document.querySelector(`.step[data-step="${calculatorState.currentStep}"]`);
-    currentStepEl.style.animation = 'shake 0.5s ease-in';
-    setTimeout(() => {
-        currentStepEl.style.animation = '';
-    }, 500);
+    const el = document.querySelector('.step[data-step="' + calculatorState.currentStep + '"]');
+    if (!el) return;
+    el.style.animation = 'shake 0.5s ease-in';
+    setTimeout(function() { el.style.animation = ''; }, 500);
 }
 
 function prevStep() {
     if (calculatorState.currentStep > 0) {
-        const currentStepEl = document.querySelector(`.step[data-step="${calculatorState.currentStep}"]`);
+        const currentStepEl = document.querySelector('.step[data-step="' + calculatorState.currentStep + '"]');
         currentStepEl.style.animation = 'slideOutRight 0.3s ease-in forwards';
-        
-        setTimeout(() => {
+        setTimeout(function() {
             currentStepEl.classList.remove('active');
             currentStepEl.style.animation = '';
             calculatorState.currentStep--;
             updateStepDisplay();
-            
-            const newStepEl = document.querySelector(`.step[data-step="${calculatorState.currentStep}"]`);
+            const newStepEl = document.querySelector('.step[data-step="' + calculatorState.currentStep + '"]');
             newStepEl.classList.add('active');
             newStepEl.style.animation = 'slideInLeft 0.3s ease-out';
         }, 300);
+    } else {
+        backToServiceSelector();
     }
 }
 
 function goToStep(step) {
     if (step <= calculatorState.currentStep) {
-        const currentStepEl = document.querySelector(`.step[data-step="${calculatorState.currentStep}"]`);
+        const currentStepEl = document.querySelector('.step[data-step="' + calculatorState.currentStep + '"]');
         currentStepEl.classList.remove('active');
-        
         calculatorState.currentStep = step;
         updateStepDisplay();
-        
-        const newStepEl = document.querySelector(`.step[data-step="${calculatorState.currentStep}"]`);
+        const newStepEl = document.querySelector('.step[data-step="' + calculatorState.currentStep + '"]');
         newStepEl.classList.add('active');
     }
 }
 
 function updateStepDisplay() {
     const step = calculatorState.currentStep;
-    
-    // Update step label
-    document.getElementById('stepLabel').textContent = `Paso ${step + 1} de ${calculatorState.totalSteps}`;
-    
-    // Update XP bar
+    document.getElementById('stepLabel').textContent = 'Paso ' + (step + 1) + ' de ' + calculatorState.totalSteps;
     const xpPercent = (calculatorState.xp / calculatorState.totalXP) * 100;
     document.getElementById('xpBarFill').style.width = xpPercent + '%';
-    document.getElementById('xpText').textContent = `${calculatorState.xp} XP`;
-    
-    // Update dots
-    const dots = document.querySelectorAll('.dot');
-    dots.forEach((dot, index) => {
+    document.getElementById('xpText').textContent = calculatorState.xp + ' XP';
+
+    document.querySelectorAll('#calculator .dot').forEach(function(dot, index) {
         dot.classList.remove('active', 'completed');
-        if (index === step) {
-            dot.classList.add('active');
-        } else if (index < step) {
-            dot.classList.add('completed');
-        }
+        if (index === step) dot.classList.add('active');
+        else if (index < step) dot.classList.add('completed');
     });
-    
-    // Update navigation buttons
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
-    
-    prevBtn.style.display = step > 0 ? 'flex' : 'none';
-    
-    if (step === calculatorState.totalSteps - 1) {
-        nextBtn.innerHTML = '<span>Ver Resultado</span><i class="fas fa-trophy"></i>';
-    } else {
-        nextBtn.innerHTML = '<span>Siguiente</span><i class="fas fa-arrow-right"></i>';
+
+    const prevBtn = document.querySelector('#calculator .prev-btn');
+    const nextBtn = document.querySelector('#calculator .next-btn');
+    if (prevBtn) prevBtn.style.display = step > 0 ? 'flex' : 'none';
+    if (nextBtn) {
+        nextBtn.innerHTML = step === calculatorState.totalSteps - 1
+            ? '<span>Ver Resultado</span><i class="fas fa-trophy"></i>'
+            : '<span>Siguiente</span><i class="fas fa-arrow-right"></i>';
     }
 }
 
@@ -276,314 +291,450 @@ function updateStepDisplay() {
 // Selection Handlers
 // ========================================
 function handleSizeSelection(element) {
-    const cards = document.querySelectorAll('.size-options .option-card');
-    cards.forEach(card => card.classList.remove('selected'));
+    document.querySelectorAll('.step[data-step="0"] .size-options .option-card').forEach(function(c) { c.classList.remove('selected'); });
     element.classList.add('selected');
-    
     calculatorState.selections.size = element.dataset.value;
-    calculatorState.selections.sizePrice = parseInt(element.dataset.price);
-    
+    calculatorState.selections.sizeMin = parseInt(element.dataset.min);
+    calculatorState.selections.sizeMax = parseInt(element.dataset.max);
+    calculatorState.selections.zone = null;
+    calculatorState.selections.xlargeArea = null;
+    calculatorState.selections.xlargeSessionsMin = 0;
+    calculatorState.selections.xlargeSessionsMax = 0;
+    document.querySelectorAll('.zone-option, .xlarge-option-card').forEach(function(c) { c.classList.remove('selected'); });
+    updateTattooPlacementStep();
     playSelectionSound();
     triggerHaptic();
 }
 
 function handleZoneSelection(element) {
-    const zones = document.querySelectorAll('.zone-option');
-    zones.forEach(zone => zone.classList.remove('selected'));
+    document.querySelectorAll('.zone-option').forEach(function(z) { z.classList.remove('selected'); });
+    document.querySelectorAll('.xlarge-option-card').forEach(function(card) { card.classList.remove('selected'); });
     element.classList.add('selected');
-    
-    // Also highlight SVG zones
     const zoneValue = element.dataset.zone;
-    const zoneGroups = document.querySelectorAll('.body-zone-group');
-    zoneGroups.forEach(g => g.classList.remove('selected'));
-    
+    document.querySelectorAll('.body-zone-group').forEach(function(g) { g.classList.remove('selected'); });
     if (zoneValue.includes(',')) {
-        const zoneList = zoneValue.split(',');
-        zoneList.forEach(z => {
-            const svgZone = document.querySelector(`.body-zone[data-zone="${z}"]`);
+        zoneValue.split(',').forEach(function(z) {
+            const svgZone = document.querySelector('.body-zone[data-zone="' + z + '"]');
             if (svgZone) svgZone.classList.add('active');
-            const svgGroup = document.querySelector(`.body-zone-group[data-zone="${z}"]`);
+            const svgGroup = document.querySelector('.body-zone-group[data-zone="' + z + '"]');
             if (svgGroup) svgGroup.classList.add('selected');
         });
     } else {
-        const svgZone = document.querySelector(`.body-zone[data-zone="${zoneValue}"]`);
+        const svgZone = document.querySelector('.body-zone[data-zone="' + zoneValue + '"]');
         if (svgZone) svgZone.classList.add('active');
-        const svgGroup = document.querySelector(`.body-zone-group[data-zone="${zoneValue}"]`);
+        const svgGroup = document.querySelector('.body-zone-group[data-zone="' + zoneValue + '"]');
         if (svgGroup) svgGroup.classList.add('selected');
     }
-    
     calculatorState.selections.zone = zoneValue;
+    calculatorState.selections.xlargeArea = null;
+    calculatorState.selections.xlargeSessionsMin = 0;
+    calculatorState.selections.xlargeSessionsMax = 0;
     calculatorState.selections.zoneMultiplier = zoneMultipliers[zoneValue.split(',')[0]] || 1;
-    
+    playSelectionSound();
+    triggerHaptic();
+}
+
+function handleXlargeSelection(element) {
+    document.querySelectorAll('.xlarge-option-card').forEach(function(card) { card.classList.remove('selected'); });
+    document.querySelectorAll('.zone-option').forEach(function(zone) { zone.classList.remove('selected'); });
+    element.classList.add('selected');
+    const config = xlargeConfigurations[element.dataset.area];
+    calculatorState.selections.zone = null;
+    calculatorState.selections.xlargeArea = element.dataset.area;
+    calculatorState.selections.xlargeSessionsMin = config ? config.sessionsMin : 0;
+    calculatorState.selections.xlargeSessionsMax = config ? config.sessionsMax : 0;
     playSelectionSound();
     triggerHaptic();
 }
 
 function handleStyleSelection(element) {
-    const cards = document.querySelectorAll('.style-cards .style-card');
-    cards.forEach(card => card.classList.remove('selected'));
+    document.querySelectorAll('.style-cards .style-card').forEach(function(c) { c.classList.remove('selected'); });
     element.classList.add('selected');
-    
     calculatorState.selections.style = element.dataset.value;
     calculatorState.selections.styleMultiplier = parseFloat(element.dataset.price);
-    
     playSelectionSound();
 }
 
 function handleComplexitySelection(element) {
-    const cards = document.querySelectorAll('.complexity-options .complexity-card');
-    cards.forEach(card => card.classList.remove('selected'));
+    document.querySelectorAll('.complexity-options .complexity-card').forEach(function(c) { c.classList.remove('selected'); });
     element.classList.add('selected');
-    
     calculatorState.selections.complexity = element.dataset.value;
     calculatorState.selections.complexityMultiplier = parseFloat(element.dataset.multiplier);
-    
     playSelectionSound();
 }
 
 function handleColorSelection(element) {
-    const choices = document.querySelectorAll('.color-choice');
-    choices.forEach(choice => choice.classList.remove('selected'));
+    document.querySelectorAll('.color-choice').forEach(function(c) { c.classList.remove('selected'); });
     element.classList.add('selected');
-    
     calculatorState.selections.color = element.dataset.value;
     calculatorState.selections.colorMultiplier = parseFloat(element.dataset.multiplier);
-    
     playSelectionSound();
 }
 
 function handleArtistSelection(element) {
-    const cards = document.querySelectorAll('.artist-cards .artist-card');
-    cards.forEach(card => card.classList.remove('selected'));
+    document.querySelectorAll('.artist-cards .artist-card').forEach(function(c) { c.classList.remove('selected'); });
     element.classList.add('selected');
-    
     calculatorState.selections.artist = element.dataset.artist;
-    
     playSelectionSound();
+}
+
+// ========================================
+// Laser Flow
+// ========================================
+function handleLaserSelection(el) {
+    document.querySelectorAll('#laserCalculator .option-card').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+    calculatorState.laserSize = el.dataset.value;
+    calculatorState.laserPrice = parseInt(el.dataset.price);
+    playSelectionSound();
+    triggerHaptic();
+}
+
+function showLaserResult() {
+    if (!calculatorState.laserSize) { showToast('Por favor, selecciona un tamano'); return; }
+    showResults();
+}
+
+// ========================================
+// Piercing Flow
+// ========================================
+function handlePiercingMaterial(el) {
+    document.querySelectorAll('#piercingCalculator .piercing-material-card').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+    piercingState.material = el.dataset.value;
+    playSelectionSound();
+    triggerHaptic();
+}
+
+function handlePiercingType(el) {
+    document.querySelectorAll('#piercingCalculator .piercing-type-card').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+    piercingState.type = el.dataset.value;
+    playSelectionSound();
+    triggerHaptic();
+}
+
+function handlePiercingQuantity(el) {
+    document.querySelectorAll('#piercingCalculator .piercing-qty-card').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+    piercingState.quantity = el.dataset.value;
+    playSelectionSound();
+    triggerHaptic();
+}
+
+function nextPiercingStep() {
+    const step = piercingState.step;
+    if (step === 0 && !piercingState.material) { showToast('Selecciona el material'); return; }
+    if (step === 1 && !piercingState.type)     { showToast('Selecciona el tipo de piercing'); return; }
+    if (step === 2 && !piercingState.quantity) { showToast('Selecciona la cantidad'); return; }
+    if (step === 1 && piercingState.type === 'avanzado') { showResults(); return; }
+    if (step === 2) { showResults(); return; }
+    const currentEl = document.querySelector('#piercingCalculator .step[data-step-p="' + step + '"]');
+    currentEl.classList.remove('active');
+    piercingState.step++;
+    if (piercingState.step === 2) {
+        const unitPrice = piercingState.material === 'titanio' ? 30 : 20;
+        const packPrice = piercingState.material === 'titanio' ? 50 : 30;
+        document.getElementById('piercingUnitPrice').textContent = unitPrice + '€';
+        document.getElementById('piercingPackPrice').textContent = packPrice + '€';
+    }
+    const nextEl = document.querySelector('#piercingCalculator .step[data-step-p="' + piercingState.step + '"]');
+    nextEl.classList.add('active');
+    updatePiercingStepDisplay();
+}
+
+function prevPiercingStep() {
+    if (piercingState.step === 0) {
+        document.getElementById('piercingCalculator').classList.remove('active');
+        backToServiceSelector();
+        return;
+    }
+    const currentEl = document.querySelector('#piercingCalculator .step[data-step-p="' + piercingState.step + '"]');
+    currentEl.classList.remove('active');
+    piercingState.step--;
+    const prevEl = document.querySelector('#piercingCalculator .step[data-step-p="' + piercingState.step + '"]');
+    prevEl.classList.add('active');
+    updatePiercingStepDisplay();
+}
+
+function updatePiercingStepDisplay() {
+    const step = piercingState.step;
+    const totalSteps = piercingState.type === 'avanzado' ? 2 : 3;
+    document.getElementById('piercingStepLabel').textContent = 'Piercing · Paso ' + (step + 1) + ' de ' + totalSteps;
+    document.querySelectorAll('#piercingDots .dot').forEach(function(dot, i) {
+        dot.classList.remove('active', 'completed');
+        if (i === step) dot.classList.add('active');
+        else if (i < step) dot.classList.add('completed');
+    });
+    const xpFill = document.getElementById('piercingXpFill');
+    if (xpFill) xpFill.style.width = (((step + 1) / totalSteps) * 100) + '%';
+    const nextBtn = document.getElementById('piercingNextBtn');
+    const isLast = (step === 1 && piercingState.type === 'avanzado') || step === 2;
+    nextBtn.innerHTML = isLast ? '<span>Ver Precio</span><i class="fas fa-trophy"></i>' : '<span>Siguiente</span><i class="fas fa-arrow-right"></i>';
+    const prevBtn = document.getElementById('piercingPrevBtn');
+    prevBtn.innerHTML = step === 0 ? '<i class="fas fa-arrow-left"></i><span>Volver</span>' : '<i class="fas fa-arrow-left"></i><span>Anterior</span>';
 }
 
 // ========================================
 // Price Calculation
 // ========================================
 function calculatePrice() {
-    const s = calculatorState.selections;
-    
-    let basePrice = s.sizePrice;
-    let multiplier = s.zoneMultiplier * s.styleMultiplier * s.complexityMultiplier * s.colorMultiplier;
-    
-    let minPrice = Math.round(basePrice * multiplier * 0.9);
-    let maxPrice = Math.round(basePrice * multiplier * 1.2);
-    
-    return { min: minPrice, max: maxPrice };
+    var s = calculatorState.selections;
+    if (s.size === 'xlarge') {
+        var config = getXlargeConfiguration();
+        if (!config) {
+            return { min: BASE_XLARGE_SESSION_PRICE, max: BASE_XLARGE_SESSION_PRICE };
+        }
+        var min = config.sessionsMin * BASE_XLARGE_SESSION_PRICE;
+        var max = config.sessionsMax * BASE_XLARGE_SESSION_PRICE;
+        return {
+            min: min,
+            max: max,
+            sessionPrice: BASE_XLARGE_SESSION_PRICE,
+            sessionsMin: config.sessionsMin,
+            sessionsMax: config.sessionsMax,
+            discountMin: Math.round(min * (1 - XLARGE_DISCOUNT)),
+            discountMax: Math.round(max * (1 - XLARGE_DISCOUNT))
+        };
+    }
+    return { min: s.sizeMin || 0, max: s.sizeMax || 0 };
+}
+
+function calculateLaserPrice() {
+    return calculatorState.laserPrice;
+}
+
+function calculatePiercingPrice() {
+    var m = piercingState.material, t = piercingState.type, q = piercingState.quantity;
+    if (t === 'avanzado') return m === 'acero' ? 50 : 70;
+    if (q === 'pack2')    return m === 'acero' ? 30 : 50;
+    return m === 'acero' ? 20 : 30;
 }
 
 // ========================================
 // Show Results
 // ========================================
 function showResults() {
-    const calculator = document.getElementById('calculator');
-    const results = document.getElementById('results');
-    
-    calculator.classList.remove('active');
-    
-    setTimeout(() => {
+    document.getElementById('calculator').classList.remove('active');
+    document.getElementById('laserCalculator').classList.remove('active');
+    document.getElementById('piercingCalculator').classList.remove('active');
+    document.getElementById('serviceSelector').classList.remove('active');
+    var results = document.getElementById('results');
+    setTimeout(function() {
         results.classList.add('active');
         createConfetti();
-        
-        // Calculate and display price
-        const price = calculatePrice();
-        document.getElementById('priceMin').textContent = price.min + '€';
-        document.getElementById('priceMax').textContent = price.max + '€';
-        
-        // Build summary
-        const summaryItems = document.getElementById('summaryItems');
-        summaryItems.innerHTML = '';
-        
-        const s = calculatorState.selections;
-        
-        const sizeLabels = { small: 'Pequeño', medium: 'Mediano', large: 'Grande', xlarge: 'Extra Grande' };
-        
-        const zoneLabels = {
-            'head': 'Cabeza / Pantalla',
-            'neck': 'Cuello',
-            'shoulder-left': 'Hombro Izquierdo',
-            'shoulder-right': 'Hombro Derecho',
-            'chest': 'Pecho',
-            'arm-left': 'Brazo Izquierdo',
-            'arm-right': 'Brazo Derecho',
-            'forearm-left': 'Antebrazo Izquierdo',
-            'forearm-right': 'Antebrazo Derecho',
-            'hand-left': 'Mano Izquierda',
-            'hand-right': 'Mano Derecha',
-            'stomach': 'Estómago',
-            'leg-left': 'Muslo Izquierdo',
-            'leg-right': 'Muslo Derecho',
-            'shin-left': 'Pierna Izquierda',
-            'shin-right': 'Pierna Derecha',
-            'foot-left': 'Pie Izquierdo',
-            'foot-right': 'Pie Derecho',
-            'back': 'Espalda'
-        };
-        
-        const zoneDisplay = s.zone ? (zoneLabels[s.zone.split(',')[0]] || s.zone.split(',')[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())) : 'No seleccionada';
-        
-        const styleLabels = {
-            realism: 'Realismo',
-            blackwork: 'Blackwork',
-            fineline: 'Fine Line',
-            watercolor: 'Acuarela',
-            japanese: 'Japonés',
-            minimalist: 'Minimalista',
-            color: 'Color',
-            traditional: 'Traditional'
-        };
-        const complexityLabels = {
-            simple: 'Sencillo', moderate: 'Moderado', detailed: 'Detectado', intricate: 'Intricado'
-        };
-        const colorLabels = { bw: 'Blanco y Negro', color: 'Color', mixed: 'Mixto' };
-        const artistLabels = { selene: 'Selene', inkbo: 'Inkbo', bigtorres: 'Big Torres' };
-        
-        const summaryData = [
-            { icon: 'fas fa-ruler-combined', label: 'Tamaño', value: sizeLabels[s.size] || '-' },
-            { icon: 'fas fa-map-marker-alt', label: 'Zona', value: zoneDisplay },
-            { icon: 'fas fa-palette', label: 'Estilo', value: styleLabels[s.style] || '-' },
-            { icon: 'fas fa-layer-group', label: 'Complejidad', value: complexityLabels[s.complexity] || '-' },
-            { icon: 'fas fa-swatchbook', label: 'Color', value: colorLabels[s.color] || '-' },
-            { icon: 'fas fa-user-edit', label: 'Artista', value: artistLabels[s.artist] || 'Sin seleccionar' }
-        ];
-        
-        summaryData.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'summary-item';
-            div.innerHTML = `
-                <span class="summary-item-label"><i class="${item.icon}"></i>${item.label}</span>
-                <span class="summary-item-value">${item.value}</span>
-            `;
-            summaryItems.appendChild(div);
-        });
+        var service = calculatorState.serviceType;
+        var titleEl = document.getElementById('resultsTitle');
+        var priceMin = document.getElementById('priceMin');
+        var priceMax = document.getElementById('priceMax');
+        var separator = document.querySelector('.price-separator');
+        var priceNote = document.querySelector('.price-note');
+        var xlNote = document.getElementById('xlarge-consult-note');
+        if (xlNote) xlNote.style.display = 'none';
+        if (separator) separator.style.display = '';
+        if (service === 'laser') {
+            titleEl.textContent = 'Precio estimado por sesión';
+            priceMin.textContent = calculateLaserPrice() + '€';
+            priceMax.textContent = '';
+            if (separator) separator.style.display = 'none';
+            priceNote.textContent = 'Precio por sesión. El número total varía según el tatuaje, colores y tipo de piel.';
+        } else if (service === 'piercing') {
+            titleEl.textContent = 'Precio estimado para tu piercing';
+            priceMin.textContent = calculatePiercingPrice() + '€';
+            priceMax.textContent = '';
+            if (separator) separator.style.display = 'none';
+            priceNote.textContent = 'Precio orientativo. Incluye joya y perforación profesional.';
+        } else {
+            var price = calculatePrice();
+            titleEl.textContent = calculatorState.selections.size === 'xlarge' ? 'Tu tatuaje extra grande estimado es...' : 'Tu tatuaje estimado es...';
+            if (price.min === price.max) {
+                priceMin.textContent = price.min + '€';
+                priceMax.textContent = '';
+                if (separator) separator.style.display = 'none';
+                if (calculatorState.selections.size === 'xlarge' && xlNote) {
+                    xlNote.style.display = 'flex';
+                    xlNote.innerHTML = '<i class="fas fa-info-circle"></i><span><strong>Tarifa base:</strong> ' + BASE_XLARGE_SESSION_PRICE + '€/sesión. <strong>Sesiones estimadas:</strong> ' + formatSessionsRange(price.sessionsMin || 1, price.sessionsMax || 1) + '. <strong>Promo web:</strong> ' + formatPriceRange(price.discountMin || price.min, price.discountMax || price.max) + ' con el 20% aplicado.</span>';
+                }
+                priceNote.textContent = calculatorState.selections.size === 'xlarge' ? 'Precio total orientativo para la pieza extra grande elegida.' : 'Precio base por sesión. Habla con nosotros para el presupuesto total.';
+            } else {
+                priceMin.textContent = price.min + '€';
+                priceMax.textContent = price.max + '€';
+                if (calculatorState.selections.size === 'xlarge' && xlNote) {
+                    xlNote.style.display = 'flex';
+                    xlNote.innerHTML = '<i class="fas fa-info-circle"></i><span><strong>Tarifa base:</strong> ' + BASE_XLARGE_SESSION_PRICE + '€/sesión. <strong>Sesiones estimadas:</strong> ' + formatSessionsRange(price.sessionsMin, price.sessionsMax) + '. <strong>Promo web:</strong> ' + formatPriceRange(price.discountMin, price.discountMax) + ' con el 20% aplicado.</span>';
+                }
+                priceNote.textContent = calculatorState.selections.size === 'xlarge' ? 'Rango total orientativo para la cobertura extra grande seleccionada.' : 'Precio orientativo. Zona, estilo, detalle y artista pueden variar el precio final.';
+            }
+        }
+        buildResultsSummary(service);
     }, 400);
+}
+
+function buildResultsSummary(service) {
+    var summaryItems = document.getElementById('summaryItems');
+    summaryItems.innerHTML = '';
+    var summaryData = [];
+    if (service === 'laser') {
+        var laserLabels = { small_laser: 'Pequeño (<=5cm)', medium_laser: 'Mediano (5-15cm)', large_laser: 'Grande (+15cm)' };
+        summaryData = [
+            { icon: 'fas fa-bolt', label: 'Servicio', value: 'Eliminación Láser' },
+            { icon: 'fas fa-ruler-combined', label: 'Tamaño', value: laserLabels[calculatorState.laserSize] || '-' }
+        ];
+    } else if (service === 'piercing') {
+        var matLabels  = { acero: 'Acero Quirúrgico', titanio: 'Titanio Grado Implante' };
+        var typeLabels = { basico: 'Básico', avanzado: 'Avanzado' };
+        var qtyLabels  = { unidad: '1 unidad', pack2: 'Pack 2 piercings' };
+        summaryData = [
+            { icon: 'fas fa-ring', label: 'Servicio', value: 'Piercing' },
+            { icon: 'fas fa-circle-notch', label: 'Material', value: matLabels[piercingState.material] || '-' },
+            { icon: 'fas fa-layer-group', label: 'Tipo', value: typeLabels[piercingState.type] || '-' }
+        ];
+        if (piercingState.quantity) summaryData.push({ icon: 'fas fa-hashtag', label: 'Cantidad', value: qtyLabels[piercingState.quantity] || '-' });
+    } else {
+        var s = calculatorState.selections;
+        var sizeLabels = { chiqui: 'Chiqui (<=3cm)', small: 'Pequeño (<=10cm)', medium: 'Mediano (10-20cm)', large: 'Grande (20-30cm)', xlarge: 'Extra Grande (+30cm)' };
+        var zoneLabels = {
+            'head':'Cabeza','neck':'Cuello','shoulder-left':'Hombro','shoulder-right':'Hombro',
+            'chest':'Pecho','arm-left':'Brazo','arm-right':'Brazo',
+            'forearm-left':'Antebrazo','forearm-right':'Antebrazo',
+            'hand-left':'Mano','hand-right':'Mano','stomach':'Estómago',
+            'leg-left':'Muslo','leg-right':'Muslo','shin-left':'Pierna','shin-right':'Pierna',
+            'foot-left':'Pie','foot-right':'Pie','back':'Espalda'
+        };
+        var styleLabels = { realism:'Realismo', blackwork:'Blackwork', fineline:'Fine Line', watercolor:'Acuarela', japanese:'Japonés', minimalist:'Minimalista', color:'Color', traditional:'Traditional' };
+        var complexityLabels = { simple:'Sencillo', moderate:'Moderado', detailed:'Detallado', intricate:'Intrincado' };
+        var colorLabels = { bw:'Blanco y Negro', color:'Color', mixed:'Mixto' };
+        var artistLabels = { selene:'Selene', inkbo:'Inkbo', bigtorres:'Big Torres', ciervo:'Ciervo' };
+        var zoneDisplay = s.zone ? (zoneLabels[s.zone.split(',')[0]] || s.zone) : 'No seleccionada';
+        var xlargeConfig = getXlargeConfiguration();
+        summaryData = [
+            { icon:'fas fa-pen-nib', label:'Servicio', value:'Tatuaje' },
+            { icon:'fas fa-ruler-combined', label:'Tamaño', value: sizeLabels[s.size] || '-' },
+            { icon:'fas fa-palette', label:'Estilo', value: styleLabels[s.style] || '-' },
+            { icon:'fas fa-layer-group', label:'Complejidad', value: complexityLabels[s.complexity] || '-' },
+            { icon:'fas fa-swatchbook', label:'Color', value: colorLabels[s.color] || '-' },
+            { icon:'fas fa-user-edit', label:'Artista', value: artistLabels[s.artist] || 'Sin seleccionar' }
+        ];
+        if (s.size === 'xlarge' && xlargeConfig) {
+            var xlargePrice = calculatePrice();
+            summaryData.splice(2, 0,
+                { icon:'fas fa-expand-arrows-alt', label:'Cobertura XL', value: xlargeConfig.label },
+                { icon:'fas fa-clock', label:'Sesiones estimadas', value: formatSessionsRange(xlargeConfig.sessionsMin, xlargeConfig.sessionsMax) },
+                { icon:'fas fa-euro-sign', label:'Tarifa por sesión', value: BASE_XLARGE_SESSION_PRICE + '€/sesión' },
+                { icon:'fas fa-tags', label:'Promo web', value: formatPriceRange(xlargePrice.discountMin, xlargePrice.discountMax) }
+            );
+        } else {
+            summaryData.splice(2, 0, { icon:'fas fa-map-marker-alt', label:'Zona', value: zoneDisplay });
+        }
+    }
+    summaryData.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'summary-item';
+        div.innerHTML = '<span class="summary-item-label"><i class="' + item.icon + '"></i>' + item.label + '</span><span class="summary-item-value">' + item.value + '</span>';
+        summaryItems.appendChild(div);
+    });
 }
 
 // ========================================
 // Reset Calculator
 // ========================================
 function resetCalculator() {
-    // Reset state
     calculatorState.currentStep = 0;
-    calculatorState.selections = {
-        size: null, sizePrice: 0,
-        zone: null, zoneMultiplier: 1,
-        style: null, styleMultiplier: 1,
-        complexity: null, complexityMultiplier: 1,
-        color: null, colorMultiplier: 1,
-        artist: null
-    };
+    calculatorState.serviceType = null;
+    calculatorState.laserSize = null;
+    calculatorState.laserPrice = 0;
+    calculatorState.selections = { size:null, sizeMin:0, sizeMax:0, zone:null, xlargeArea:null, xlargeSessionsMin:0, xlargeSessionsMax:0, zoneMultiplier:1, style:null, styleMultiplier:1, complexity:null, complexityMultiplier:1, color:null, colorMultiplier:1, artist:null };
     calculatorState.xp = 0;
-    
-    // Hide results, show hero
+    piercingState.step = 0; piercingState.material = null; piercingState.type = null; piercingState.quantity = null;
     document.getElementById('results').classList.remove('active');
     document.getElementById('calculator').classList.remove('active');
-    
-    const hero = document.querySelector('.calc-hero');
+    document.getElementById('laserCalculator').classList.remove('active');
+    document.getElementById('piercingCalculator').classList.remove('active');
+    document.getElementById('serviceSelector').classList.remove('active');
+    var hero = document.querySelector('.calc-hero');
     hero.style.display = 'flex';
-    
-    setTimeout(() => {
-        hero.style.opacity = '1';
-        hero.style.transform = 'translateY(0)';
-    }, 50);
-    
-    // Reset all selections
-    document.querySelectorAll('.option-card, .style-card, .complexity-card, .color-choice, .artist-card, .zone-option')
-        .forEach(el => el.classList.remove('selected'));
-    
-    // Reset SVG zones and groups
-    document.querySelectorAll('.body-zone').forEach(z => z.classList.remove('active'));
-    document.querySelectorAll('.body-zone-group').forEach(g => g.classList.remove('selected'));
-    
-    // Reset complexity (default to moderate)
-    document.querySelector('.complexity-card[data-value="moderate"]').classList.add('selected');
-    calculatorState.selections.complexity = 'moderate';
-    calculatorState.selections.complexityMultiplier = 1.3;
-    
+    setTimeout(function() { hero.style.opacity = '1'; hero.style.transform = 'translateY(0)'; }, 50);
+    document.querySelectorAll('.option-card, .style-card, .complexity-card, .color-choice, .artist-card, .zone-option').forEach(function(el) { el.classList.remove('selected'); });
+    document.querySelectorAll('.body-zone').forEach(function(z) { z.classList.remove('active'); });
+    document.querySelectorAll('.body-zone-group').forEach(function(g) { g.classList.remove('selected'); });
+    var sep = document.querySelector('.price-separator');
+    if (sep) sep.style.display = '';
+    var xlNote = document.getElementById('xlarge-consult-note');
+    if (xlNote) {
+        xlNote.innerHTML = '<i class="fas fa-info-circle"></i><span>Precio base por sesión para tatuajes extra grandes. El número de sesiones depende de la cobertura elegida.</span>';
+        xlNote.style.display = 'none';
+    }
+    updateTattooPlacementStep();
+    var moderateCard = document.querySelector('.complexity-card[data-value="moderate"]');
+    if (moderateCard) { moderateCard.classList.add('selected'); calculatorState.selections.complexity = 'moderate'; calculatorState.selections.complexityMultiplier = 1.3; }
     updateStepDisplay();
 }
 
 // ========================================
-// WhatsApp with Completion Animation
+// WhatsApp
 // ========================================
 function openWhatsApp() {
-    const btn = document.getElementById('whatsappBtn');
-    
-    // Button animation feedback
+    var btn = document.getElementById('whatsappBtn');
     btn.style.transform = 'scale(0.95)';
     btn.style.filter = 'brightness(0.9)';
-    
-    setTimeout(() => {
+    setTimeout(function() {
         btn.style.transform = '';
         btn.style.filter = '';
-        
-        // Create mini confetti burst
         createMiniConfetti(btn);
-        
-        // Build WhatsApp message
-        const s = calculatorState.selections;
-        const price = calculatePrice();
-        const sizeLabels = { small: 'Pequeño', medium: 'Mediano', large: 'Grande', xlarge: 'Extra Grande' };
-        const zoneLabels = {
-            'head': 'Cabeza', 'neck': 'Cuello', 'shoulder-left': 'Hombro Izquierdo', 'shoulder-right': 'Hombro Derecho',
-            'chest': 'Pecho', 'arm-left': 'Brazo Izquierdo', 'arm-right': 'Brazo Derecho',
-            'forearm-left': 'Antebrazo Izquierdo', 'forearm-right': 'Antebrazo Derecho',
-            'hand-left': 'Mano Izquierda', 'hand-right': 'Mano Derecha',
-            'stomach': 'Estómago', 'leg-left': 'Muslo Izquierdo', 'leg-right': 'Muslo Derecho',
-            'shin-left': 'Pierna Izquierda', 'shin-right': 'Pierna Derecha',
-            'foot-left': 'Pie Izquierdo', 'foot-right': 'Pie Derecho', 'back': 'Espalda'
-        };
-        const styleLabels = { realism: 'Realismo', blackwork: 'Blackwork', fineline: 'Fine Line', watercolor: 'Acuarela', japanese: 'Japonés', minimalist: 'Minimalista', color: 'Color', traditional: 'Traditional' };
-        const complexityLabels = { simple: 'Sencillo', moderate: 'Moderado', detailed: 'Detectado', intricate: 'Intricado' };
-        const colorLabels = { bw: 'Blanco y Negro', color: 'Color', mixed: 'Mixto' };
-        
-        const message = `¡Hola! 👋\n\nHe completado la calculadora de tatuaje en Von Bastik Studio:\n\n` +
-            `📏 *Tamaño:* ${sizeLabels[s.size] || '-'}\n` +
-            `📍 *Zona:* ${zoneLabels[s.zone?.split(',')[0]] || '-'}\n` +
-            `🎨 *Estilo:* ${styleLabels[s.style] || '-'}\n` +
-            `🔧 *Complejidad:* ${complexityLabels[s.complexity] || '-'}\n` +
-            `🎭 *Color:* ${colorLabels[s.color] || '-'}\n` +
-            `👨‍🎨 *Artista:* ${s.artist ? s.artist.charAt(0).toUpperCase() + s.artist.slice(1) : 'Sin seleccionar'}\n\n` +
-            `💰 *Estimación:* ${price.min}€ - ${price.max}€\n\n¡Me gustaría reservar una cita!`;
-        
-        const encoded = encodeURIComponent(message);
-        window.open(`https://wa.me/34653053913?text=${encoded}`, '_blank');
+        var service = calculatorState.serviceType;
+        var message = 'Hola! He consultado precios en Von Bastik:\n\n';
+        if (service === 'laser') {
+            var laserLabels = { small_laser:'Pequeño (<=5cm)', medium_laser:'Mediano (5-15cm)', large_laser:'Grande (+15cm)' };
+            message += 'Servicio: Eliminacion Laser\n';
+            message += 'Tamano: ' + (laserLabels[calculatorState.laserSize] || '-') + '\n';
+            message += 'Estimado/sesion: ' + calculateLaserPrice() + 'EUR\n\n';
+            message += 'Me gustaria pedir mas informacion!';
+        } else if (service === 'piercing') {
+            var matLabels = { acero:'Acero Quirurgico', titanio:'Titanio Grado Implante' };
+            var typeLabels = { basico:'Basico', avanzado:'Avanzado' };
+            var qtyLabels = { unidad:'1 unidad', pack2:'Pack 2 piercings' };
+            message += 'Servicio: Piercing\n';
+            message += 'Material: ' + (matLabels[piercingState.material] || '-') + '\n';
+            message += 'Tipo: ' + (typeLabels[piercingState.type] || '-') + '\n';
+            if (piercingState.quantity) message += 'Cantidad: ' + (qtyLabels[piercingState.quantity] || '-') + '\n';
+            message += 'Estimado: ' + calculatePiercingPrice() + 'EUR\n\nMe gustaria reservar cita!';
+        } else {
+            var s = calculatorState.selections;
+            var price = calculatePrice();
+            var sizeLabels = { chiqui:'Chiqui (<=3cm)', small:'Pequeno (<=10cm)', medium:'Mediano (10-20cm)', large:'Grande (20-30cm)', xlarge:'Extra Grande (+30cm)' };
+            var styleLabels = { realism:'Realismo', blackwork:'Blackwork', fineline:'Fine Line', watercolor:'Acuarela', japanese:'Japones', minimalist:'Minimalista', color:'Color', traditional:'Traditional' };
+            message += 'Servicio: Tatuaje\n';
+            message += 'Tamano: ' + (sizeLabels[s.size] || '-') + '\n';
+            if (s.size === 'xlarge' && getXlargeConfiguration()) {
+                var xlConfig = getXlargeConfiguration();
+                message += 'Cobertura XL: ' + xlConfig.label + '\n';
+                message += 'Sesiones estimadas: ' + formatSessionsRange(xlConfig.sessionsMin, xlConfig.sessionsMax) + '\n';
+                message += 'Promo web: ' + formatPriceRange(price.discountMin, price.discountMax) + '\n';
+            }
+            message += 'Estilo: ' + (styleLabels[s.style] || '-') + '\n';
+            message += 'Artista: ' + (s.artist || 'Sin seleccionar') + '\n';
+            message += price.min === price.max ? 'Estimacion: ' + price.min + 'EUR/sesion\n\n' : 'Estimacion: ' + price.min + 'EUR - ' + price.max + 'EUR\n\n';
+            message += 'Me gustaria reservar una cita!';
+        }
+        window.open('https://wa.me/34653053913?text=' + encodeURIComponent(message), '_blank');
     }, 150);
 }
 
 function createMiniConfetti(element) {
-    const rect = element.getBoundingClientRect();
-    const colors = ['#c9a96e', '#f0d89d', '#25D366', '#fff'];
-    
-    for (let i = 0; i < 20; i++) {
-        const confetti = document.createElement('div');
-        confetti.style.cssText = `
-            position: fixed;
-            width: ${5 + Math.random() * 8}px;
-            height: ${5 + Math.random() * 8}px;
-            background: ${colors[Math.floor(Math.random() * colors.length)]};
-            border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
-            left: ${rect.left + rect.width / 2}px;
-            top: ${rect.top}px;
-            pointer-events: none;
-            z-index: 10000;
-            transition: all ${0.5 + Math.random() * 0.5}s ease-out;
-        `;
+    var rect = element.getBoundingClientRect();
+    var colors = ['#c9a96e', '#f0d89d', '#25D366', '#fff'];
+    for (var i = 0; i < 20; i++) {
+        var confetti = document.createElement('div');
+        confetti.style.cssText = 'position:fixed;width:' + (5+Math.random()*8) + 'px;height:' + (5+Math.random()*8) + 'px;background:' + colors[Math.floor(Math.random()*colors.length)] + ';border-radius:' + (Math.random()>0.5?'50%':'0') + ';left:' + (rect.left+rect.width/2) + 'px;top:' + rect.top + 'px;pointer-events:none;z-index:10000;transition:all ' + (0.5+Math.random()*0.5) + 's ease-out;';
         document.body.appendChild(confetti);
-        
-        requestAnimationFrame(() => {
-            confetti.style.left = `${rect.left + rect.width / 2 + (Math.random() - 0.5) * 200}px`;
-            confetti.style.top = `${rect.top - 50 - Math.random() * 100}px`;
-            confetti.style.opacity = '0';
-            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-        });
-        
-        setTimeout(() => confetti.remove(), 1000);
+        (function(c) {
+            requestAnimationFrame(function() {
+                c.style.left = (rect.left+rect.width/2+(Math.random()-0.5)*200) + 'px';
+                c.style.top = (rect.top-50-Math.random()*100) + 'px';
+                c.style.opacity = '0';
+            });
+            setTimeout(function() { c.remove(); }, 1000);
+        })(confetti);
     }
 }
 
@@ -592,144 +743,76 @@ function createMiniConfetti(element) {
 // ========================================
 function playSelectionSound() {
     try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
-        
-        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.15);
-    } catch (e) {
-        // Audio not supported
-    }
+        var ctx = new (window.AudioContext || window.webkitAudioContext)();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.15);
+    } catch(e) {}
 }
 
-function triggerHaptic() {
-    if (navigator.vibrate) {
-        navigator.vibrate(30);
-    }
-}
+function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(30); }
 
-// ========================================
-// Toast Notification
-// ========================================
 function showToast(message) {
-    const toast = document.getElementById('calcToast');
+    var toast = document.getElementById('calcToast');
     toast.textContent = message;
     toast.classList.add('show');
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 2500);
+    setTimeout(function() { toast.classList.remove('show'); }, 2500);
 }
 
-// ========================================
-// Animation Keyframes (inject dynamically)
-// ========================================
 function injectAnimationStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideOutLeft {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(-50px); }
-        }
-        @keyframes slideOutRight {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(50px); }
-        }
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-    `;
+    var style = document.createElement('style');
+    style.textContent = '@keyframes slideOutLeft{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-50px)}}@keyframes slideOutRight{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(50px)}}@keyframes slideInLeft{from{opacity:0;transform:translateX(-50px)}to{opacity:1;transform:translateX(0)}}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}';
     document.head.appendChild(style);
 }
 
 // ========================================
-// Event Listeners Initialization
+// Event Listeners
 // ========================================
 function initEventListeners() {
-    // Size options
-    document.querySelectorAll('.size-options .option-card').forEach(card => {
-        card.addEventListener('click', () => handleSizeSelection(card));
-    });
-    
-    // Zone options
-    document.querySelectorAll('.zone-option').forEach(option => {
-        option.addEventListener('click', () => handleZoneSelection(option));
-    });
-    
-    // SVG body zones (using groups now)
-    document.querySelectorAll('.body-zone-group').forEach(group => {
-        group.addEventListener('click', () => {
-            const zoneValue = group.dataset.zone;
-            const matchingOption = document.querySelector(`.zone-option[data-zone="${zoneValue}"]`);
-            if (matchingOption) {
-                handleZoneSelection(matchingOption);
-            }
+    document.querySelectorAll('.step[data-step="0"] .size-options .option-card').forEach(function(c) { c.addEventListener('click', function() { handleSizeSelection(c); }); });
+    document.querySelectorAll('.zone-option').forEach(function(o) { o.addEventListener('click', function() { handleZoneSelection(o); }); });
+    document.querySelectorAll('.xlarge-option-card').forEach(function(card) { card.addEventListener('click', function() { handleXlargeSelection(card); }); });
+    document.querySelectorAll('.body-zone-group').forEach(function(g) {
+        g.addEventListener('click', function() {
+            var m = document.querySelector('.zone-option[data-zone="' + g.dataset.zone + '"]');
+            if (m) handleZoneSelection(m);
         });
     });
-    
-    // Style cards
-    document.querySelectorAll('.style-cards .style-card').forEach(card => {
-        card.addEventListener('click', () => handleStyleSelection(card));
+    document.querySelectorAll('.style-cards .style-card').forEach(function(c) { c.addEventListener('click', function() { handleStyleSelection(c); }); });
+    document.querySelectorAll('.complexity-options .complexity-card').forEach(function(c) { c.addEventListener('click', function() { handleComplexitySelection(c); }); });
+    document.querySelectorAll('.color-choice').forEach(function(c) { c.addEventListener('click', function() { handleColorSelection(c); }); });
+    document.querySelectorAll('.artist-cards .artist-card').forEach(function(c) { c.addEventListener('click', function() { handleArtistSelection(c); }); });
+    document.querySelectorAll('#calculator .dot').forEach(function(dot) {
+        dot.addEventListener('click', function() { goToStep(parseInt(dot.dataset.step)); });
     });
-    
-    // Complexity cards
-    document.querySelectorAll('.complexity-options .complexity-card').forEach(card => {
-        card.addEventListener('click', () => handleComplexitySelection(card));
-    });
-    
-    // Color options
-    document.querySelectorAll('.color-choice').forEach(choice => {
-        choice.addEventListener('click', () => handleColorSelection(choice));
-    });
-    
-    // Artist cards
-    document.querySelectorAll('.artist-cards .artist-card').forEach(card => {
-        card.addEventListener('click', () => handleArtistSelection(card));
-    });
-    
-    // Step dots navigation
-    document.querySelectorAll('.dot').forEach(dot => {
-        dot.addEventListener('click', () => {
-            const step = parseInt(dot.dataset.step);
-            goToStep(step);
-        });
-    });
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === 'Enter') {
-            e.preventDefault();
-            nextStep();
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            prevStep();
-        }
+    document.querySelectorAll('#laserCalculator .option-card').forEach(function(c) { c.addEventListener('click', function() { handleLaserSelection(c); }); });
+    document.querySelectorAll('.piercing-material-card').forEach(function(c) { c.addEventListener('click', function() { handlePiercingMaterial(c); }); });
+    document.querySelectorAll('.piercing-type-card').forEach(function(c) { c.addEventListener('click', function() { handlePiercingType(c); }); });
+    document.querySelectorAll('.piercing-qty-card').forEach(function(c) { c.addEventListener('click', function() { handlePiercingQuantity(c); }); });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'Enter') { e.preventDefault(); nextStep(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevStep(); }
     });
 }
 
 // ========================================
 // Initialize
 // ========================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     createParticles();
     injectAnimationStyles();
     initEventListeners();
-    
-    // Set initial complexity to moderate (default)
-    const defaultComplexity = document.querySelector('.complexity-card[data-value="moderate"]');
-    if (defaultComplexity) {
-        handleComplexitySelection(defaultComplexity);
+    updateTattooPlacementStep();
+    var moderateCard = document.querySelector('.complexity-card[data-value="moderate"]');
+    if (moderateCard) {
+        moderateCard.classList.add('selected');
+        calculatorState.selections.complexity = 'moderate';
+        calculatorState.selections.complexityMultiplier = 1.3;
     }
 });

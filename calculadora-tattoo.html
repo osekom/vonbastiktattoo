@@ -36,13 +36,49 @@
                 <span class="gradient-text">Tatuaje Perfecto</span>
             </h1>
             <p class="hero-subtitle">
-                Responde 6 preguntas rápidas y descubre tu estimación de precio
+                Tatuaje, láser o piercing — obtén tu estimación de precio orientativa
             </p>
             <button class="start-btn" onclick="startCalculator()">
-                <span class="btn-text">Comenzar Aventura</span>
+                <span class="btn-text">Calcular Precio</span>
                 <span class="btn-icon"><i class="fas fa-rocket"></i></span>
                 <div class="btn-shine"></div>
             </button>
+        </div>
+    </section>
+
+    <!-- Calculator Section (Hidden initially) -->
+    <!-- Service Selector -->
+    <section class="service-selector" id="serviceSelector">
+        <div class="service-selector-content">
+            <p class="service-selector-tag">Von Bastik Studio</p>
+            <h2 class="service-selector-title">¿Qué servicio quieres calcular?</h2>
+            <p class="service-selector-sub">Precios orientativos — el presupuesto final se confirma en consulta</p>
+            <div class="service-card-row">
+                <div class="service-card" onclick="selectService('tattoo')">
+                    <div class="service-card-icon tattoo-icon"><i class="fas fa-pen-nib"></i></div>
+                    <div class="service-card-info">
+                        <h3>Tatuaje</h3>
+                        <p>Desde 50€ · Todos los estilos</p>
+                    </div>
+                    <div class="service-card-chevron"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="service-card" onclick="selectService('laser')">
+                    <div class="service-card-icon laser-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="service-card-info">
+                        <h3>Eliminación Láser</h3>
+                        <p>Desde 40€ · Precio por sesión</p>
+                    </div>
+                    <div class="service-card-chevron"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="service-card" onclick="selectService('piercing')">
+                    <div class="service-card-icon piercing-icon"><i class="fas fa-ring"></i></div>
+                    <div class="service-card-info">
+                        <h3>Piercing</h3>
+                        <p>Desde 20€ · Acero quirúrgico o titanio</p>
+                    </div>
+                    <div class="service-card-chevron"><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -78,124 +114,184 @@
                         <i class="fas fa-ruler-combined"></i>
                     </div>
                     <h2>¿Qué tamaño buscas?</h2>
-                    <p>Tu tatuaje será pequeño, mediano o grande</p>
+                    <p>Selecciona solo el tamaño disponible que mejor encaje con tu idea</p>
                 </div>
                 <div class="options-grid size-options">
-                    <div class="option-card" data-value="small" data-price="80">
-                        <div class="option-icon">
-                            <i class="fas fa-star"></i>
+                    <div class="option-card" data-value="chiqui" data-min="50" data-max="50">
+                        <div class="option-icon"><i class="fas fa-seedling"></i></div>
+                        <div class="option-content">
+                            <h3>Chiqui</h3>
+                            <p>Hasta 3 cm</p>
                         </div>
+                        <div class="option-price">50€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card" data-value="small" data-min="60" data-max="90">
+                        <div class="option-icon"><i class="fas fa-star"></i></div>
                         <div class="option-content">
                             <h3>Pequeño</h3>
                             <p>Hasta 10 cm</p>
                         </div>
-                        <div class="option-price">Desde 80€</div>
-                        <div class="option-check">
-                            <i class="fas fa-check"></i>
-                        </div>
+                        <div class="option-price">60€ – 90€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
                     </div>
-                    <div class="option-card" data-value="medium" data-price="150">
-                        <div class="option-icon">
-                            <i class="fas fa-certificate"></i>
-                        </div>
+                    <div class="option-card" data-value="medium" data-min="100" data-max="220">
+                        <div class="option-icon"><i class="fas fa-certificate"></i></div>
                         <div class="option-content">
                             <h3>Mediano</h3>
-                            <p>10 - 20 cm</p>
+                            <p>10 – 20 cm</p>
                         </div>
-                        <div class="option-price">Desde 150€</div>
-                        <div class="option-check">
-                            <i class="fas fa-check"></i>
-                        </div>
+                        <div class="option-price">100€ – 220€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
                     </div>
-                    <div class="option-card" data-value="large" data-price="300">
-                        <div class="option-icon">
-                            <i class="fas fa-gem"></i>
-                        </div>
+                    <div class="option-card" data-value="large" data-min="230" data-max="400">
+                        <div class="option-icon"><i class="fas fa-gem"></i></div>
                         <div class="option-content">
                             <h3>Grande</h3>
-                            <p>20 - 30 cm</p>
+                            <p>20 – 30 cm</p>
                         </div>
-                        <div class="option-price">Desde 300€</div>
-                        <div class="option-check">
-                            <i class="fas fa-check"></i>
-                        </div>
+                        <div class="option-price">230€ – 400€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
                     </div>
-                    <div class="option-card" data-value="xlarge" data-price="500">
-                        <div class="option-icon">
-                            <i class="fas fa-crown"></i>
-                        </div>
+                    <div class="option-card" data-value="xlarge" data-min="500" data-max="500">
+                        <div class="option-icon"><i class="fas fa-crown"></i></div>
                         <div class="option-content">
                             <h3>Extra Grande</h3>
                             <p>Más de 30 cm</p>
                         </div>
-                        <div class="option-price">Desde 500€</div>
-                        <div class="option-check">
-                            <i class="fas fa-check"></i>
-                        </div>
+                        <div class="option-price">500€/sesión</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Step 2: Body Part -->
+            <!-- Step 2: Zone -->
             <div class="step" data-step="1">
                 <div class="step-header">
                     <div class="step-icon-wrap">
-                        <i class="fas fa-person"></i>
+                        <i class="fas fa-map-marker-alt"></i>
                     </div>
-                    <h2>¿Dónde lo quieres?</h2>
-                    <p>Selecciona la zona del cuerpo</p>
+                    <h2 id="placementStepTitle">¿En qué zona irá?</h2>
+                    <p id="placementStepSubtitle">Selecciona la parte del cuerpo para continuar con la estimación</p>
                 </div>
-                <div class="zone-options-body">
-                    <div class="zone-options-list">
-                        <div class="zone-option" data-zone="head">
-                            <span class="zone-emoji">💇</span>
-                            <span class="zone-name">Cabeza / Pantalla</span>
-                        </div>
-                        <div class="zone-option" data-zone="neck">
-                            <span class="zone-emoji">🔗</span>
-                            <span class="zone-name">Cuello</span>
-                        </div>
-                        <div class="zone-option" data-zone="shoulder-left,shoulder-right">
-                            <span class="zone-emoji">💪</span>
-                            <span class="zone-name">Hombro</span>
-                        </div>
-                        <div class="zone-option" data-zone="chest">
-                            <span class="zone-emoji">❤️</span>
-                            <span class="zone-name">Pecho</span>
-                        </div>
-                        <div class="zone-option" data-zone="arm-left,arm-right">
-                            <span class="zone-emoji">💪</span>
-                            <span class="zone-name">Brazo</span>
-                        </div>
-                        <div class="zone-option" data-zone="forearm-left,forearm-right">
-                            <span class="zone-emoji">✏️</span>
-                            <span class="zone-name">Antebrazo</span>
-                        </div>
-                        <div class="zone-option" data-zone="hand-left,hand-right">
-                            <span class="zone-emoji">🤞</span>
-                            <span class="zone-name">Mano</span>
-                        </div>
-                        <div class="zone-option" data-zone="stomach">
-                            <span class="zone-emoji">⭕</span>
-                            <span class="zone-name">Estómago</span>
-                        </div>
-                        <div class="zone-option" data-zone="leg-left,leg-right">
-                            <span class="zone-emoji">🦵</span>
-                            <span class="zone-name">Muslo</span>
-                        </div>
-                        <div class="zone-option" data-zone="shin-left,shin-right">
-                            <span class="zone-emoji">🦿</span>
-                            <span class="zone-name">Pierna</span>
-                        </div>
-                        <div class="zone-option" data-zone="foot-left,foot-right">
-                            <span class="zone-emoji">👟</span>
-                            <span class="zone-name">Pie</span>
-                        </div>
-                        <div class="zone-option" data-zone="back">
-                            <span class="zone-emoji">⭐</span>
-                            <span class="zone-name">Espalda</span>
-                        </div>
+                <div class="zone-options-list" id="regularZoneOptions">
+                    <div class="zone-option" data-zone="head">
+                        <span class="zone-emoji">👤</span>
+                        <span class="zone-name">Cabeza / Cara</span>
                     </div>
+                    <div class="zone-option" data-zone="neck">
+                        <span class="zone-emoji">🧣</span>
+                        <span class="zone-name">Cuello</span>
+                    </div>
+                    <div class="zone-option" data-zone="shoulder-left,shoulder-right">
+                        <span class="zone-emoji">🦾</span>
+                        <span class="zone-name">Hombro</span>
+                    </div>
+                    <div class="zone-option" data-zone="chest">
+                        <span class="zone-emoji">❤️</span>
+                        <span class="zone-name">Pecho</span>
+                    </div>
+                    <div class="zone-option" data-zone="arm-left,arm-right">
+                        <span class="zone-emoji">💪</span>
+                        <span class="zone-name">Brazo</span>
+                    </div>
+                    <div class="zone-option" data-zone="forearm-left,forearm-right">
+                        <span class="zone-emoji">🖋️</span>
+                        <span class="zone-name">Antebrazo</span>
+                    </div>
+                    <div class="zone-option" data-zone="hand-left,hand-right">
+                        <span class="zone-emoji">✋</span>
+                        <span class="zone-name">Mano</span>
+                    </div>
+                    <div class="zone-option" data-zone="stomach">
+                        <span class="zone-emoji">🫧</span>
+                        <span class="zone-name">Estómago</span>
+                    </div>
+                    <div class="zone-option" data-zone="leg-left,leg-right">
+                        <span class="zone-emoji">🦵</span>
+                        <span class="zone-name">Muslo</span>
+                    </div>
+                    <div class="zone-option" data-zone="shin-left,shin-right">
+                        <span class="zone-emoji">🦿</span>
+                        <span class="zone-name">Pierna</span>
+                    </div>
+                    <div class="zone-option" data-zone="foot-left,foot-right">
+                        <span class="zone-emoji">🦶</span>
+                        <span class="zone-name">Pie</span>
+                    </div>
+                    <div class="zone-option" data-zone="back">
+                        <span class="zone-emoji">🔙</span>
+                        <span class="zone-name">Espalda</span>
+                    </div>
+                </div>
+                <div class="options-grid xlarge-options-grid" id="xlargeOptions" style="display:none;">
+                    <div class="option-card xlarge-option-card" data-area="full_arm">
+                        <div class="option-icon"><i class="fas fa-hand-rock"></i></div>
+                        <div class="option-content">
+                            <h3>Brazo completo</h3>
+                            <p>5 a 8 sesiones</p>
+                        </div>
+                        <div class="option-price">2.500€ – 4.000€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card xlarge-option-card" data-area="full_leg">
+                        <div class="option-icon"><i class="fas fa-walking"></i></div>
+                        <div class="option-content">
+                            <h3>Pierna completa</h3>
+                            <p>10 a 15 sesiones</p>
+                        </div>
+                        <div class="option-price">5.000€ – 7.500€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card xlarge-option-card" data-area="full_back">
+                        <div class="option-icon"><i class="fas fa-user"></i></div>
+                        <div class="option-content">
+                            <h3>Espalda completa</h3>
+                            <p>6 a 10 sesiones</p>
+                        </div>
+                        <div class="option-price">3.000€ – 5.000€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card xlarge-option-card" data-area="chest_piece">
+                        <div class="option-icon"><i class="fas fa-heart"></i></div>
+                        <div class="option-content">
+                            <h3>Pecho</h3>
+                            <p>3 sesiones</p>
+                        </div>
+                        <div class="option-price">1.500€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card xlarge-option-card" data-area="full_torso">
+                        <div class="option-icon"><i class="fas fa-child"></i></div>
+                        <div class="option-content">
+                            <h3>Torso completo</h3>
+                            <p>6 a 8 sesiones</p>
+                        </div>
+                        <div class="option-price">3.000€ – 4.000€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card xlarge-option-card" data-area="outer_arm">
+                        <div class="option-icon"><i class="fas fa-hand-paper"></i></div>
+                        <div class="option-content">
+                            <h3>Brazo exterior</h3>
+                            <p>3 sesiones</p>
+                        </div>
+                        <div class="option-price">1.500€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card xlarge-option-card" data-area="outer_leg">
+                        <div class="option-icon"><i class="fas fa-running"></i></div>
+                        <div class="option-content">
+                            <h3>Pierna exterior</h3>
+                            <p>4 sesiones</p>
+                        </div>
+                        <div class="option-price">2.000€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                </div>
+                <div class="service-info-note xlarge-step-note" id="xlargeStepNote" style="display:none;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Extra Grande se calcula desde 500€/sesión. El total orientativo depende de la cobertura elegida y las sesiones estimadas. Promoción web actual: 20% de descuento sobre el total.</span>
                 </div>
             </div>
 
@@ -280,12 +376,12 @@
                         <i class="fas fa-layer-group"></i>
                     </div>
                     <h2>¿Qué nivel de detalle?</h2>
-                    <p>El nivel de complejidad afecta el tiempo</p>
+                    <p>El nivel de detalle influye en el tiempo y en el precio final</p>
                 </div>
                 <div class="complexity-options">
                     <div class="complexity-card" data-value="simple" data-multiplier="1.0">
                         <div class="complexity-visual simple">
-                            <div class="shape simple-shape"></div>
+                            <i class="fas fa-pen complexity-icon"></i>
                         </div>
                         <h3>Sencillo</h3>
                         <p>Líneas limpias, poco sombreado</p>
@@ -296,8 +392,7 @@
                     </div>
                     <div class="complexity-card selected" data-value="moderate" data-multiplier="1.3">
                         <div class="complexity-visual moderate">
-                            <div class="shape moderate-shape"></div>
-                            <div class="shape moderate-shape2"></div>
+                            <i class="fas fa-pencil-ruler complexity-icon"></i>
                         </div>
                         <h3>Moderado</h3>
                         <p>Sombras y detalles intermedios</p>
@@ -309,28 +404,23 @@
                     </div>
                     <div class="complexity-card" data-value="detailed" data-multiplier="1.6">
                         <div class="complexity-visual detailed">
-                            <div class="shape detailed-shape"></div>
-                            <div class="shape detailed-shape2"></div>
-                            <div class="shape detailed-shape3"></div>
+                            <i class="fas fa-magnifying-glass-plus complexity-icon"></i>
                         </div>
-                        <h3>Detectado</h3>
+                        <h3>Detallado</h3>
                         <p>Alto nivel de detalle y textura</p>
                         <div class="complexity-features">
                             <span><i class="fas fa-check"></i> Todo lo anterior</span>
                             <span><i class="fas fa-check"></i> Texturas</span>
-                            <span><i class="fas fa-check"></i> Gradeos</span>
+                            <span><i class="fas fa-check"></i> Degradados</span>
                             <span><i class="fas fa-check"></i> Alto detalle</span>
                         </div>
                     </div>
                     <div class="complexity-card" data-value="intricate" data-multiplier="2.0">
                         <div class="complexity-visual intricate">
-                            <div class="shape intricate-shape"></div>
-                            <div class="shape intricate-shape2"></div>
-                            <div class="shape intricate-shape3"></div>
-                            <div class="shape intricate-shape4"></div>
+                            <i class="fas fa-gem complexity-icon"></i>
                         </div>
                         <h3>Intricado</h3>
-                        <p>Obra de arte con cada pixel</p>
+                        <p>Obra compleja con acabado muy preciso</p>
                         <div class="complexity-features">
                             <span><i class="fas fa-check"></i> Todo lo anterior</span>
                             <span><i class="fas fa-check"></i> Ultra detalle</span>
@@ -396,7 +486,7 @@
                 <div class="artist-cards">
                     <div class="artist-card" data-artist="selene">
                         <div class="artist-avatar">
-                            <img src="public/artist/Selene/selene-hero.jpg" alt="Selene" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a1a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23c9a96e%22 font-size=%2240%22>S</text></svg>'">
+                            <img src="public/images/hero_selene.jpg" alt="Selene" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a1a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23c9a96e%22 font-size=%2240%22>S</text></svg>'">
                         </div>
                         <h3>Selene</h3>
                         <p>Especialista en realismo y fine line</p>
@@ -407,7 +497,7 @@
                     </div>
                     <div class="artist-card" data-artist="inkbo">
                         <div class="artist-avatar">
-                            <img src="public/artist/Inkbo/inkbo-hero.jpg" alt="Inkbo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a1a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23c9a96e%22 font-size=%2240%22>I</text></svg>'">
+                            <img src="public/images/hero_bo.jpg" alt="Inkbo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a1a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23c9a96e%22 font-size=%2240%22>I</text></svg>'">
                         </div>
                         <h3>Inkbo</h3>
                         <p>Master en blackwork y geométrico</p>
@@ -418,7 +508,7 @@
                     </div>
                     <div class="artist-card" data-artist="bigtorres">
                         <div class="artist-avatar">
-                            <img src="public/artist/BigTorres/bigtorres-hero.jpg" alt="Big Torres" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a1a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23c9a96e%22 font-size=%2240%22>B</text></svg>'">
+                            <img src="public/images/hero_bigtorres.jpg" alt="Big Torres" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a1a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23c9a96e%22 font-size=%2240%22>B</text></svg>'">
                         </div>
                         <h3>Big Torres</h3>
                         <p>Especialista en tradicional y color</p>
@@ -454,7 +544,7 @@
                 <span>¡COMPLETADO!</span>
             </div>
             
-            <h2>Tu tatuaje estimado es...</h2>
+            <h2 id="resultsTitle">Tu tatuaje estimado es...</h2>
             
             <div class="price-display">
                 <div class="price-range">
@@ -463,6 +553,10 @@
                     <span class="price-max" id="priceMax">180€</span>
                 </div>
                 <p class="price-note">Precio orientativo. El precio final puede variar según el diseño.</p>
+                <div class="xlarge-consult-note" id="xlarge-consult-note" style="display:none;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Precio base por sesión para tatuajes extra grandes. El número de sesiones depende del tamaño y cobertura. Habla con nosotros para un presupuesto completo.</span>
+                </div>
             </div>
 
             <div class="summary-card">
@@ -480,6 +574,165 @@
                     <span>Empezar de Nuevo</span>
                 </button>
             </div>
+        </div>
+    </section>
+
+    <!-- Laser Calculator Section -->
+    <section class="calculator-section" id="laserCalculator">
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="step-label"><i class="fas fa-bolt" style="color:#c9a96e;margin-right:6px;"></i> Eliminación Láser · Paso 1 de 1</span>
+            </div>
+        </div>
+        <div class="steps-wrapper">
+            <div class="step active">
+                <div class="step-header">
+                    <div class="step-icon-wrap"><i class="fas fa-bolt"></i></div>
+                    <h2>¿Qué tamaño tiene el tatuaje a eliminar?</h2>
+                    <p>Precio orientativo por sesión</p>
+                </div>
+                <div class="options-grid size-options">
+                    <div class="option-card" data-value="small_laser" data-price="40">
+                        <div class="option-icon"><i class="fas fa-dot-circle"></i></div>
+                        <div class="option-content"><h3>Pequeño</h3><p>Hasta 5 cm</p></div>
+                        <div class="option-price">40€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card" data-value="medium_laser" data-price="70">
+                        <div class="option-icon"><i class="fas fa-circle"></i></div>
+                        <div class="option-content"><h3>Mediano</h3><p>5 – 15 cm</p></div>
+                        <div class="option-price">70€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card" data-value="large_laser" data-price="100">
+                        <div class="option-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+                        <div class="option-content"><h3>Grande</h3><p>Más de 15 cm</p></div>
+                        <div class="option-price">100€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                </div>
+                <div class="service-info-note">
+                    <i class="fas fa-info-circle"></i>
+                    El número total de sesiones varía según el tatuaje, los colores y el tipo de piel. Consulta en estudio para una estimación completa.
+                </div>
+            </div>
+        </div>
+        <div class="step-navigation">
+            <button class="nav-btn prev-btn" onclick="backToServiceSelector()" style="display:flex;">
+                <i class="fas fa-arrow-left"></i><span>Volver</span>
+            </button>
+            <div class="spacer"></div>
+            <button class="nav-btn next-btn" onclick="showLaserResult()">
+                <span>Ver Precio</span><i class="fas fa-bolt"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Piercing Calculator Section -->
+    <section class="calculator-section" id="piercingCalculator">
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="step-label" id="piercingStepLabel">Piercing · Paso 1 de 2</span>
+                <div class="xp-bar">
+                    <div class="xp-bar-bg">
+                        <div class="xp-bar-fill" id="piercingXpFill" style="width:33%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="steps-dots" id="piercingDots">
+                <div class="dot active" data-step="0"></div>
+                <div class="dot" data-step="1"></div>
+                <div class="dot" data-step="2"></div>
+            </div>
+        </div>
+        <div class="steps-wrapper">
+            <!-- Piercing Step 0: Material -->
+            <div class="step active" data-step-p="0">
+                <div class="step-header">
+                    <div class="step-icon-wrap"><i class="fas fa-ring"></i></div>
+                    <h2>¿Qué material prefieres?</h2>
+                    <p>Ambas opciones son aptas para uso inicial</p>
+                </div>
+                <div class="options-grid size-options">
+                    <div class="option-card piercing-material-card" data-value="acero">
+                        <div class="option-icon"><i class="fas fa-circle-notch"></i></div>
+                        <div class="option-content">
+                            <h3>Acero Quirúrgico</h3>
+                            <p>Básico: 20€ · Avanzado: 50€</p>
+                        </div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card piercing-material-card" data-value="titanio">
+                        <div class="option-icon"><i class="fas fa-gem"></i></div>
+                        <div class="option-content">
+                            <h3>Titanio Grado Implante</h3>
+                            <p>Básico: 30€ · Avanzado: 70€</p>
+                        </div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Piercing Step 1: Tipo -->
+            <div class="step" data-step-p="1">
+                <div class="step-header">
+                    <div class="step-icon-wrap"><i class="fas fa-layer-group"></i></div>
+                    <h2>¿Qué tipo de piercing?</h2>
+                    <p>Los avanzados requieren más técnica y material especializado</p>
+                </div>
+                <div class="options-grid size-options">
+                    <div class="option-card piercing-type-card" data-value="basico">
+                        <div class="option-icon"><i class="fas fa-star"></i></div>
+                        <div class="option-content">
+                            <h3>Básico</h3>
+                            <p>Hélix, lóbulo, septum, labret, nostril y similares</p>
+                        </div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card piercing-type-card" data-value="avanzado">
+                        <div class="option-icon"><i class="fas fa-crown"></i></div>
+                        <div class="option-content">
+                            <h3>Avanzado</h3>
+                            <p>Microdermal · Surface · Industrial</p>
+                        </div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                </div>
+                <div class="service-info-note service-info-warning">
+                    <i class="fas fa-ban"></i>
+                    No realizamos piercings genitales ni Snake Eyes.
+                </div>
+            </div>
+            <!-- Piercing Step 2: Cantidad (solo básico) -->
+            <div class="step" data-step-p="2">
+                <div class="step-header">
+                    <div class="step-icon-wrap"><i class="fas fa-hashtag"></i></div>
+                    <h2>¿Cuántos piercings?</h2>
+                    <p>El pack incluye ambas perforaciones en una sola visita</p>
+                </div>
+                <div class="options-grid size-options">
+                    <div class="option-card piercing-qty-card" data-value="unidad">
+                        <div class="option-icon"><i class="fas fa-dot-circle"></i></div>
+                        <div class="option-content"><h3>1 Piercing</h3><p>Precio por unidad</p></div>
+                        <div class="option-price" id="piercingUnitPrice">20€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="option-card piercing-qty-card" data-value="pack2">
+                        <div class="option-icon"><i class="fas fa-layer-group"></i></div>
+                        <div class="option-content"><h3>Pack 2 Piercings</h3><p>Precio especial por 2</p></div>
+                        <div class="option-price" id="piercingPackPrice">30€</div>
+                        <div class="option-check"><i class="fas fa-check"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step-navigation">
+            <button class="nav-btn prev-btn" id="piercingPrevBtn" onclick="prevPiercingStep()" style="display:flex;">
+                <i class="fas fa-arrow-left"></i><span>Volver</span>
+            </button>
+            <div class="spacer"></div>
+            <button class="nav-btn next-btn" id="piercingNextBtn" onclick="nextPiercingStep()">
+                <span>Siguiente</span><i class="fas fa-arrow-right"></i>
+            </button>
         </div>
     </section>
 
